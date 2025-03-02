@@ -1,0 +1,48 @@
+/**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-create-block-blablablocks-tabs-block {
+	background-color: #21759b;
+	color: #fff;
+	padding: 2px;
+}
+
+.blablablocks-tabs-buttons {
+	gap: var(--bbb-tab-spacing);
+
+	.blablablock-tab-btn {
+		cursor: pointer;
+		padding: var(--bbb-tab-padding-top) var(--bbb-tab-padding-right) var(--bbb-tab-padding-bottom) var(--bbb-tab-padding-left);
+		background-color: var(--bbb-tab-background-color);
+		border-radius: var(--bbb-tab-border-radius);
+		border-bottom: var(--bbb-tab-border-bottom);
+		border-left: var(--bbb-tab-border-left);
+		border-right: var(--bbb-tab-border-right);
+		border-top: var(--bbb-tab-border-top);
+	}
+
+	.blablablock-tab-btn .tab-button-text {
+		color: var(--bbb-tab-color);
+	}
+
+	.blablablock-tab-btn:hover {
+		background-color: var(--bbb-tab-background-hover-color);
+
+		.blablablock-tab-btn .tab-button-text {
+			color: var(--bbb-tab-hover-color);
+		}
+	}
+
+	.blablablock-tab-btn.is-bbb-active-tab {
+		background-color: var(--bbb-tab-background-active-color);
+
+		.blablablock-tab-btn .tab-button-text {
+			color: var(--bbb-tab-active-color);
+		}
+	}
+
+}

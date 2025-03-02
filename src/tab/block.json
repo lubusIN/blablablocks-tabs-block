@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "blablablocks/tab",
+    "title": "Tab",
+    "description": "A single tab within a tabs block.",
+    "parent": [
+        "blablablocks/tabs"
+    ],
+    "attributes": {
+        "tabname": {
+            "type": "string"
+        },
+        "tabId": {
+            "type": "string"
+        }
+    },
+    "supports": {
+        "html": false,
+        "color": {
+            "gradients": true,
+            "link": true,
+            "heading": true,
+            "button": true,
+            "__experimentalDefaultControls": {
+                "background": true,
+                "text": true
+            }
+        }
+    },
+    "textdomain": "blablablocks-tab-block",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
+}

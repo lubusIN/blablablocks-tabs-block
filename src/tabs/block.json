@@ -1,0 +1,111 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "blablablocks/tabs",
+	"title": "Tabs",
+	"category": "widgets",
+	"description": "A dynamic tab block that lets you organize content into interactive, customizable tabs. Easily manage and display information in a clean, user-friendly layout.",
+	"attributes": {
+		"tabs": {
+			"type": "array",
+			"default": []
+		},
+		"activeTab": {
+			"type": "integer",
+			"default": 0
+		},
+		"orientation": {
+			"type": "string",
+			"default": "row"
+		},
+		"verticalAlignment": {
+			"type": "string",
+			"default": "center"
+		},
+		"verticalPosition": {
+			"type": "string",
+			"default": "left"
+		},
+		"justification": {
+			"type": "string",
+			"default": "left"
+		},
+		"iconPosition": {
+			"type": "string",
+			"default": "left"
+		},
+		"tabColor": {
+			"type": "object",
+			"properties": {
+				"color": {
+					"type": "object",
+					"properties": {
+						"default": {
+							"type": "string"
+						},
+						"hover": {
+							"type": "string"
+						},
+						"active": {
+							"type": "string"
+						}
+					}
+				},
+				"backgroundColor": {
+					"type": "object",
+					"properties": {
+						"default": {
+							"type": "string"
+						},
+						"hover": {
+							"type": "string"
+						},
+						"active": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"tabPadding": {
+			"type": "object"
+		},
+		"tabBorderRadius": {
+			"type": "string"
+		},
+		"tabBorder": {
+			"type": "object"
+		},
+		"tabSpacing": {
+			"type": "string"
+		}
+	},
+	"supports": {
+		"anchor": true,
+		"html": false,
+		"align": [
+			"wide",
+			"full"
+		],
+		"spacing": {
+			"margin": [
+				"top",
+				"bottom"
+			],
+			"padding": true,
+			"__experimentalDefaultControls": {
+				"padding": true,
+				"blockGap": true
+			}
+		},
+		"interactivity": true
+	},
+	"allowedBlocks": [
+		"blablablocks/tab"
+	],
+	"textdomain": "blablablocks-tabs-block",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScriptModule": "file:./view.js"
+}
