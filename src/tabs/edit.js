@@ -30,6 +30,11 @@ const DEFAULT_BLOCK = {
 	name: 'blablablocks/tab',
 };
 
+const TEMPLATE = [
+	['blablablocks/tab', { tabname: 'Tab 1' }],
+	['blablablocks/tab', { tabname: 'Tab 2' }],
+];
+
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -55,6 +60,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 	const innerBlocksProps = useInnerBlocksProps({},
 		{
+			template: TEMPLATE, // Use the default template
+			templateLock: false, // Allow users to modify the template
 			defaultBlock: DEFAULT_BLOCK,
 			directInsert: true,
 			orientation: 'horizontal',

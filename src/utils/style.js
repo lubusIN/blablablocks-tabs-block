@@ -145,7 +145,7 @@ export const generateStyles = (attributes = {}) => {
     // Spacing styles with defaults
     addStyle(
         '--bbb-tab-spacing',
-        resolveSpacingSizeValue(attributes?.tabSpacing, '4px')
+        resolveSpacingSizeValue(attributes?.tabSpacing, '20px')
     );
 
     // Border styles
