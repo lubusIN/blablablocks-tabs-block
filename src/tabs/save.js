@@ -27,10 +27,10 @@ export default function save({ attributes }) {
 			<div className="blablablocks-tabs-buttons">
 				<template data-wp-each--tab="context.tabs">
 					<button
-						className="tab-button"
+						className='blablablock-tab-btn'
 						data-wp-key="context.tab.id"
 						data-wp-on--click="actions.setActiveTab"
-						data-wp-bind--class="{ 'active': state.activeTab === context.tab.id }"
+						data-wp-class--active="state.isActive"
 					>
 						<span data-wp-text="context.tab.label"></span>
 					</button>

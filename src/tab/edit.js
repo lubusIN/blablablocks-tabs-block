@@ -4,77 +4,88 @@
 import { __ } from '@wordpress/i18n';
 import {
     useBlockProps,
-    store as blockEditorStore,
     InnerBlocks,
     useInnerBlocksProps,
 } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
+import { useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
 import './editor.scss';
-import { useEffect } from '@wordpress/element';
 
 /**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
+ * The Edit component for the Tab block.
  *
  * @param {Object}   props               Component props.
  * @param {string}   props.clientId      The client ID for this block instance.
  * @param {Object}   props.attributes    The block attributes.
  * @param {Function} props.setAttributes Function to update block attributes.
- *
  * @return {JSX.Element} The component rendering for the block editor.
  */
 export default function Edit({ clientId, attributes, setAttributes }) {
-
-    const { hasChildBlocks } = useSelect(
+    /**
+     * Retrieve block-related data using the `useSelect` hook.
+     */
+    const { hasChildBlocks, parentBlocks, closestParentBlockId, parentAttributes, siblingTabs } = useSelect(
         (select) => {
-            const { getBlockOrder } = select(blockEditorStore);
+            const { getBlockOrder, getBlockParentsByBlockName, getBlock } = select('core/block-editor');
+            const parentBlocks = getBlockParentsByBlockName(clientId, ['blablablocks/tabs']);
+            const closestParentBlockId = parentBlocks?.[parentBlocks.length - 1] || null;
+            const parentAttributes = closestParentBlockId ? getBlock(closestParentBlockId)?.attributes : {};
+            const siblingTabs = closestParentBlockId ? getBlock(closestParentBlockId)?.innerBlocks || [] : [];
+
             return {
                 hasChildBlocks: getBlockOrder(clientId).length > 0,
+                parentBlocks,
+                closestParentBlockId,
+                parentAttributes,
+                siblingTabs,
             };
         },
         [clientId]
     );
 
-    // Get all ancestors of type 'blablablocks/tabs'
-    const parentBlocks = useSelect((select) =>
-        select('core/block-editor').getBlockParentsByBlockName(clientId, ['blablablocks/tabs']),
-        [clientId]);
-
-    // Get the closest 'blablablocks/tabs' parent
-    const closestParentBlockId = parentBlocks?.[parentBlocks.length - 1] || null;
-
-    // Retrieve parent block attributes
-    const parentAttributes = useSelect((select) =>
-        closestParentBlockId ? select('core/block-editor').getBlock(closestParentBlockId)?.attributes : {},
-        [closestParentBlockId]);
-
-    // Retrieve sibling tabs within the parent block
-    const siblingTabs = useSelect((select) =>
-        closestParentBlockId ? select('core/block-editor').getBlock(closestParentBlockId)?.innerBlocks || [] : [],
-        [closestParentBlockId]);
-
-    // Extract orientation and active tab index from parent attributes
+    /**
+     * Determine the active tab index from the parent block's attributes.
+     * @type {number}
+     */
     const activeTabIndex = parentAttributes?.activeTab || 0;
-    const isActive = siblingTabs.findIndex(tab => tab.clientId === clientId) === activeTabIndex;
 
+    /**
+     * Check if the current tab is the active tab.
+     * @type {boolean}
+     */
+    const isActive = siblingTabs.findIndex((tab) => tab.clientId === clientId) === activeTabIndex;
+
+    /**
+     * Props for the block container.
+     * @type {Object}
+     */
     const blockProps = useBlockProps();
 
+    /**
+     * Props for the inner blocks container.
+     * @type {Object}
+     */
     const innerBlocksProps = useInnerBlocksProps(blockProps, {
-        renderAppender: hasChildBlocks
-            ? undefined
-            : InnerBlocks.ButtonBlockAppender,
+        renderAppender: hasChildBlocks ? undefined : InnerBlocks.ButtonBlockAppender,
     });
 
+    /**
+     * Set the `tabId` attribute if it doesn't already exist.
+     * This ensures each tab has a unique identifier.
+     */
     useEffect(() => {
         if (!attributes.tabId) {
             setAttributes({ tabId: clientId });
         }
-    }, [clientId, attributes.tabId]);
+    }, [clientId, attributes.tabId, setAttributes]);
 
+    /**
+     * Render the inner blocks only if the current tab is active.
+     */
     return (
         <>
             {isActive && (
