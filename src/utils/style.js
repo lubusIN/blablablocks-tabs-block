@@ -151,5 +151,25 @@ export const generateStyles = (attributes = {}) => {
     // Border styles
     Object.assign(styles, getBorderStyles(attributes?.tabBorder));
 
+    // Tab Buttons styles
+    addStyle(
+        '--bbb-tab-buttons-justify-content',
+        attributes?.justification || 'left'
+    );
+    addStyle(
+        '--bbb-tab-buttons-flex-direction',
+        attributes?.orientation || 'column'
+    );
+
+    // Tabs styles
+    addStyle(
+        '--bbb-tabs-display',
+        attributes?.orientation === 'column' ? 'flex' : ''
+    );
+    addStyle(
+        '--bbb-tabs-flex-direction',
+        attributes?.orientation === 'column' && attributes?.verticalPosition === 'right' ? 'row-reverse' : 'row'
+    );
+
     return styles;
 };

@@ -1,18 +1,13 @@
-/**
- * The following styles get applied both on the front of your site
- * and in the editor.
- *
- * Replace them with your own styles or remove the file completely.
- */
-
-.wp-block-create-block-blablablocks-tabs-block {
-	background-color: #21759b;
-	color: #fff;
-	padding: 2px;
+.blablablocks-tabs {
+	display: var(--bbb-tabs-display, column);
+	flex-direction: var(--bbb-tabs-flex-direction, column);
 }
 
 .blablablocks-tabs-buttons {
 	gap: var(--bbb-tab-spacing);
+	display: flex;
+	justify-content: var(--bbb-tab-buttons-justify-content, left);
+	flex-direction: var(--bbb-tab-buttons-flex-direction, column);
 
 	.blablablock-tab-btn {
 		cursor: pointer;

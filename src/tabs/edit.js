@@ -53,16 +53,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	const { insertBlock, selectBlock, updateBlockAttributes } = useDispatch(blockEditorStore);
 
 	/**
-	 * Style for the tab buttons container.
-	 * @type {Object}
-	 */
-	const buttonStyle = {
-		display: 'flex',
-		justifyContent: justification || 'left',
-		flexDirection: orientation || 'column',
-	};
-
-	/**
 	 * Get the inner blocks of the current block.
 	 * @type {Array}
 	 */
@@ -121,22 +111,12 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	};
 
 	/**
-	 * Generate styles based on block attributes.
-	 * @type {Object}
-	 */
-	const applyStyles = generateStyles(attributes);
-
-	/**
 	 * Props for the block container.
 	 * @type {Object}
 	 */
 	const blockProps = useBlockProps({
 		className: 'blablablocks-tabs',
-		style: {
-			...applyStyles,
-			display: orientation === 'column' ? 'flex' : '',
-			flexDirection: orientation === 'column' && verticalPosition === 'right' ? 'row-reverse' : 'row',
-		},
+		style: generateStyles(attributes),
 	});
 
 	/**
@@ -169,7 +149,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		<>
 			<div {...blockProps}>
 				{/* Tab Buttons */}
-				<div className="blablablocks-tabs-buttons" style={buttonStyle}>
+				<div className="blablablocks-tabs-buttons">
 					{innerBlocks.map((tab, index) => (
 						<div
 							className={`blablablock-tab-btn ${activeTab === index ? 'is-bbb-active-tab' : ''}`}

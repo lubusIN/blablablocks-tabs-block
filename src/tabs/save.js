@@ -2,6 +2,7 @@
  * Wordpress dependencies
  */
 import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
+import { generateStyles } from '../utils/style';
 
 /**
  * The save function defines the way in which the different attributes should
@@ -14,7 +15,12 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
  */
 export default function save({ attributes }) {
 	const { tabs } = attributes;
-	const blockProps = useBlockProps.save();
+	const blockProps = useBlockProps.save(
+		{
+			className: 'blablablocks-tabs',
+			style: generateStyles(attributes),
+		}
+	);
 	const innerBlocksProps = useInnerBlocksProps.save();
 
 	return (
@@ -32,7 +38,7 @@ export default function save({ attributes }) {
 						data-wp-on--click="actions.setActiveTab"
 						data-wp-class--active="state.isActive"
 					>
-						<span data-wp-text="context.tab.label"></span>
+						<span className='tab-button-text' data-wp-text="context.tab.label"></span>
 					</button>
 				</template>
 			</div>
