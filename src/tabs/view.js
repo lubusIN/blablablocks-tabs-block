@@ -17,7 +17,19 @@ const { state, actions } = store(STORE_NAME, {
          */
         get activeTab() {
             const context = getContext();
-            return context.activeTab || context.tabs?.[0]?.id || DEFAULT_TAB_ID;
+            return context.activeTab || state.defaultTab || DEFAULT_TAB_ID;
+        },
+
+        /**
+         * Returns the ID of the default tab.
+         * Falls back to the first tab's ID if no tab is marked as default.
+         * 
+         * @type {string}
+         */
+        get defaultTab() {
+            const context = getContext();
+            const defaultTab = context.tabs?.find(tab => tab.isDefault);
+            return defaultTab?.id || context.tabs?.[0]?.id || DEFAULT_TAB_ID;
         },
 
         /**
@@ -43,7 +55,7 @@ const { state, actions } = store(STORE_NAME, {
     },
     callbacks: {
         /**
-         * Initializes the tabs by setting the first tab as active
+         * Initializes the tabs by setting the default tab as active
          * if no active tab is already set.
          * 
          * @returns {void}
@@ -54,7 +66,7 @@ const { state, actions } = store(STORE_NAME, {
             const noActiveTab = !context.activeTab;
 
             if (noActiveTab && hasTabs) {
-                context.activeTab = context.tabs[0].id;
+                context.activeTab = state.defaultTab;
             }
         },
     }

@@ -18,10 +18,6 @@
 			"type": "string",
 			"default": "row"
 		},
-		"verticalAlignment": {
-			"type": "string",
-			"default": "center"
-		},
 		"verticalPosition": {
 			"type": "string",
 			"default": "left"

@@ -13,20 +13,17 @@
         },
         "tabId": {
             "type": "string"
+        },
+        "tabIcon": {
+            "type": "string"
+        },
+        "isDefault": {
+            "type": "boolean",
+            "default": false
         }
     },
     "supports": {
-        "html": false,
-        "color": {
-            "gradients": true,
-            "link": true,
-            "heading": true,
-            "button": true,
-            "__experimentalDefaultControls": {
-                "background": true,
-                "text": true
-            }
-        }
+        "html": false
     },
     "textdomain": "blablablocks-tab-block",
     "editorScript": "file:./index.js",

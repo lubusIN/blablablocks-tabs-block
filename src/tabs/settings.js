@@ -14,7 +14,6 @@ import {
     arrowRight,
     justifyBottom,
     justifyCenter,
-    justifyCenterVertical,
     justifyLeft,
     justifyRight,
     justifyTop
@@ -58,15 +57,16 @@ function Settings({ attributes, setAttributes }) {
                 </HStack>
                 <HStack align={'start'}>
                     <ToggleGroupControl
-                        label={__('Vertical alignment', 'blablablocks-tabs-block')}
-                        value={attributes.verticalAlignment}
+                        label={__('Icon Position', 'blablablocks-tabs-block')}
+                        value={attributes.iconPosition}
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
-                        onChange={(value) => setAttributes({ verticalAlignment: value })}
+                        onChange={(value) => setAttributes({ iconPosition: value })}
                     >
                         <ToggleGroupControlOptionIcon icon={justifyTop} value="top" label="Align top" />
-                        <ToggleGroupControlOptionIcon icon={justifyCenterVertical} value="center" label="Align middle" />
+                        <ToggleGroupControlOptionIcon icon={justifyLeft} value="left" label="Align left" />
                         <ToggleGroupControlOptionIcon icon={justifyBottom} value="bottom" label="Align bottom" />
+                        <ToggleGroupControlOptionIcon icon={justifyRight} value="right" label="Align right" />
                     </ToggleGroupControl>
                     <ToggleGroupControl
                         label={__('Position', 'blablablocks-tabs-block')}
@@ -79,18 +79,6 @@ function Settings({ attributes, setAttributes }) {
                         <ToggleGroupControlOptionIcon icon={justifyRight} value="right" label="Right" />
                     </ToggleGroupControl>
                 </HStack>
-                <ToggleGroupControl
-                    label={__('Icon Position', 'blablablocks-tabs-block')}
-                    value={attributes.iconPosition}
-                    __nextHasNoMarginBottom
-                    __next40pxDefaultSize
-                    onChange={(value) => setAttributes({ iconPosition: value })}
-                >
-                    <ToggleGroupControlOptionIcon icon={justifyTop} value="top" label="Align top" />
-                    <ToggleGroupControlOptionIcon icon={justifyLeft} value="left" label="Align left" />
-                    <ToggleGroupControlOptionIcon icon={justifyBottom} value="bottom" label="Align bottom" />
-                    <ToggleGroupControlOptionIcon icon={justifyRight} value="right" label="Align right" />
-                </ToggleGroupControl>
             </PanelBody>
         </InspectorControls>
     )

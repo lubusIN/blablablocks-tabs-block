@@ -171,5 +171,11 @@ export const generateStyles = (attributes = {}) => {
         attributes?.orientation === 'column' && attributes?.verticalPosition === 'right' ? 'row-reverse' : 'row'
     );
 
+    // Icon Position
+    addStyle(
+        '--bbb-tab-icon-position',
+        attributes?.iconPosition || 'left'
+    );
+
     return styles;
 };

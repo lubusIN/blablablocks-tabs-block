@@ -48,3 +48,32 @@
 .bbb-tab-spacing .spacing-sizes-control__icon {
 	display: none;
 }
+
+.bbb-icon-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+}
+
+.bbb-icon-textarea {
+	height: 100%;
+
+	.components-base-control__field,
+	.components-base-control__field textarea {
+		height: 100%;
+	}
+
+	.components-base-control__field textarea {
+		resize: none;
+	}
+}
+
+.bbb-custom-icon-modal .components-modal__content>div:nth-child(2) {
+	height: 100%;
+}
+
+.bbb-icon-preview svg {
+	width: 80px;
+	height: 80px;
+}

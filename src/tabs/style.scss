@@ -1,4 +1,4 @@
-.blablablocks-tabs {
+.blablablocks-tab {
 	display: var(--bbb-tabs-display, column);
 	flex-direction: var(--bbb-tabs-flex-direction, column);
 }
@@ -39,4 +39,41 @@
 			color: var(--bbb-tab-active-color);
 		}
 	}
+}
+
+.blablablock-tab-btn {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Apply icon position based on the CSS variable */
+.blablablock-tab-btn {
+	flex-direction: var(--bbb-tab-icon-position, row);
+}
+
+/* Specific adjustments for each icon position */
+.blablablocks-tabs[style*="--bbb-tab-icon-position: top"] .blablablock-tab-btn {
+	flex-direction: column;
+	align-items: center;
+}
+
+.blablablocks-tabs[style*="--bbb-tab-icon-position: bottom"] .blablablock-tab-btn {
+	flex-direction: column-reverse;
+	align-items: center;
+}
+
+.blablablocks-tabs[style*="--bbb-tab-icon-position: left"] .blablablock-tab-btn {
+	flex-direction: row;
+	align-items: center;
+}
+
+.blablablocks-tabs[style*="--bbb-tab-icon-position: right"] .blablablock-tab-btn {
+	flex-direction: row-reverse;
+	align-items: center;
+}
+
+.blablablock-tab-btn .bbb-tab-icon svg {
+	width: var(--bbb-tab-icon-size, 40px);
+	height: var(--bbb-tab-icon-size, 40px);
 }

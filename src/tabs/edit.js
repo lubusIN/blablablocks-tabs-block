@@ -10,7 +10,6 @@ import {
 	useBlockProps,
 	useInnerBlocksProps,
 	BlockControls,
-	RichText,
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 
@@ -49,7 +48,7 @@ const TABS_TEMPLATE = [
  * @return {JSX.Element} The component rendering for the block editor.
  */
 export default function Edit({ clientId, attributes, setAttributes }) {
-	const { allowedBlocks, activeTab, orientation, verticalPosition, justification } = attributes;
+	const { allowedBlocks, activeTab } = attributes;
 	const { insertBlock, selectBlock, updateBlockAttributes } = useDispatch(blockEditorStore);
 
 	/**
@@ -92,6 +91,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		const tabNumber = innerBlocks.length + 1;
 		const block = createBlock('blablablocks/tab', {
 			tabname: `Tab ${tabNumber}`,
+			isDefault: false
 		});
 
 		insertBlock(block, innerBlocks.length, clientId, false);
@@ -99,16 +99,6 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		setAttributes({ activeTab: newActiveTabIndex });
 		selectBlock(block.clientId);
 	}, [innerBlocks.length, clientId, insertBlock, setAttributes, selectBlock]);
-
-	/**
-	 * Set the active tab and select it in the editor.
-	 *
-	 * @param {number} index The index of the tab to set as active.
-	 */
-	const setActiveTab = (index) => {
-		updateBlockAttributes(clientId, { activeTab: index });
-		selectBlock(innerBlocks[index].clientId);
-	};
 
 	/**
 	 * Props for the block container.
@@ -127,6 +117,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		{},
 		{
 			template: TABS_TEMPLATE,
+			__experimentalCaptureToolbars: true,
 			templateLock: false,
 			defaultBlock: DEFAULT_BLOCK,
 			orientation: 'horizontal',
@@ -141,6 +132,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		const newTabs = innerBlocks.map((tab) => ({
 			id: tab.attributes.tabId || tab.clientId,
 			label: tab.attributes.tabname,
+			icon: tab.attributes.tabIcon,
+			isDefault: tab.attributes.isDefault
 		}));
 		setAttributes({ tabs: newTabs });
 	}, [innerBlocks, setAttributes]);
@@ -148,30 +141,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	return (
 		<>
 			<div {...blockProps}>
-				{/* Tab Buttons */}
-				<div className="blablablocks-tabs-buttons">
-					{innerBlocks.map((tab, index) => (
-						<div
-							className={`blablablock-tab-btn ${activeTab === index ? 'is-bbb-active-tab' : ''}`}
-							key={tab.clientId}
-							onClick={() => setActiveTab(index)}
-						>
-							<RichText
-								tagName="div"
-								className="tab-button-text"
-								aria-label={__('Tab name')}
-								placeholder={__('Add tab name...')}
-								allowedFormats={['core/bold', 'core/italic']}
-								value={tab.attributes.tabname}
-								onChange={(value) => {
-									updateBlockAttributes(tab.clientId, { tabname: value });
-								}}
-							/>
-						</div>
-					))}
-				</div>
-				{/* Tab Content */}
-				<div {...innerBlocksProps}></div>
+				{innerBlocksProps.children}
 			</div>
 			<BlockControls>
 				<ToolbarGroup>
