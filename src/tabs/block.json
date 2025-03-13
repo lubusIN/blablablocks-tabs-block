@@ -30,6 +30,10 @@
 			"type": "string",
 			"default": "left"
 		},
+		"iconSize": {
+			"type": "string",
+			"default": "24"
+		},
 		"tabColor": {
 			"type": "object",
 			"properties": {
@@ -92,6 +96,19 @@
 			"__experimentalDefaultControls": {
 				"padding": true,
 				"blockGap": true
+			}
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
 			}
 		},
 		"interactivity": true

@@ -86,36 +86,30 @@ export const generateStyles = (attributes = {}) => {
         }
     };
 
-    // Tab Color
+    // Tab Color using Tailwind's gray shades
     addStyle(
         '--bbb-tab-color',
-        attributes?.tabColor?.color?.default,
-        '#000'
+        attributes?.tabColor?.color?.default || '#4b5563' // Tailwind gray-600
     );
     addStyle(
         '--bbb-tab-background-color',
-        attributes?.tabColor?.backgroundColor?.default,
-        'transparent'
+        attributes?.tabColor?.backgroundColor?.default || 'transparent'
     );
     addStyle(
         '--bbb-tab-hover-color',
-        attributes?.tabColor?.color?.hover,
-        '#333'
+        attributes?.tabColor?.color?.hover || '#374151' // Tailwind gray-700
     );
     addStyle(
         '--bbb-tab-background-hover-color',
-        attributes?.tabColor?.backgroundColor?.hover,
-        'transparent'
+        attributes?.tabColor?.backgroundColor?.hover || 'transparent'
     );
     addStyle(
         '--bbb-tab-active-color',
-        attributes?.tabColor?.color?.active,
-        '#333'
+        attributes?.tabColor?.color?.active || '#1f2937' // Tailwind gray-800
     );
     addStyle(
         '--bbb-tab-background-active-color',
-        attributes?.tabColor?.backgroundColor?.active,
-        'transparent'
+        attributes?.tabColor?.backgroundColor?.active || '#d1d5db8a' // Tailwind gray-300
     );
 
     // Tab Border Radius
@@ -127,25 +121,25 @@ export const generateStyles = (attributes = {}) => {
     // Padding styles with defaults
     addStyle(
         '--bbb-tab-padding-top',
-        resolveSpacingSizeValue(attributes?.tabPadding?.top, '0px')
+        resolveSpacingSizeValue(attributes?.tabPadding?.top, '5px')
     );
     addStyle(
         '--bbb-tab-padding-right',
-        resolveSpacingSizeValue(attributes?.tabPadding?.right, '0px')
+        resolveSpacingSizeValue(attributes?.tabPadding?.right, '15px')
     );
     addStyle(
         '--bbb-tab-padding-bottom',
-        resolveSpacingSizeValue(attributes?.tabPadding?.bottom, '0px')
+        resolveSpacingSizeValue(attributes?.tabPadding?.bottom, '5px')
     );
     addStyle(
         '--bbb-tab-padding-left',
-        resolveSpacingSizeValue(attributes?.tabPadding?.left, '0px')
+        resolveSpacingSizeValue(attributes?.tabPadding?.left, '15px')
     );
 
     // Spacing styles with defaults
     addStyle(
         '--bbb-tab-spacing',
-        resolveSpacingSizeValue(attributes?.tabSpacing, '20px')
+        resolveSpacingSizeValue(attributes?.tabSpacing, '10px')
     );
 
     // Border styles
@@ -168,13 +162,22 @@ export const generateStyles = (attributes = {}) => {
     );
     addStyle(
         '--bbb-tabs-flex-direction',
-        attributes?.orientation === 'column' && attributes?.verticalPosition === 'right' ? 'row-reverse' : 'row'
+        attributes?.orientation === 'column' && attributes?.verticalPosition === 'right' ? 'row-reverse' : attributes?.orientation === 'column' ? 'row' : 'column'
     );
 
     // Icon Position
     addStyle(
         '--bbb-tab-icon-position',
-        attributes?.iconPosition || 'left'
+        attributes?.iconPosition == 'top' ? 'column' :
+            attributes?.iconPosition == 'bottom' ? 'column-reverse' :
+                attributes?.iconPosition == 'right' ? 'row-reverse' :
+                    'row'
+    );
+
+    // Icon Size
+    addStyle(
+        '--bbb-tab-icon-size',
+        attributes?.iconSize ? `${attributes?.iconSize}px` : '24px'
     );
 
     return styles;

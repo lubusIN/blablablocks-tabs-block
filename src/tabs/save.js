@@ -32,14 +32,15 @@ export default function save({ attributes }) {
 		>
 			<div className="blablablocks-tabs-buttons">
 				<template data-wp-each--tab="context.tabs">
-					<button
+					<div
 						className='blablablock-tab-btn'
 						data-wp-key="context.tab.id"
 						data-wp-on--click="actions.setActiveTab"
-						data-wp-class--active="state.isActive"
+						data-wp-class--is-bbb-active-tab="state.isActive"
 					>
+						<span className='bbb-tab-icon' data-wp-bind--hidden="!context.tab.icon" data-wp-watch="callbacks.renderIcon"></span>
 						<span className='tab-button-text' data-wp-text="context.tab.label"></span>
-					</button>
+					</div>
 				</template>
 			</div>
 

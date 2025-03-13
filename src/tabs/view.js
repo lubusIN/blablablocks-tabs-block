@@ -1,7 +1,7 @@
 /**
  * Wordpress dependencies
  */
-import { store, getContext } from '@wordpress/interactivity';
+import { store, getContext, getElement } from '@wordpress/interactivity';
 
 // Constants for store name and default values
 const STORE_NAME = 'blablablocks-tabs';
@@ -67,6 +67,20 @@ const { state, actions } = store(STORE_NAME, {
 
             if (noActiveTab && hasTabs) {
                 context.activeTab = state.defaultTab;
+            }
+        },
+
+        /**
+         * Renders the icon for the tabs.
+         * 
+         * @returns {void}
+         */
+        renderIcon() {
+            const context = getContext();
+            const element = getElement();
+            // Check if tabs and icon exist
+            if (context.tab && context.tab.icon) {
+                element.ref.innerHTML = context.tab.icon;
             }
         },
     }

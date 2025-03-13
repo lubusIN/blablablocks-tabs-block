@@ -2,6 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import clsx from 'clsx';
 import {
     useBlockProps,
     InnerBlocks,
@@ -26,7 +27,7 @@ import {
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
-import { code, gallery } from '@wordpress/icons';
+import { code, reset } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -189,7 +190,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
     return (
         <div {...blockProps}>
             <TabFill tabsClientId={tabsClientId}>
-                <div className='blablablock-tab-btn'>
+                <div className={clsx('blablablock-tab-btn', { 'is-bbb-active-tab': isActive })}>
                     {/* Render the tab icon if it exists */}
                     {attributes.tabIcon && (
                         <span
@@ -240,6 +241,17 @@ export default function Edit({ clientId, attributes, setAttributes }) {
                                 icon: code,
                                 title: attributes.tabIcon ? __('Edit custom SVG icon', 'blablablocks-tabs-block') : __('Add custom SVG icon', 'blablablocks-tabs-block'),
                                 onClick: openModal
+                            },
+                            {
+                                icon: reset,
+                                title: __('Reset icon', 'blablablocks-tabs-block'),
+                                onClick: () => {
+                                    setAttributes({ tabIcon: '' });
+                                    setSvgCode('');
+                                    setIsSvgValid(false);
+                                    setValidationError('');
+                                },
+                                isDisabled: !attributes.tabIcon,
                             }
                         ]}
                         text={attributes.tabIcon ? __('Replace icon', 'blablablocks-tabs-block') : __('Add Icon', 'blablablocks-tabs-block')}
