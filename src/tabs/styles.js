@@ -38,8 +38,13 @@ function Styles({ attributes, setAttributes }) {
                 resetAll={() =>
                     setAttributes({
                         tabColor: {
-                            color: { default: undefined, hover: undefined, active: undefined },
-                            background: {
+                            textColor: { default: undefined, hover: undefined, active: undefined },
+                            backgroundColor: {
+                                default: undefined,
+                                hover: undefined,
+                                active: undefined,
+                            },
+                            iconColor: {
                                 default: undefined,
                                 hover: undefined,
                                 active: undefined,
@@ -56,26 +61,37 @@ function Styles({ attributes, setAttributes }) {
                     label={__('Color', 'blablablocks-tabs-block')}
                     isShownByDefault
                     hasValue={() =>
-                        !!attributes?.tabColor?.color
+                        !!attributes?.tabColor?.textColor
                             ?.default ||
-                        !!attributes?.tabColor?.color?.hover ||
-                        !!attributes?.tabColor?.color?.active ||
+                        !!attributes?.tabColor?.textColor?.hover ||
+                        !!attributes?.tabColor?.textColor?.active ||
                         !!attributes?.tabColor?.backgroundColor
                             ?.default ||
                         !!attributes?.tabColor?.backgroundColor
                             ?.hover ||
                         !!attributes?.tabColor?.backgroundColor
+                            ?.active ||
+                        !!attributes?.tabColor?.iconColor
+                            ?.default ||
+                        !!attributes?.tabColor?.iconColor
+                            ?.hover ||
+                        !!attributes?.tabColor?.iconColor
                             ?.active
                     }
                     onDeselect={() =>
                         setAttributes({
                             tabColor: {
-                                color: {
+                                textColor: {
                                     default: undefined,
                                     hover: undefined,
                                     active: undefined,
                                 },
-                                background: {
+                                backgroundColor: {
+                                    default: undefined,
+                                    hover: undefined,
+                                    active: undefined,
+                                },
+                                iconColor: {
                                     default: undefined,
                                     hover: undefined,
                                     active: undefined,
@@ -99,18 +115,18 @@ function Styles({ attributes, setAttributes }) {
                         >
                             <ColorControlDropdown
                                 label={__(
-                                    'Color',
+                                    'Text',
                                     'blablablocks-tabs-block'
                                 )}
                                 colorValue={
                                     attributes?.tabColor
-                                        ?.color || {}
+                                        ?.textColor || {}
                                 }
                                 onChangeColor={(newColor) =>
                                     setAttributes({
                                         tabColor: {
                                             ...attributes.tabColor,
-                                            color: newColor,
+                                            textColor: newColor,
                                         },
                                     })
                                 }
@@ -131,6 +147,26 @@ function Styles({ attributes, setAttributes }) {
                                         tabColor: {
                                             ...attributes?.tabColor,
                                             backgroundColor: newColor,
+                                        },
+                                    })
+                                }
+                                hasHover={true}
+                                hasActive={true}
+                            />
+                            <ColorControlDropdown
+                                label={__(
+                                    'Icon',
+                                    'blablablocks-tabs-block'
+                                )}
+                                colorValue={
+                                    attributes?.tabColor
+                                        ?.iconColor || {}
+                                }
+                                onChangeColor={(newColor) =>
+                                    setAttributes({
+                                        tabColor: {
+                                            ...attributes?.tabColor,
+                                            iconColor: newColor,
                                         },
                                     })
                                 }

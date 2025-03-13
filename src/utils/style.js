@@ -88,28 +88,40 @@ export const generateStyles = (attributes = {}) => {
 
     // Tab Color using Tailwind's gray shades
     addStyle(
-        '--bbb-tab-color',
-        attributes?.tabColor?.color?.default || '#4b5563' // Tailwind gray-600
+        '--bbb-tab-text-color',
+        attributes?.tabColor?.textColor?.default || '#4b5563' // Tailwind gray-600
     );
     addStyle(
         '--bbb-tab-background-color',
         attributes?.tabColor?.backgroundColor?.default || 'transparent'
     );
     addStyle(
-        '--bbb-tab-hover-color',
-        attributes?.tabColor?.color?.hover || '#374151' // Tailwind gray-700
+        '--bbb-tab-icon-color',
+        attributes?.tabColor?.iconColor?.default || '#000'
+    );
+    addStyle(
+        '--bbb-tab-text-hover-color',
+        attributes?.tabColor?.textColor?.hover || '#374151' // Tailwind gray-700
     );
     addStyle(
         '--bbb-tab-background-hover-color',
-        attributes?.tabColor?.backgroundColor?.hover || 'transparent'
+        attributes?.tabColor?.backgroundColor?.hover || '#d1d5db8a'
     );
     addStyle(
-        '--bbb-tab-active-color',
-        attributes?.tabColor?.color?.active || '#1f2937' // Tailwind gray-800
+        '--bbb-tab-icon-hover-color',
+        attributes?.tabColor?.iconColor?.hover || '#374151'
+    );
+    addStyle(
+        '--bbb-tab-text-active-color',
+        attributes?.tabColor?.textColor?.active || '#1f2937' // Tailwind gray-800
     );
     addStyle(
         '--bbb-tab-background-active-color',
         attributes?.tabColor?.backgroundColor?.active || '#d1d5db8a' // Tailwind gray-300
+    );
+    addStyle(
+        '--bbb-tab-icon-active-color',
+        attributes?.tabColor?.iconColor?.active || '#374151' // Tailwind gray-300
     );
 
     // Tab Border Radius

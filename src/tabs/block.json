@@ -37,7 +37,7 @@
 		"tabColor": {
 			"type": "object",
 			"properties": {
-				"color": {
+				"textColor": {
 					"type": "object",
 					"properties": {
 						"default": {
@@ -52,6 +52,20 @@
 					}
 				},
 				"backgroundColor": {
+					"type": "object",
+					"properties": {
+						"default": {
+							"type": "string"
+						},
+						"hover": {
+							"type": "string"
+						},
+						"active": {
+							"type": "string"
+						}
+					}
+				},
+				"iconColor": {
 					"type": "object",
 					"properties": {
 						"default": {

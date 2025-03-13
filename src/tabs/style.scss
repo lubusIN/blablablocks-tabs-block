@@ -19,25 +19,37 @@
 		border-left: var(--bbb-tab-border-left);
 		border-right: var(--bbb-tab-border-right);
 		border-top: var(--bbb-tab-border-top);
-	}
 
-	.blablablock-tab-btn .tab-button-text {
-		color: var(--bbb-tab-color);
-	}
+		&.is-bbb-active-tab {
+			background-color: var(--bbb-tab-background-active-color);
 
-	.blablablock-tab-btn:hover {
-		background-color: var(--bbb-tab-background-hover-color);
+			.tab-button-text {
+				color: var(--bbb-tab-text-active-color);
+			}
 
-		.blablablock-tab-btn .tab-button-text {
-			color: var(--bbb-tab-hover-color);
+			.bbb-tab-icon svg {
+				fill: var(--bbb-tab-icon-active-color);
+			}
 		}
-	}
 
-	.blablablock-tab-btn.is-bbb-active-tab {
-		background-color: var(--bbb-tab-background-active-color);
+		&:hover {
+			background-color: var(--bbb-tab-background-hover-color);
 
-		.blablablock-tab-btn .tab-button-text {
-			color: var(--bbb-tab-active-color);
+			.tab-button-text {
+				color: var(--bbb-tab-text-hover-color);
+			}
+
+			.bbb-tab-icon svg {
+				fill: var(--bbb-tab-icon-hover-color);
+			}
+		}
+
+		.tab-button-text {
+			color: var(--bbb-tab-text-color);
+		}
+
+		.bbb-tab-icon svg {
+			fill: var(--bbb-tab-icon-color);
 		}
 	}
 }
@@ -47,7 +59,7 @@
 	align-items: center;
 	gap: 8px;
 	height: fit-content;
-    margin-top: auto;
+	margin-top: auto;
 }
 
 /* Apply icon position based on the CSS variable */
