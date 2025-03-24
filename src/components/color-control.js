@@ -4,13 +4,13 @@
 import { __ } from '@wordpress/i18n';
 import { ColorPalette } from '@wordpress/block-editor';
 import {
-    Button,
-    Dropdown,
-    ColorIndicator,
+	Button,
+	Dropdown,
+	ColorIndicator,
     __experimentalZStack as ZStack, // eslint-disable-line
     __experimentalHStack as HStack, // eslint-disable-line
     __experimentalText as Text, // eslint-disable-line
-    TabPanel,
+	TabPanel,
 } from '@wordpress/components';
 
 /**
@@ -25,101 +25,99 @@ import {
  *
  * @return {JSX.Element} The rendered ColorControlDropdown component.
  */
-function ColorControlDropdown({
-    label,
-    colorValue = {},
-    onChangeColor,
-    hasHover = false,
-    hasActive = false,
-}) {
-    return (
-        <Dropdown
-            popoverProps={{
-                placement: 'left-start',
-                offset: 36,
-                shift: true,
-            }}
-            contentClassName="tabs_color_popover"
-            renderToggle={({ isOpen, onToggle }) => (
-                <Button
-                    className={`tabs_color_button ${isOpen ? 'isOpen' : ''
-                        }`}
-                    aria-expanded={isOpen}
-                    onClick={onToggle}
-                >
-                    <HStack justify="left">
-                        <ZStack offset={10}>
-                            <ColorIndicator colorValue={colorValue.default} />
-                            {hasHover && (
-                                <ColorIndicator
-                                    colorValue={colorValue.hover}
-                                />
-                            )}
-                            {hasActive && (
-                                <ColorIndicator
-                                    colorValue={colorValue.active}
-                                />
-                            )}
-                        </ZStack>
-                        <Text>{label}</Text>
-                    </HStack>
-                </Button>
-            )}
-            renderContent={() =>
-                hasHover || hasActive ? (
-                    <TabPanel
-                        tabs={[
-                            {
-                                name: 'default',
-                                title: __(
-                                    'Default',
-                                    'blablablocks-tabs-block'
-                                ),
-                            },
-                            {
-                                name: 'hover',
-                                title: __(
-                                    'Hover',
-                                    'blablablocks-tabs-block'
-                                ),
-                            },
-                            {
-                                name: 'active',
-                                title: __(
-                                    'Active',
-                                    'blablablocks-tabs-block'
-                                ),
-                            },
-                        ]}
-                    >
-                        {(tab) => (
-                            <ColorPalette
-                                __experimentalIsRenderedInSidebar
-                                value={colorValue[tab.name] || ''}
-                                onChange={(color) => {
-                                    onChangeColor({
-                                        ...colorValue,
-                                        [tab.name]: color,
-                                    });
-                                }}
-                                enableAlpha
-                            />
-                        )}
-                    </TabPanel>
-                ) : (
-                    <ColorPalette
-                        className="ls-color-pallete-container"
-                        __experimentalIsRenderedInSidebar
-                        value={colorValue.default || ''}
-                        onChange={(color) => {
-                            onChangeColor({ ...colorValue, default: color });
-                        }}
-                        enableAlpha
-                    />
-                )
-            }
-        />
-    );
+function ColorControlDropdown( {
+	label,
+	colorValue = {},
+	onChangeColor,
+	hasHover = false,
+	hasActive = false,
+} ) {
+	return (
+		<Dropdown
+			popoverProps={ {
+				placement: 'left-start',
+				offset: 36,
+				shift: true,
+			} }
+			contentClassName="tabs_color_popover"
+			renderToggle={ ( { isOpen, onToggle } ) => (
+				<Button
+					className={ `tabs_color_button ${
+						isOpen ? 'isOpen' : ''
+					}` }
+					aria-expanded={ isOpen }
+					onClick={ onToggle }
+				>
+					<HStack justify="left">
+						<ZStack offset={ 10 }>
+							<ColorIndicator colorValue={ colorValue.default } />
+							{ hasHover && (
+								<ColorIndicator
+									colorValue={ colorValue.hover }
+								/>
+							) }
+							{ hasActive && (
+								<ColorIndicator
+									colorValue={ colorValue.active }
+								/>
+							) }
+						</ZStack>
+						<Text>{ label }</Text>
+					</HStack>
+				</Button>
+			) }
+			renderContent={ () =>
+				hasHover || hasActive ? (
+					<TabPanel
+						tabs={ [
+							{
+								name: 'default',
+								title: __(
+									'Default',
+									'blablablocks-tabs-block'
+								),
+							},
+							{
+								name: 'hover',
+								title: __( 'Hover', 'blablablocks-tabs-block' ),
+							},
+							{
+								name: 'active',
+								title: __(
+									'Active',
+									'blablablocks-tabs-block'
+								),
+							},
+						] }
+					>
+						{ ( tab ) => (
+							<ColorPalette
+								__experimentalIsRenderedInSidebar
+								value={ colorValue[ tab.name ] || '' }
+								onChange={ ( color ) => {
+									onChangeColor( {
+										...colorValue,
+										[ tab.name ]: color,
+									} );
+								} }
+								enableAlpha
+							/>
+						) }
+					</TabPanel>
+				) : (
+					<ColorPalette
+						className="ls-color-pallete-container"
+						__experimentalIsRenderedInSidebar
+						value={ colorValue.default || '' }
+						onChange={ ( color ) => {
+							onChangeColor( { ...colorValue, default: color } );
+						} }
+						enableAlpha
+					/>
+				)
+			}
+		/>
+	);
 }
 
 export default ColorControlDropdown;

@@ -11,7 +11,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-tabs-block
  *
- * @package blablablocks-tabs-block
+ * @package BlablablocksTabsBlock
  */
 
 if (! defined('ABSPATH')) {
@@ -19,13 +19,46 @@ if (! defined('ABSPATH')) {
 }
 
 /**
- * Registers the block using the metadata loaded from the `block.json` file.
- * Behind the scenes, it registers also all assets so they can be enqueued
- * through the block editor in the corresponding context.
+ * Initialize the plugin by registering blocks and styles.
  */
 function bbb_tabs_block_init()
 {
+	// Register the blocks.
 	register_block_type(__DIR__ . '/build/tabs');
 	register_block_type(__DIR__ . '/build/tab');
+
+	// Register custom block styles.
+	blablablocks_register_tabs_styles();
 }
 add_action('init', 'bbb_tabs_block_init');
+
+/**
+ * Register custom styles for the Tabs block.
+ */
+function blablablocks_register_tabs_styles()
+{
+	if (! function_exists('register_block_style')) {
+		return; // Exit if the function is not available.
+	}
+
+	$styles = array(
+		array(
+			'name'  => 'style-1',
+			'label' => __('Style 1', 'blablablocks-tabs-block'),
+		),
+		array(
+			'name'  => 'style-2',
+			'label' => __('Style 2', 'blablablocks-tabs-block'),
+		),
+		array(
+			'name'       => 'style-3',
+			'label'      => __('Style 3', 'blablablocks-tabs-block'),
+			'is_default' => true,
+		),
+	);
+
+	// Loop through and register each style.
+	foreach ($styles as $style) {
+		register_block_style('blablablocks/tabs', $style);
+	}
+}

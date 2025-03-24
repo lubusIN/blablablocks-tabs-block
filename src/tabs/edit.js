@@ -34,8 +34,8 @@ const DEFAULT_BLOCK = {
  * @type {Array}
  */
 const TABS_TEMPLATE = [
-	['blablablocks/tab', { tabname: 'Tab 1' }],
-	['blablablocks/tab', { tabname: 'Tab 2' }],
+	[ 'blablablocks/tab', { tabname: 'Tab 1' } ],
+	[ 'blablablocks/tab', { tabname: 'Tab 2' } ],
 ];
 
 /**
@@ -47,17 +47,17 @@ const TABS_TEMPLATE = [
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({ clientId, attributes, setAttributes }) {
+export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { allowedBlocks, activeTab } = attributes;
-	const { insertBlock, selectBlock, updateBlockAttributes } = useDispatch(blockEditorStore);
+	const { insertBlock, selectBlock } = useDispatch( blockEditorStore );
 
 	/**
 	 * Get the inner blocks of the current block.
 	 * @type {Array}
 	 */
 	const innerBlocks = useSelect(
-		(select) => select(blockEditorStore).getBlocks(clientId),
-		[clientId]
+		( select ) => select( blockEditorStore ).getBlocks( clientId ),
+		[ clientId ]
 	);
 
 	/**
@@ -65,49 +65,55 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	 * @type {string}
 	 */
 	const selectedBlockClientId = useSelect(
-		(select) => select(blockEditorStore).getSelectedBlockClientId(),
+		( select ) => select( blockEditorStore ).getSelectedBlockClientId(),
 		[]
 	);
 
 	/**
 	 * Update the activeTab attribute when a tab is selected from the List View.
 	 */
-	useEffect(() => {
-		if (selectedBlockClientId) {
+	useEffect( () => {
+		if ( selectedBlockClientId ) {
 			const selectedTabIndex = innerBlocks.findIndex(
-				(tab) => tab.clientId === selectedBlockClientId
+				( tab ) => tab.clientId === selectedBlockClientId
 			);
 
-			if (selectedTabIndex !== -1 && selectedTabIndex !== activeTab) {
-				setAttributes({ activeTab: selectedTabIndex });
+			if ( selectedTabIndex !== -1 && selectedTabIndex !== activeTab ) {
+				setAttributes( { activeTab: selectedTabIndex } );
 			}
 		}
-	}, [selectedBlockClientId, innerBlocks, activeTab, setAttributes]);
+	}, [ selectedBlockClientId, innerBlocks, activeTab, setAttributes ] );
 
 	/**
 	 * Add a new tab to the block.
 	 */
-	const addTab = useCallback(() => {
+	const addTab = useCallback( () => {
 		const tabNumber = innerBlocks.length + 1;
-		const block = createBlock('blablablocks/tab', {
-			tabname: `Tab ${tabNumber}`,
-			isDefault: false
-		});
+		const block = createBlock( 'blablablocks/tab', {
+			tabname: `Tab ${ tabNumber }`,
+			isDefault: false,
+		} );
 
-		insertBlock(block, innerBlocks.length, clientId, false);
+		insertBlock( block, innerBlocks.length, clientId, false );
 		const newActiveTabIndex = innerBlocks.length;
-		setAttributes({ activeTab: newActiveTabIndex });
-		selectBlock(block.clientId);
-	}, [innerBlocks.length, clientId, insertBlock, setAttributes, selectBlock]);
+		setAttributes( { activeTab: newActiveTabIndex } );
+		selectBlock( block.clientId );
+	}, [
+		innerBlocks.length,
+		clientId,
+		insertBlock,
+		setAttributes,
+		selectBlock,
+	] );
 
 	/**
 	 * Props for the block container.
 	 * @type {Object}
 	 */
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: 'blablablocks-tabs',
-		style: generateStyles(attributes),
-	});
+		style: generateStyles( attributes ),
+	} );
 
 	/**
 	 * Props for the inner blocks container.
@@ -128,30 +134,31 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	/**
 	 * Update the tabs attribute when inner blocks change.
 	 */
-	useEffect(() => {
-		const newTabs = innerBlocks.map((tab) => ({
+	useEffect( () => {
+		const newTabs = innerBlocks.map( ( tab ) => ( {
 			id: tab.attributes.tabId || tab.clientId,
 			label: tab.attributes.tabname,
 			icon: tab.attributes.tabIcon,
-			isDefault: tab.attributes.isDefault
-		}));
-		setAttributes({ tabs: newTabs });
-	}, [innerBlocks, setAttributes]);
+			isDefault: tab.attributes.isDefault,
+		} ) );
+		setAttributes( { tabs: newTabs } );
+	}, [ innerBlocks, setAttributes ] );
 
 	return (
 		<>
-			<div {...blockProps}>
-				{innerBlocksProps.children}
-			</div>
+			<div { ...blockProps }>{ innerBlocksProps.children }</div>
 			<BlockControls>
 				<ToolbarGroup>
-					<ToolbarButton onClick={addTab}>
-						{__('Add Tab', 'blablablocks-tabs-block')}
+					<ToolbarButton onClick={ addTab }>
+						{ __( 'Add Tab', 'blablablocks-tabs-block' ) }
 					</ToolbarButton>
 				</ToolbarGroup>
 			</BlockControls>
-			<Settings attributes={attributes} setAttributes={setAttributes} />
-			<Styles attributes={attributes} setAttributes={setAttributes} />
+			<Settings
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+			/>
+			<Styles attributes={ attributes } setAttributes={ setAttributes } />
 		</>
 	);
 }

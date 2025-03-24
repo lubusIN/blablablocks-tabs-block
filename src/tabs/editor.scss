@@ -1,4 +1,4 @@
-.tabs_color_popover .components-popover__content>div {
+.tabs_color_popover .components-popover__content > div {
 	margin: -8px;
 	width: 260px;
 }
@@ -12,25 +12,26 @@
 }
 
 .tabs_color-support-panel {
+
 	.components-dropdown {
 		width: 100%;
 
 		&:nth-child(1) {
-			border: 1px solid rgba(0, 0, 0, .1);
+			border: 1px solid rgba(0, 0, 0, 0.1);
 			border-top-left-radius: 2px;
 			border-top-right-radius: 2px;
 		}
 
 		&:nth-child(2) {
-			border-left: 1px solid rgba(0, 0, 0, .1);
-			border-bottom: 1px solid rgba(0, 0, 0, .1);
-			border-right: 1px solid rgba(0, 0, 0, .1);
+			border-left: 1px solid rgba(0, 0, 0, 0.1);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+			border-right: 1px solid rgba(0, 0, 0, 0.1);
 		}
 
 		&:nth-child(3) {
-			border-left: 1px solid rgba(0, 0, 0, .1);
-			border-bottom: 1px solid rgba(0, 0, 0, .1);
-			border-right: 1px solid rgba(0, 0, 0, .1);
+			border-left: 1px solid rgba(0, 0, 0, 0.1);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+			border-right: 1px solid rgba(0, 0, 0, 0.1);
 			border-bottom-left-radius: 2px;
 			border-bottom-right-radius: 2px;
 		}
@@ -75,7 +76,7 @@
 	}
 }
 
-.bbb-custom-icon-modal .components-modal__content>div:nth-child(2) {
+.bbb-custom-icon-modal .components-modal__content > div:nth-child(2) {
 	height: 100%;
 }
 

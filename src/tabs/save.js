@@ -13,39 +13,44 @@ import { generateStyles } from '../utils/style';
  * @param {Object} props.attributes The block's attributes.
  * @return {JSX.Element}            The block's save component.
  */
-export default function save({ attributes }) {
+export default function save( { attributes } ) {
 	const { tabs } = attributes;
-	const blockProps = useBlockProps.save(
-		{
-			className: 'blablablocks-tabs',
-			style: generateStyles(attributes),
-		}
-	);
+	const blockProps = useBlockProps.save( {
+		className: 'blablablocks-tabs',
+		style: generateStyles( attributes ),
+	} );
 	const innerBlocksProps = useInnerBlocksProps.save();
 
 	return (
 		<div
-			{...blockProps}
+			{ ...blockProps }
 			data-wp-interactive="blablablocks-tabs"
-			data-wp-context={`{ "tabs": ${JSON.stringify(tabs)} }`}
+			data-wp-context={ `{ "tabs": ${ JSON.stringify( tabs ) } }` }
 			data-wp-init="callbacks.initTabs"
 		>
 			<div className="blablablocks-tabs-buttons">
 				<template data-wp-each--tab="context.tabs">
 					<div
-						className='blablablock-tab-btn'
+						className="blablablock-tab-btn"
 						data-wp-key="context.tab.id"
 						data-wp-on--click="actions.setActiveTab"
 						data-wp-class--is-bbb-active-tab="state.isActive"
 					>
-						<span className='bbb-tab-icon' data-wp-bind--hidden="!context.tab.icon" data-wp-watch="callbacks.renderIcon"></span>
-						<span className='tab-button-text' data-wp-text="context.tab.label"></span>
+						<span
+							className="bbb-tab-icon"
+							data-wp-bind--hidden="!context.tab.icon"
+							data-wp-watch="callbacks.renderIcon"
+						></span>
+						<span
+							className="tab-button-text"
+							data-wp-text="context.tab.label"
+						></span>
 					</div>
 				</template>
 			</div>
 
 			<div className="blablablocks-tabs-content">
-				<div {...innerBlocksProps} />
+				<div { ...innerBlocksProps } />
 			</div>
 		</div>
 	);

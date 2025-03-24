@@ -94,6 +94,39 @@
 			"type": "string"
 		}
 	},
+	"example": {
+		"attributes": {
+			"className": "is-example"
+		},
+		"innerBlocks": [
+			{
+				"name": "blablablocks/tab",
+				"attributes": {
+					"tabname": "Tab 1"
+				},
+				"innerBlocks": [
+					{
+						"name": "core/paragraph",
+						"attributes": {
+							"content": "Tab 1 content"
+						}
+					}
+				]
+			},
+			{
+				"name": "blablablocks/tab",
+				"attributes": {
+					"tabname": "Tab 2"
+				}
+			},
+			{
+				"name": "blablablocks/tab",
+				"attributes": {
+					"tabname": "Tab 3"
+				}
+			}
+		]
+	},
 	"supports": {
 		"anchor": true,
 		"html": false,

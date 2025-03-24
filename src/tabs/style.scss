@@ -4,6 +4,23 @@
 	gap: 10px;
 }
 
+.blablablock-tab-btn {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	height: fit-content;
+	margin-top: auto;
+	flex-direction: var(--bbb-tab-icon-position, row);
+}
+
+/* Icon position */
+.blablablocks-tabs .blablablock-tab-btn {
+	flex-direction: var(--bbb-tab-icon-position, row);
+	align-items: center;
+	justify-content: end;
+}
+
 .blablablocks-tabs-buttons {
 	gap: var(--bbb-tab-spacing);
 	display: flex;
@@ -19,6 +36,14 @@
 		border-left: var(--bbb-tab-border-left);
 		border-right: var(--bbb-tab-border-right);
 		border-top: var(--bbb-tab-border-top);
+
+		.tab-button-text {
+			color: var(--bbb-tab-text-color);
+		}
+
+		.bbb-tab-icon svg {
+			fill: var(--bbb-tab-icon-color);
+		}
 
 		&.is-bbb-active-tab {
 			background-color: var(--bbb-tab-background-active-color);
@@ -43,38 +68,49 @@
 				fill: var(--bbb-tab-icon-hover-color);
 			}
 		}
-
-		.tab-button-text {
-			color: var(--bbb-tab-text-color);
-		}
-
-		.bbb-tab-icon svg {
-			fill: var(--bbb-tab-icon-color);
-		}
 	}
-}
-
-.blablablock-tab-btn {
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	height: fit-content;
-	margin-top: auto;
-}
-
-/* Apply icon position based on the CSS variable */
-.blablablock-tab-btn {
-	flex-direction: var(--bbb-tab-icon-position, row);
-}
-
-/* Icon position */
-.blablablocks-tabs .blablablock-tab-btn {
-	flex-direction: var(--bbb-tab-icon-position, row);
-	align-items: center;
-	justify-content: end;
 }
 
 .blablablock-tab-btn .bbb-tab-icon {
 	width: var(--bbb-tab-icon-size, 24px);
 	height: var(--bbb-tab-icon-size, 24px);
+}
+
+.wp-block-blablablocks-tabs.is-style-style-2 .blablablock-tab-btn {
+	overflow: hidden;
+}
+
+.wp-block-blablablocks-tabs.is-style-style-1 .blablablock-tab-btn.is-bbb-active-tab::after {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -10px;
+	width: 0;
+	height: 0;
+	border: solid transparent;
+	border-width: 10px;
+	border-top-color: var(--bbb-tab-background-active-color);
+	content: "";
+	pointer-events: none;
+}
+
+.wp-block-blablablocks-tabs.is-style-style-2 .blablablock-tab-btn::after {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: var(--bbb-tab-active-border-color, #2cc185);
+	content: "";
+	transition: transform 0.3s;
+	-webkit-transform: translate3d(0, 150%, 0);
+	-moz-transform: translate3d(0, 150%, 0);
+	-ms-transform: translate3d(0, 150%, 0);
+	-o-transform: translate3d(0, 150%, 0);
+	transform: translate3d(0, 150%, 0);
+}
+
+.wp-block-blablablocks-tabs.is-style-style-2 .blablablock-tab-btn.is-bbb-active-tab::after {
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
 }
