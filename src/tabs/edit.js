@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -19,6 +19,7 @@ import Settings from './settings';
 import Styles from './styles';
 import { generateStyles } from '../utils/style';
 import { TabFill } from '../utils/slotFill';
+import Placeholder from './placeholder';
 
 /**
  * Default block configuration.
@@ -57,6 +58,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		(select) => select(blockEditorStore).getBlocks(clientId),
 		[clientId]
 	);
+
+	const hasInnerBlocks = innerBlocks.length > 0;
 
 	/**
 	 * Get the currently selected block's client ID in the editor.
@@ -120,7 +123,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		setAttributes({ tabs: newTabs });
 	}, [innerBlocks, setAttributes]);
 
-	return (
+	return hasInnerBlocks ? (
 		<>
 			<div {...blockProps}>
 				{innerBlocksProps.children}
@@ -136,5 +139,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			/>
 			<Styles attributes={attributes} setAttributes={setAttributes} />
 		</>
+	) : (
+		<Placeholder clientId={clientId} setAttributes={setAttributes} />
 	);
 }
