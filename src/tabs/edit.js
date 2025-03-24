@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
 import { useEffect } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import {
@@ -34,8 +33,8 @@ const DEFAULT_BLOCK = {
  * @type {Array}
  */
 const TABS_TEMPLATE = [
-	['blablablocks/tab', { tabname: 'Tab 1' }],
-	['blablablocks/tab', { tabname: 'Tab 2' }],
+	[ 'blablablocks/tab', { tabname: 'Tab 1' } ],
+	[ 'blablablocks/tab', { tabname: 'Tab 2' } ],
 ];
 
 /**
@@ -47,7 +46,7 @@ const TABS_TEMPLATE = [
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({ clientId, attributes, setAttributes }) {
+export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { allowedBlocks, activeTab } = attributes;
 
 	/**
@@ -55,8 +54,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	 * @type {Array}
 	 */
 	const innerBlocks = useSelect(
-		(select) => select(blockEditorStore).getBlocks(clientId),
-		[clientId]
+		( select ) => select( blockEditorStore ).getBlocks( clientId ),
+		[ clientId ]
 	);
 
 	const hasInnerBlocks = innerBlocks.length > 0;
@@ -66,33 +65,33 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	 * @type {string}
 	 */
 	const selectedBlockClientId = useSelect(
-		(select) => select(blockEditorStore).getSelectedBlockClientId(),
+		( select ) => select( blockEditorStore ).getSelectedBlockClientId(),
 		[]
 	);
 
 	/**
 	 * Update the activeTab attribute when a tab is selected from the List View.
 	 */
-	useEffect(() => {
-		if (selectedBlockClientId) {
+	useEffect( () => {
+		if ( selectedBlockClientId ) {
 			const selectedTabIndex = innerBlocks.findIndex(
-				(tab) => tab.clientId === selectedBlockClientId
+				( tab ) => tab.clientId === selectedBlockClientId
 			);
 
-			if (selectedTabIndex !== -1 && selectedTabIndex !== activeTab) {
-				setAttributes({ activeTab: selectedTabIndex });
+			if ( selectedTabIndex !== -1 && selectedTabIndex !== activeTab ) {
+				setAttributes( { activeTab: selectedTabIndex } );
 			}
 		}
-	}, [selectedBlockClientId, innerBlocks, activeTab, setAttributes]);
+	}, [ selectedBlockClientId, innerBlocks, activeTab, setAttributes ] );
 
 	/**
 	 * Props for the block container.
 	 * @type {Object}
 	 */
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: 'blablablocks-tabs',
-		style: generateStyles(attributes),
-	});
+		style: generateStyles( attributes ),
+	} );
 
 	/**
 	 * Props for the inner blocks container.
@@ -113,33 +112,33 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	/**
 	 * Update the tabs attribute when inner blocks change.
 	 */
-	useEffect(() => {
-		const newTabs = innerBlocks.map((tab) => ({
+	useEffect( () => {
+		const newTabs = innerBlocks.map( ( tab ) => ( {
 			id: tab.attributes.tabId || tab.clientId,
 			label: tab.attributes.tabname,
 			icon: tab.attributes.tabIcon,
 			isDefault: tab.attributes.isDefault,
-		}));
-		setAttributes({ tabs: newTabs });
-	}, [innerBlocks, setAttributes]);
+		} ) );
+		setAttributes( { tabs: newTabs } );
+	}, [ innerBlocks, setAttributes ] );
 
 	return hasInnerBlocks ? (
 		<>
-			<div {...blockProps}>
-				{innerBlocksProps.children}
-				<TabFill tabsClientId={clientId}>
+			<div { ...blockProps }>
+				{ innerBlocksProps.children }
+				<TabFill tabsClientId={ clientId }>
 					<div className="blablablocks-tab_inserter">
 						<InnerBlocks.ButtonBlockAppender />
 					</div>
 				</TabFill>
 			</div>
 			<Settings
-				attributes={attributes}
-				setAttributes={setAttributes}
+				attributes={ attributes }
+				setAttributes={ setAttributes }
 			/>
-			<Styles attributes={attributes} setAttributes={setAttributes} />
+			<Styles attributes={ attributes } setAttributes={ setAttributes } />
 		</>
 	) : (
-		<Placeholder clientId={clientId} setAttributes={setAttributes} />
+		<Placeholder clientId={ clientId } setAttributes={ setAttributes } />
 	);
 }

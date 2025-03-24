@@ -1,7 +1,7 @@
 /**
  * Wordpress dependencies.
  */
-import { SVG, Path, G, Rect } from '@wordpress/components';
+import { SVG, Path } from '@wordpress/components';
 
 /**
  * Tabs logo icon

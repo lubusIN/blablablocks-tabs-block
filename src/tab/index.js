@@ -15,7 +15,7 @@ import './style.scss';
 /**
  * Register a slide block
  */
-registerBlockType(metadata.name, {
+registerBlockType( metadata.name, {
 	icon: (
 		<SVG
 			width="24"
@@ -32,4 +32,4 @@ registerBlockType(metadata.name, {
 	),
 	edit: Edit,
 	save,
-});
+} );

@@ -35,34 +35,61 @@ function Settings( { attributes, setAttributes } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Layout', 'blablablocks-tabs-block' ) }>
 					<HStack align={ 'start' }>
-						<ToggleGroupControl
-							label={ __(
-								'Justification',
-								'blablablocks-tabs-block'
-							) }
-							value={ attributes.justification }
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							onChange={ ( value ) =>
-								setAttributes( { justification: value } )
-							}
-						>
-							<ToggleGroupControlOptionIcon
-								icon={ justifyLeft }
-								value="left"
-								label="Justify items left"
-							/>
-							<ToggleGroupControlOptionIcon
-								icon={ justifyCenter }
-								value="center"
-								label="Justify items center"
-							/>
-							<ToggleGroupControlOptionIcon
-								icon={ justifyRight }
-								value="right"
-								label="Justify items right"
-							/>
-						</ToggleGroupControl>
+						{ attributes.orientation === 'row' && (
+							<ToggleGroupControl
+								label={ __(
+									'Justification',
+									'blablablocks-tabs-block'
+								) }
+								value={ attributes.justification }
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								onChange={ ( value ) =>
+									setAttributes( { justification: value } )
+								}
+							>
+								<ToggleGroupControlOptionIcon
+									icon={ justifyLeft }
+									value="left"
+									label="Justify items left"
+								/>
+								<ToggleGroupControlOptionIcon
+									icon={ justifyCenter }
+									value="center"
+									label="Justify items center"
+								/>
+								<ToggleGroupControlOptionIcon
+									icon={ justifyRight }
+									value="right"
+									label="Justify items right"
+								/>
+							</ToggleGroupControl>
+						) }
+						{ attributes.orientation === 'column' && (
+							<ToggleGroupControl
+								label={ __(
+									'Position',
+									'blablablocks-tabs-block'
+								) }
+								value={ attributes.verticalPosition }
+								__nextHasNoMarginBottom
+								__next40pxDefaultSize
+								onChange={ ( value ) =>
+									setAttributes( { verticalPosition: value } )
+								}
+							>
+								<ToggleGroupControlOptionIcon
+									icon={ justifyLeft }
+									value="left"
+									label="Left"
+								/>
+								<ToggleGroupControlOptionIcon
+									icon={ justifyRight }
+									value="right"
+									label="Right"
+								/>
+							</ToggleGroupControl>
+						) }
 						<ToggleGroupControl
 							label={ __(
 								'Orientation',
@@ -84,31 +111,6 @@ function Settings( { attributes, setAttributes } ) {
 								icon={ arrowDown }
 								value="column"
 								label="Vertical"
-							/>
-						</ToggleGroupControl>
-					</HStack>
-					<HStack align={ 'start' }>
-						<ToggleGroupControl
-							label={ __(
-								'Position',
-								'blablablocks-tabs-block'
-							) }
-							value={ attributes.verticalPosition }
-							__nextHasNoMarginBottom
-							__next40pxDefaultSize
-							onChange={ ( value ) =>
-								setAttributes( { verticalPosition: value } )
-							}
-						>
-							<ToggleGroupControlOptionIcon
-								icon={ justifyLeft }
-								value="left"
-								label="Left"
-							/>
-							<ToggleGroupControlOptionIcon
-								icon={ justifyRight }
-								value="right"
-								label="Right"
 							/>
 						</ToggleGroupControl>
 					</HStack>
