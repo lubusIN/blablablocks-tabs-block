@@ -12,13 +12,17 @@
 	height: fit-content;
 	margin-top: auto;
 	flex-direction: var(--bbb-tab-icon-position, row);
+
+	&.is-bbb-full-width-tab {
+		width: var(--bbb-tab-auto-width, auto);
+	}
 }
 
 /* Icon position */
 .blablablocks-tabs .blablablock-tab-btn {
 	flex-direction: var(--bbb-tab-icon-position, row);
 	align-items: center;
-	justify-content: end;
+	justify-content: center;
 }
 
 .blablablocks-tabs-buttons {

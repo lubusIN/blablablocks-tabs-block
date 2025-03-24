@@ -5,6 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	PanelBody,
+	ToggleControl,
 	RangeControl,
 	__experimentalHStack as HStack, // eslint-disable-line
 	__experimentalToggleGroupControl as ToggleGroupControl, // eslint-disable-line
@@ -114,6 +115,16 @@ function Settings( { attributes, setAttributes } ) {
 							/>
 						</ToggleGroupControl>
 					</HStack>
+					<ToggleControl
+						checked={ attributes.autoWidth }
+						label={ __(
+							'Auto-adjust tab width',
+							'blablablocks-tabs-block'
+						) }
+						onChange={ ( value ) =>
+							setAttributes( { autoWidth: value } )
+						}
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls>

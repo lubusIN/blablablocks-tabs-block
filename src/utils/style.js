@@ -204,5 +204,13 @@ export const generateStyles = ( attributes = {} ) => {
 		attributes?.iconSize ? `${ attributes?.iconSize }px` : '24px'
 	);
 
+	// Auto width
+	addStyle(
+		'--bbb-tab-auto-width',
+		attributes?.autoWidth && attributes.orientation === 'row'
+			? '100%'
+			: 'auto'
+	);
+
 	return styles;
 };
