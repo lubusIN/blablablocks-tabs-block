@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { useEffect } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -48,6 +48,7 @@ const TABS_TEMPLATE = [
  */
 export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { allowedBlocks, activeTab } = attributes;
+	const { selectBlock } = useDispatch( blockEditorStore );
 
 	/**
 	 * Get the inner blocks of the current block.
@@ -68,6 +69,16 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		( select ) => select( blockEditorStore ).getSelectedBlockClientId(),
 		[]
 	);
+
+	useEffect(() => {
+		if (
+			innerBlocks.length > 0 &&
+			innerBlocks[ activeTab ] &&
+			selectedBlockClientId !== innerBlocks[ activeTab ].clientId
+		) {
+			selectBlock(innerBlocks[ activeTab ].clientId);
+		}
+	}, [innerBlocks, activeTab]);	
 
 	/**
 	 * Update the activeTab attribute when a tab is selected from the List View.
