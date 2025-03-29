@@ -10,12 +10,8 @@
 	align-items: center;
 	gap: 8px;
 	height: fit-content;
-	margin-top: auto;
 	flex-direction: var(--bbb-tab-icon-position, row);
-
-	&.is-bbb-full-width-tab {
-		width: var(--bbb-tab-auto-width, auto);
-	}
+	width: var(--bbb-tab-auto-width, auto);
 }
 
 /* Icon position */
@@ -30,6 +26,7 @@
 	display: flex;
 	justify-content: var(--bbb-tab-buttons-justify-content, left);
 	flex-direction: var(--bbb-tab-buttons-flex-direction, column);
+	align-items: end;
 
 	.blablablock-tab-btn {
 		cursor: pointer;
