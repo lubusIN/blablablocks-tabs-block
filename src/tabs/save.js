@@ -19,6 +19,7 @@ export default function save( { attributes } ) {
 		className: 'blablablocks-tabs',
 		style: generateStyles( attributes ),
 	} );
+	
 	const innerBlocksProps = useInnerBlocksProps.save();
 
 	return (

@@ -47,7 +47,7 @@ import Placeholder from './placeholder';
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({ clientId, attributes, setAttributes }) {
+export default function Edit({ clientId, isSelected, attributes, setAttributes }) {
 	const [isOpen, setOpen] = useState(false);
 	const [svgCode, setSvgCode] = useState('');
 	const [isSvgValid, setIsSvgValid] = useState(false);
@@ -117,6 +117,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				getBlockRootClientId,
 				getBlockParentsByBlockName,
 				getBlock,
+				hasSelectedInnerBlock
 			} = select('core/block-editor');
 
 			const parentBlocks = getBlockParentsByBlockName(clientId, [
@@ -131,6 +132,10 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				? getBlock(closestParentBlockId)?.innerBlocks || []
 				: [];
 			const rootClientId = getBlockRootClientId(clientId);
+			const hasInnerBlocksSelected = hasSelectedInnerBlock(
+				clientId,
+				true
+			);
 
 			return {
 				tabsClientId: rootClientId,
@@ -139,29 +144,22 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				closestParentBlockId,
 				parentAttributes: parentBlockAttrs,
 				siblingTabs: siblingBlocks,
+				hasInnerBlocksSelected,
 			};
 		},
 		[clientId]
 	);
 
-	const { hasChildBlocks, tabsClientId, parentAttributes, siblingTabs } =
+	const { hasChildBlocks, tabsClientId, parentAttributes, siblingTabs, hasInnerBlocksSelected } =
 		blockData;
 
-	const { updateBlockAttributes } = useDispatch(blockEditorStore);
+	const { updateBlockAttributes, selectBlock } = useDispatch(blockEditorStore);
 
 	/**
-	 * Determine the active tab index from the parent block's attributes.
-	 * @type {number}
-	 */
-	const activeTabIndex = parentAttributes?.activeTab || 0;
-
-	/**
-	 * Check if the current tab is the active tab.
+	 * Check if the current tab is selected.
 	 * @type {boolean}
 	 */
-	const isActive =
-		siblingTabs.findIndex((tab) => tab.clientId === clientId) ===
-		activeTabIndex;
+	const isTabSelected = isSelected || hasInnerBlocksSelected || attributes.isDefault;
 
 	/**
 	 * Props for the block container.
@@ -216,8 +214,10 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			<TabFill tabsClientId={tabsClientId}>
 				<div
 					className={clsx('blablablock-tab-btn', {
-						'is-bbb-active-tab': isActive,
+						'is-bbb-active-tab': isTabSelected,
 					})}
+					role='button'
+					onClick={() => selectBlock(clientId)}
 				>
 					{ /* Render the tab icon if it exists */}
 					{attributes.tabIcon && (
@@ -243,13 +243,13 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 					/>
 				</div>
 			</TabFill>
-			{isActive && (
+			{isTabSelected && (
 				<>
 					<TabsListSlot tabsClientId={tabsClientId} />
 					{hasChildBlocks ?
 						(<div {...innerBlocksProps} />)
 						: (
-							<Placeholder clientId={clientId} />
+							<Placeholder clientId={clientId} attributes={attributes} />
 						)
 					}
 				</>
