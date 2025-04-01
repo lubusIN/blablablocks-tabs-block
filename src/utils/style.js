@@ -5,20 +5,20 @@
  * @param {string|number} defaultValue - The default value.
  * @return {string} - A valid CSS spacing size value.
  */
-const resolveSpacingSizeValue = ( value, defaultValue = '0px' ) => {
-	if ( typeof value === 'string' ) {
-		if ( value.startsWith( 'var:' ) ) {
+const resolveSpacingSizeValue = (value, defaultValue = '0px') => {
+	if (typeof value === 'string') {
+		if (value.startsWith('var:')) {
 			// Convert "var:some|value" into "var(--wp--some--value)"
 			const cssVariable = value
-				.replace( 'var:', '--wp--' )
-				.replace( /\|/g, '--' );
-			return `var(${ cssVariable })`;
+				.replace('var:', '--wp--')
+				.replace(/\|/g, '--');
+			return `var(${cssVariable})`;
 		}
 		return value; // If it's a valid CSS string, return as-is
 	}
 
-	if ( typeof value === 'number' ) {
-		return `${ value }px`; // Convert numbers to pixel values
+	if (typeof value === 'number') {
+		return `${value}px`; // Convert numbers to pixel values
 	}
 
 	// use defaultValue if value is invalid or undefined
@@ -31,19 +31,19 @@ const resolveSpacingSizeValue = ( value, defaultValue = '0px' ) => {
  * @param {Object} border - The border definition object.
  * @return {Object} - An object containing border styles.
  */
-const getBorderStyles = ( border = {} ) => {
+const getBorderStyles = (border = {}) => {
 	const styles = {};
 
 	// Loop through each border side and assign styles
-	[ 'top', 'right', 'bottom', 'left' ].forEach( ( side ) => {
-		const width = border?.[ side ]?.width ?? border?.width ?? '0px';
-		const style = border?.[ side ]?.style ?? border?.style ?? 'solid';
-		const color = border?.[ side ]?.color ?? border?.color ?? '';
+	['top', 'right', 'bottom', 'left'].forEach((side) => {
+		const width = border?.[side]?.width ?? border?.width ?? '0px';
+		const style = border?.[side]?.style ?? border?.style ?? 'solid';
+		const color = border?.[side]?.color ?? border?.color ?? '';
 
 		styles[
-			`--bbb-tab-border-${ side }`
-		] = `${ width } ${ style } ${ color }`;
-	} );
+			`--bbb-tab-border-${side}`
+		] = `${width} ${style} ${color}`;
+	});
 
 	return styles;
 };
@@ -55,8 +55,8 @@ const getBorderStyles = ( border = {} ) => {
  * @param {string|number} defaultValue - The default value.
  * @return {string} - A valid CSS border-radius value.
  */
-const getBorderRadiusStyles = ( borderRadius, defaultValue = '0px' ) => {
-	if ( typeof borderRadius === 'string' ) {
+const getBorderRadiusStyles = (borderRadius, defaultValue = '0px') => {
+	if (typeof borderRadius === 'string') {
 		return borderRadius;
 	}
 
@@ -65,7 +65,7 @@ const getBorderRadiusStyles = ( borderRadius, defaultValue = '0px' ) => {
 	const topRight = borderRadius?.topRight || defaultValue;
 	const bottomRight = borderRadius?.bottomRight || defaultValue;
 	const bottomLeft = borderRadius?.bottomLeft || defaultValue;
-	return `${ topLeft } ${ topRight } ${ bottomRight } ${ bottomLeft }`;
+	return `${topLeft} ${topRight} ${bottomRight} ${bottomLeft}`;
 };
 
 /**
@@ -76,15 +76,15 @@ const getBorderRadiusStyles = ( borderRadius, defaultValue = '0px' ) => {
  *
  * @return {Object} - An object with CSS variable definitions.
  */
-export const generateStyles = ( attributes = {} ) => {
+export const generateStyles = (attributes = {}) => {
 	const styles = {};
 
 	// Helper function to add a style with a fallback to default values
-	const addStyle = ( key, value, defaultValue = '0px' ) => {
-		if ( value !== undefined && value !== null ) {
-			styles[ key ] = value;
-		} else if ( defaultValue ) {
-			styles[ key ] = defaultValue;
+	const addStyle = (key, value, defaultValue = '0px') => {
+		if (value !== undefined && value !== null) {
+			styles[key] = value;
+		} else if (defaultValue) {
+			styles[key] = defaultValue;
 		}
 	};
 
@@ -129,35 +129,35 @@ export const generateStyles = ( attributes = {} ) => {
 	// Tab Border Radius
 	addStyle(
 		'--bbb-tab-border-radius',
-		getBorderRadiusStyles( attributes?.tabBorderRadius, '4px' )
+		getBorderRadiusStyles(attributes?.tabBorderRadius, '4px')
 	);
 
 	// Padding styles with defaults
 	addStyle(
 		'--bbb-tab-padding-top',
-		resolveSpacingSizeValue( attributes?.tabPadding?.top, '5px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.top, '5px')
 	);
 	addStyle(
 		'--bbb-tab-padding-right',
-		resolveSpacingSizeValue( attributes?.tabPadding?.right, '15px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.right, '15px')
 	);
 	addStyle(
 		'--bbb-tab-padding-bottom',
-		resolveSpacingSizeValue( attributes?.tabPadding?.bottom, '5px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.bottom, '5px')
 	);
 	addStyle(
 		'--bbb-tab-padding-left',
-		resolveSpacingSizeValue( attributes?.tabPadding?.left, '15px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.left, '15px')
 	);
 
 	// Spacing styles with defaults
 	addStyle(
 		'--bbb-tab-spacing',
-		resolveSpacingSizeValue( attributes?.tabSpacing, '10px' )
+		resolveSpacingSizeValue(attributes?.tabSpacing, '10px')
 	);
 
 	// Border styles
-	Object.assign( styles, getBorderStyles( attributes?.tabBorder ) );
+	Object.assign(styles, getBorderStyles(attributes?.tabBorder));
 
 	// Tab Buttons styles
 	addStyle(
@@ -175,33 +175,33 @@ export const generateStyles = ( attributes = {} ) => {
 		attributes?.orientation === 'column' ? 'flex' : ''
 	);
 	// Tabs styles
-	if ( attributes?.orientation === 'column' ) {
-		addStyle( '--bbb-tabs-display', 'flex' );
-		if ( attributes?.verticalPosition === 'right' ) {
-			addStyle( '--bbb-tabs-flex-direction', 'row-reverse' );
+	if (attributes?.orientation === 'column') {
+		addStyle('--bbb-tabs-display', 'flex');
+		if (attributes?.verticalPosition === 'right') {
+			addStyle('--bbb-tabs-flex-direction', 'row-reverse');
 		} else {
-			addStyle( '--bbb-tabs-flex-direction', 'row' );
+			addStyle('--bbb-tabs-flex-direction', 'row');
 		}
 	} else {
-		addStyle( '--bbb-tabs-display', '' );
-		addStyle( '--bbb-tabs-flex-direction', 'column' );
+		addStyle('--bbb-tabs-display', '');
+		addStyle('--bbb-tabs-flex-direction', 'column');
 	}
 
 	// Icon Position
 	let iconDirection = 'row';
-	if ( attributes?.iconPosition === 'top' ) {
+	if (attributes?.iconPosition === 'top') {
 		iconDirection = 'column';
-	} else if ( attributes?.iconPosition === 'bottom' ) {
+	} else if (attributes?.iconPosition === 'bottom') {
 		iconDirection = 'column-reverse';
-	} else if ( attributes?.iconPosition === 'right' ) {
+	} else if (attributes?.iconPosition === 'right') {
 		iconDirection = 'row-reverse';
 	}
-	addStyle( '--bbb-tab-icon-position', iconDirection );
+	addStyle('--bbb-tab-icon-position', iconDirection);
 
 	// Icon Size
 	addStyle(
 		'--bbb-tab-icon-size',
-		attributes?.iconSize ? `${ attributes?.iconSize }px` : '24px'
+		attributes?.iconSize ? `${attributes?.iconSize}px` : '24px'
 	);
 
 	// Auto width

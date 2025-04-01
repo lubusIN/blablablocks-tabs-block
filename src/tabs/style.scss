@@ -43,7 +43,11 @@
 		}
 
 		.bbb-tab-icon svg {
-			fill: var(--bbb-tab-icon-color);
+			color: var(--bbb-tab-icon-color);
+		}
+
+		.bbb-tab-icon .is-bbb-svg-fill {
+			fill: currentColor;
 		}
 
 		&.is-bbb-active-tab {
@@ -54,7 +58,7 @@
 			}
 
 			.bbb-tab-icon svg {
-				fill: var(--bbb-tab-icon-active-color);
+				color: var(--bbb-tab-icon-active-color);
 			}
 		}
 
@@ -66,7 +70,7 @@
 			}
 
 			.bbb-tab-icon svg {
-				fill: var(--bbb-tab-icon-hover-color);
+				color: var(--bbb-tab-icon-hover-color);
 			}
 		}
 	}

@@ -38,6 +38,10 @@
 			"type": "string",
 			"default": "24"
 		},
+		"iconFill": {
+			"type": "boolean",
+			"default": true
+		},
 		"tabColor": {
 			"type": "object",
 			"properties": {

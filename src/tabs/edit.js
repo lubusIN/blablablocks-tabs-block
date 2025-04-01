@@ -78,7 +78,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		) {
 			selectBlock(innerBlocks[ activeTab ].clientId);
 		}
-	}, [innerBlocks, activeTab]);	
+	}, []);	
 
 	/**
 	 * Update the activeTab attribute when a tab is selected from the List View.

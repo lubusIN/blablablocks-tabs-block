@@ -221,7 +221,9 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 					{ /* Render the tab icon if it exists */ }
 					{ attributes.tabIcon && (
 						<span
-							className="bbb-tab-icon"
+							className={ clsx( 'bbb-tab-icon', {
+								'is-bbb-svg-fill': parentAttributes.iconFill,
+							} ) }
 							dangerouslySetInnerHTML={ {
 								__html: attributes.tabIcon,
 							} }
