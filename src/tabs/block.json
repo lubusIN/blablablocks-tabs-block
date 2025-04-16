@@ -6,16 +6,12 @@
 	"category": "widgets",
 	"description": "A dynamic tab block that lets you organize content into interactive, customizable tabs. Easily manage and display information in a clean, user-friendly layout.",
 	"attributes": {
-		"tabs": {
-			"type": "array",
-			"default": []
-		},
 		"autoWidth": {
 			"type": "boolean",
 			"default": false
 		},
 		"activeTab": {
-			"type": "integer",
+			"type": "number",
 			"default": 0
 		},
 		"orientation": {
@@ -171,5 +167,6 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
+	"render": "file:./render.php",
 	"viewScriptModule": "file:./view.js"
 }

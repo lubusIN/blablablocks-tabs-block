@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       Blablablocks Tabs Block
+ * Plugin Name:       BlaBlablocks Tabs Block
  * Description:       Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.
  * Version:           1.0.0
  * Requires at least: 6.7
@@ -11,7 +11,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-tabs-block
  *
- * @package BlablablocksTabsBlock
+ * @package 		  BlaBlaBlocks Tabs Block
  */
 
 if (! defined('ABSPATH')) {

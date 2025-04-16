@@ -5,31 +5,23 @@ import { store, getContext, getElement } from '@wordpress/interactivity';
 
 // Constants for store name and default values
 const STORE_NAME = 'blablablocks-tabs';
-const DEFAULT_TAB_ID = '';
 
-const { state } = store( STORE_NAME, {
+const { state } = store(STORE_NAME, {
 	state: {
 		/**
-		 * Returns the ID of the currently active tab.
-		 * Falls back to the first tab's ID if no active tab is set.
+		 * Returns the index of the currently active tab.
 		 *
-		 * @type {string}
+		 * @type {number|null}
 		 */
-		get activeTab() {
-			const context = getContext();
-			return context.activeTab || state.defaultTab || DEFAULT_TAB_ID;
-		},
-
-		/**
-		 * Returns the ID of the default tab.
-		 * Falls back to the first tab's ID if no tab is marked as default.
-		 *
-		 * @type {string}
-		 */
-		get defaultTab() {
-			const context = getContext();
-			const defaultTab = context.tabs?.find( ( tab ) => tab.isDefault );
-			return defaultTab?.id || context.tabs?.[ 0 ]?.id || DEFAULT_TAB_ID;
+		get activeTabIndex() {
+			const { attributes } = getElement();
+			const tabId = attributes?.id || null;
+			if (!tabId) {
+				return null;
+			}
+			const { tabs } = getContext();
+			const tabIndex = tabs.findIndex((t) => t.id === tabId);
+			return tabIndex;
 		},
 
 		/**
@@ -38,8 +30,18 @@ const { state } = store( STORE_NAME, {
 		 * @type {boolean}
 		 */
 		get isActive() {
-			const context = getContext();
-			return context.tab?.id === state.activeTab;
+			const { activeTab } = getContext();
+			const tabIndex = state.activeTabIndex;
+			return activeTab === tabIndex;
+		},
+
+		/**
+		 * The value of the tabindex attribute.
+		 *
+		 * @type {false|string}
+		 */
+		get tabIndex() {
+			return state.isActive ? -1 : 0;
 		},
 	},
 	actions: {
@@ -50,7 +52,10 @@ const { state } = store( STORE_NAME, {
 		 */
 		setActiveTab: () => {
 			const context = getContext();
-			context.activeTab = context.tab?.id;
+			const tabIndex = state.activeTabIndex;
+			if (tabIndex !== null) {
+				context.activeTab = state.activeTabIndex;
+			}
 		},
 	},
 	callbacks: {
@@ -62,26 +67,10 @@ const { state } = store( STORE_NAME, {
 		 */
 		initTabs() {
 			const context = getContext();
-			const hasTabs = context.tabs?.length > 0;
-			const noActiveTab = ! context.activeTab;
-
-			if ( noActiveTab && hasTabs ) {
-				context.activeTab = state.defaultTab;
-			}
-		},
-
-		/**
-		 * Renders the icon for the tabs.
-		 *
-		 * @return {void}
-		 */
-		renderIcon() {
-			const context = getContext();
-			const element = getElement();
-			// Check if tabs and icon exist
-			if ( context.tab && context.tab.icon ) {
-				element.ref.innerHTML = context.tab.icon;
+			const tabIndex = context.tabs.findIndex((t) => t.id === context.activeId);
+			if (tabIndex >= 0) {
+				context.activeTab = tabIndex;
 			}
 		},
 	},
-} );
+});

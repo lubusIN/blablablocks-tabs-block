@@ -4,10 +4,9 @@
 import clsx from 'clsx';
 import { __ } from '@wordpress/i18n';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useEffect, useState } from '@wordpress/element';
+import { useEffect, useMemo, useState } from '@wordpress/element';
 import {
 	useBlockProps,
-	InnerBlocks,
 	useInnerBlocksProps,
 	RichText,
 	BlockControls,
@@ -34,7 +33,6 @@ import { code, reset } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import './editor.scss';
 import { TabFill, TabsListSlot } from '../utils/slotFill';
 import Placeholder from './placeholder';
 
@@ -43,6 +41,7 @@ import Placeholder from './placeholder';
  *
  * @param {Object}   props               Component props.
  * @param {string}   props.clientId      The client ID for this block instance.
+ * @param {boolean}  props.isSelected    Whether the block is currently selected.
  * @param {Object}   props.attributes    The block attributes.
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
@@ -52,6 +51,7 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 	const [svgCode, setSvgCode] = useState('');
 	const [isSvgValid, setIsSvgValid] = useState(false);
 	const [validationError, setValidationError] = useState('');
+	const { updateBlockAttributes, selectBlock } = useDispatch(blockEditorStore);
 
 	const openModal = () => setOpen(true);
 	const closeModal = () => setOpen(false);
@@ -89,6 +89,7 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 
 	/**
 	 * Handle SVG code changes.
+	 * Updates the SVG code state and validates the new code.
 	 *
 	 * @param {string} value The new SVG code.
 	 */
@@ -110,56 +111,88 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 	/**
 	 * Retrieve block-related data using the `useSelect` hook.
 	 */
-	const blockData = useSelect(
-		(select) => {
-			const {
-				getBlockOrder,
-				getBlockRootClientId,
-				getBlockParentsByBlockName,
-				getBlock,
-				hasSelectedInnerBlock
-			} = select('core/block-editor');
+	const {
+		hasChildBlocks,
+		tabsClientId,
+		hasTabSelected,
+		isDefaultTab,
+		blockIndex,
+		isTabsClientSelected,
+		forceDisplay,
+		hasInnerBlocksSelected
+	} = useSelect((select) => {
+		const {
+			getBlockOrder,
+			getBlockIndex,
+			getBlockRootClientId,
+			getBlockParentsByBlockName,
+			getBlockAttributes,
+			hasSelectedInnerBlock,
+			isBlockSelected
+		} = select('core/block-editor');
 
-			const parentBlocks = getBlockParentsByBlockName(clientId, [
-				'blablablocks/tabs',
-			]);
-			const closestParentBlockId =
-				parentBlocks?.[parentBlocks.length - 1] || null;
-			const parentBlockAttrs = closestParentBlockId
-				? getBlock(closestParentBlockId)?.attributes
-				: {};
-			const siblingBlocks = closestParentBlockId
-				? getBlock(closestParentBlockId)?.innerBlocks || []
-				: [];
-			const rootClientId = getBlockRootClientId(clientId);
-			const hasInnerBlocksSelected = hasSelectedInnerBlock(
-				clientId,
-				true
-			);
+		const parentBlocks = getBlockParentsByBlockName(clientId, [
+			'blablablocks/tabs',
+		]);
+		const closestParentBlockId =
+			parentBlocks?.[parentBlocks.length - 1] || null;
+		const rootClientId = getBlockRootClientId(clientId);
+		const parentBlockAttrs = getBlockAttributes(closestParentBlockId);
+		const hasTabSelected = hasSelectedInnerBlock(rootClientId, true);
+		const hasInnerBlocksSelected = hasSelectedInnerBlock(
+			clientId,
+			true
+		);
+		const blockIndex = getBlockIndex(clientId);
+		const totalTabsCount = getBlockOrder(rootClientId).length;
+		
+		// Check if activeTab is a valid index and if this tab is the active one
+		const activeTab = parentBlockAttrs?.activeTab;
+		const isValidActiveTab = typeof activeTab === 'number' && activeTab >= 0 && activeTab < totalTabsCount;
+		const isDefaultTab = isValidActiveTab ? activeTab === blockIndex : blockIndex === 0;
+		const isTabsClientSelected = isBlockSelected(rootClientId);
 
-			return {
-				tabsClientId: rootClientId,
-				hasChildBlocks: getBlockOrder(clientId).length > 0,
-				parentBlocks,
-				closestParentBlockId,
-				parentAttributes: parentBlockAttrs,
-				siblingTabs: siblingBlocks,
-				hasInnerBlocksSelected,
-			};
-		},
+		return {
+			blockIndex,
+			tabsClientId: rootClientId,
+			hasChildBlocks: getBlockOrder(clientId).length > 0,
+			hasInnerBlocksSelected,
+			isTabsClientSelected,
+			isDefaultTab,
+			forceDisplay: isDefaultTab && isTabsClientSelected,
+			hasTabSelected,
+		};
+	},
 		[clientId]
 	);
 
-	const { hasChildBlocks, tabsClientId, parentAttributes, siblingTabs, hasInnerBlocksSelected } =
-		blockData;
-
-	const { updateBlockAttributes, selectBlock } = useDispatch(blockEditorStore);
-
 	/**
-	 * Check if the current tab is selected.
+	 * Determines if the current tab should be displayed as selected based on
+	 * various selection states and conditions.
+	 * 
 	 * @type {boolean}
 	 */
-	const isTabSelected = isSelected || hasInnerBlocksSelected || attributes.isDefault;
+	const isTabSelected = useMemo(() => {
+		if (isSelected || hasInnerBlocksSelected || forceDisplay) {
+			return true;
+		}
+		if (
+			isDefaultTab &&
+			!isTabsClientSelected &&
+			!isSelected &&
+			!hasTabSelected
+		) {
+			return true;
+		}
+		return false;
+	}, [
+		isSelected,
+		hasInnerBlocksSelected,
+		isDefaultTab,
+		forceDisplay,
+		isTabsClientSelected,
+		hasTabSelected,
+	]);
 
 	/**
 	 * Props for the block container.
@@ -173,40 +206,25 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 	 * Props for the inner blocks container.
 	 * @type {Object}
 	 */
-	const innerBlocksProps = useInnerBlocksProps(
-		{},
-		{
-			renderAppender: hasChildBlocks
-				? undefined
-				: InnerBlocks.ButtonBlockAppender,
-		}
-	);
+	const innerBlocksProps = useInnerBlocksProps();
 
 	/**
-	 * Sets the default tab by updating the `isDefault` attribute of the specified tab and
-	 * resetting the `isDefault` attribute of all other tabs.
+	 * Sets the default tab by updating the `activeTab` attribute of the parent Tabs block.
 	 *
-	 * @param {boolean} value - The value to set for the `isDefault` attribute.
+	 * @param {boolean} value - The value to set for the active tab.
 	 */
 	const handleSetDefault = (value) => {
-		// Unmark all other tabs as default
-		siblingTabs.forEach((tab) => {
-			if (tab.clientId !== clientId && tab.attributes.isDefault) {
-				updateBlockAttributes(tab.clientId, { isDefault: false });
-			}
-		});
-		// Set the current tab as default
-		setAttributes({ isDefault: value });
+		updateBlockAttributes(tabsClientId, { activeTab: value ? blockIndex : 0 });
 	};
 
 	/**
-	 * Set the `tabId` attribute if it doesn't already exist.
-	 * This ensures each tab has a unique identifier.
+	 * Set the `tabId` attribute.
+	 * 
+	 * This effect ensures each tab has a unique identifier by setting the tabId
+	 * attribute to the clientId.
 	 */
 	useEffect(() => {
-		if (!attributes.tabId) {
-			setAttributes({ tabId: clientId });
-		}
+		setAttributes({ tabId: clientId });
 	}, [clientId, attributes.tabId, setAttributes]);
 
 	return (
@@ -265,7 +283,7 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 							'Set as default tab',
 							'blablablocks-tabs-block'
 						)}
-						checked={attributes.isDefault}
+						checked={isDefaultTab}
 						onChange={(value) => handleSetDefault(value)}
 					/>
 				</PanelBody>

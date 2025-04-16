@@ -30,6 +30,7 @@
 	display: flex;
 	justify-content: var(--bbb-tab-buttons-justify-content, left);
 	flex-direction: var(--bbb-tab-buttons-flex-direction, column);
+	padding: 0px;
 
 	.blablablock-tab-btn {
 		cursor: pointer;
