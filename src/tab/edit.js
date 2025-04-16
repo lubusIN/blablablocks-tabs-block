@@ -46,33 +46,39 @@ import Placeholder from './placeholder';
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({ clientId, isSelected, attributes, setAttributes }) {
-	const [isOpen, setOpen] = useState(false);
-	const [svgCode, setSvgCode] = useState('');
-	const [isSvgValid, setIsSvgValid] = useState(false);
-	const [validationError, setValidationError] = useState('');
-	const { updateBlockAttributes, selectBlock } = useDispatch(blockEditorStore);
+export default function Edit( {
+	clientId,
+	isSelected,
+	attributes,
+	setAttributes,
+} ) {
+	const [ isOpen, setOpen ] = useState( false );
+	const [ svgCode, setSvgCode ] = useState( '' );
+	const [ isSvgValid, setIsSvgValid ] = useState( false );
+	const [ validationError, setValidationError ] = useState( '' );
+	const { updateBlockAttributes, selectBlock } =
+		useDispatch( blockEditorStore );
 
-	const openModal = () => setOpen(true);
-	const closeModal = () => setOpen(false);
+	const openModal = () => setOpen( true );
+	const closeModal = () => setOpen( false );
 
 	/**
 	 * Validate the SVG code.
 	 *
-	 * @param {string} svgCode The SVG code to validate.
+	 * @param {string} svg The SVG code to validate.
 	 * @return {boolean} Whether the SVG is valid.
 	 */
-	const validateSvg = (svgCode) => {
-		if (!svgCode.trim()) {
+	const validateSvg = ( svg ) => {
+		if ( ! svg.trim() ) {
 			setValidationError(
-				__('Please paste your SVG code.', 'blablablocks-tabs-block')
+				__( 'Please paste your SVG code.', 'blablablocks-tabs-block' )
 			);
 			return false;
 		}
 
 		// Basic SVG validation using a regex
 		const svgRegex = /<svg[^>]*>(.*?)<\/svg>/gis;
-		if (!svgRegex.test(svgCode)) {
+		if ( ! svgRegex.test( svg ) ) {
 			setValidationError(
 				__(
 					'Invalid SVG code. Please provide a valid SVG.',
@@ -83,7 +89,7 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 		}
 
 		// Clear any previous error
-		setValidationError('');
+		setValidationError( '' );
 		return true;
 	};
 
@@ -93,17 +99,17 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 	 *
 	 * @param {string} value The new SVG code.
 	 */
-	const handleSvgCodeChange = (value) => {
-		setSvgCode(value);
-		setIsSvgValid(validateSvg(value));
+	const handleSvgCodeChange = ( value ) => {
+		setSvgCode( value );
+		setIsSvgValid( validateSvg( value ) );
 	};
 
 	/**
 	 * Handle inserting the SVG.
 	 */
 	const handleInsertSvg = () => {
-		if (isSvgValid) {
-			setAttributes({ tabIcon: svgCode });
+		if ( isSvgValid ) {
+			setAttributes( { tabIcon: svgCode } );
 			closeModal();
 		}
 	};
@@ -119,68 +125,77 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 		blockIndex,
 		isTabsClientSelected,
 		forceDisplay,
-		hasInnerBlocksSelected
-	} = useSelect((select) => {
-		const {
-			getBlockOrder,
-			getBlockIndex,
-			getBlockRootClientId,
-			getBlockParentsByBlockName,
-			getBlockAttributes,
-			hasSelectedInnerBlock,
-			isBlockSelected
-		} = select('core/block-editor');
+		hasInnerBlocksSelected,
+	} = useSelect(
+		( select ) => {
+			const {
+				getBlockOrder,
+				getBlockIndex,
+				getBlockRootClientId,
+				getBlockParentsByBlockName,
+				getBlockAttributes,
+				hasSelectedInnerBlock,
+				isBlockSelected,
+			} = select( 'core/block-editor' );
 
-		const parentBlocks = getBlockParentsByBlockName(clientId, [
-			'blablablocks/tabs',
-		]);
-		const closestParentBlockId =
-			parentBlocks?.[parentBlocks.length - 1] || null;
-		const rootClientId = getBlockRootClientId(clientId);
-		const parentBlockAttrs = getBlockAttributes(closestParentBlockId);
-		const hasTabSelected = hasSelectedInnerBlock(rootClientId, true);
-		const hasInnerBlocksSelected = hasSelectedInnerBlock(
-			clientId,
-			true
-		);
-		const blockIndex = getBlockIndex(clientId);
-		const totalTabsCount = getBlockOrder(rootClientId).length;
-		
-		// Check if activeTab is a valid index and if this tab is the active one
-		const activeTab = parentBlockAttrs?.activeTab;
-		const isValidActiveTab = typeof activeTab === 'number' && activeTab >= 0 && activeTab < totalTabsCount;
-		const isDefaultTab = isValidActiveTab ? activeTab === blockIndex : blockIndex === 0;
-		const isTabsClientSelected = isBlockSelected(rootClientId);
+			const parentBlocks = getBlockParentsByBlockName( clientId, [
+				'blablablocks/tabs',
+			] );
+			const closestParentBlockId =
+				parentBlocks?.[ parentBlocks.length - 1 ] || null;
+			const rootClientId = getBlockRootClientId( clientId );
+			const parentBlockAttrs = getBlockAttributes( closestParentBlockId );
+			const innerHasTabSelected = hasSelectedInnerBlock(
+				rootClientId,
+				true
+			);
+			const innerHasInnerBlocksSelected = hasSelectedInnerBlock(
+				clientId,
+				true
+			);
+			const innerBlockIndex = getBlockIndex( clientId );
+			const totalTabsCount = getBlockOrder( rootClientId ).length;
 
-		return {
-			blockIndex,
-			tabsClientId: rootClientId,
-			hasChildBlocks: getBlockOrder(clientId).length > 0,
-			hasInnerBlocksSelected,
-			isTabsClientSelected,
-			isDefaultTab,
-			forceDisplay: isDefaultTab && isTabsClientSelected,
-			hasTabSelected,
-		};
-	},
-		[clientId]
+			// Check if activeTab is a valid index and if this tab is the active one
+			const activeTab = parentBlockAttrs?.activeTab;
+			const isValidActiveTab =
+				typeof activeTab === 'number' &&
+				activeTab >= 0 &&
+				activeTab < totalTabsCount;
+			const innerIsDefaultTab = isValidActiveTab
+				? activeTab === innerBlockIndex
+				: innerBlockIndex === 0;
+			const innerIsTabsClientSelected = isBlockSelected( rootClientId );
+
+			return {
+				blockIndex: innerBlockIndex,
+				tabsClientId: rootClientId,
+				hasChildBlocks: getBlockOrder( clientId ).length > 0,
+				hasInnerBlocksSelected: innerHasInnerBlocksSelected,
+				isTabsClientSelected: innerIsTabsClientSelected,
+				isDefaultTab: innerIsDefaultTab,
+				forceDisplay: innerIsDefaultTab && innerIsTabsClientSelected,
+				hasTabSelected: innerHasTabSelected,
+			};
+		},
+		[ clientId ]
 	);
 
 	/**
 	 * Determines if the current tab should be displayed as selected based on
 	 * various selection states and conditions.
-	 * 
+	 *
 	 * @type {boolean}
 	 */
-	const isTabSelected = useMemo(() => {
-		if (isSelected || hasInnerBlocksSelected || forceDisplay) {
+	const isTabSelected = useMemo( () => {
+		if ( isSelected || hasInnerBlocksSelected || forceDisplay ) {
 			return true;
 		}
 		if (
 			isDefaultTab &&
-			!isTabsClientSelected &&
-			!isSelected &&
-			!hasTabSelected
+			! isTabsClientSelected &&
+			! isSelected &&
+			! hasTabSelected
 		) {
 			return true;
 		}
@@ -192,15 +207,15 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 		forceDisplay,
 		isTabsClientSelected,
 		hasTabSelected,
-	]);
+	] );
 
 	/**
 	 * Props for the block container.
 	 * @type {Object}
 	 */
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: 'blablablocks-tab',
-	});
+	} );
 
 	/**
 	 * Props for the inner blocks container.
@@ -213,78 +228,83 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 	 *
 	 * @param {boolean} value - The value to set for the active tab.
 	 */
-	const handleSetDefault = (value) => {
-		updateBlockAttributes(tabsClientId, { activeTab: value ? blockIndex : 0 });
+	const handleSetDefault = ( value ) => {
+		updateBlockAttributes( tabsClientId, {
+			activeTab: value ? blockIndex : 0,
+		} );
 	};
 
 	/**
 	 * Set the `tabId` attribute.
-	 * 
+	 *
 	 * This effect ensures each tab has a unique identifier by setting the tabId
 	 * attribute to the clientId.
 	 */
-	useEffect(() => {
-		setAttributes({ tabId: clientId });
-	}, [clientId, attributes.tabId, setAttributes]);
+	useEffect( () => {
+		setAttributes( { tabId: clientId } );
+	}, [ clientId, attributes.tabId, setAttributes ] );
 
 	return (
-		<div {...blockProps}>
-			<TabFill tabsClientId={tabsClientId}>
+		<div { ...blockProps }>
+			<TabFill tabsClientId={ tabsClientId }>
 				<div
-					className={clsx('blablablock-tab-btn', {
+					className={ clsx( 'blablablock-tab-btn', {
 						'is-bbb-active-tab': isTabSelected,
-					})}
-					role='button'
-					onClick={() => selectBlock(clientId)}
+					} ) }
+					role="tab"
+					aria-selected={ isTabSelected }
+					onClick={ () => selectBlock( clientId ) }
 				>
-					{ /* Render the tab icon if it exists */}
-					{attributes.tabIcon && (
+					{ /* Render the tab icon if it exists */ }
+					{ attributes.tabIcon && (
 						<span
 							className="bbb-tab-icon"
-							dangerouslySetInnerHTML={{
+							dangerouslySetInnerHTML={ {
 								__html: attributes.tabIcon,
-							}}
+							} }
 						/>
-					)}
-					{ /* Render the tab name */}
+					) }
+					{ /* Render the tab name */ }
 					<RichText
 						tagName="span"
 						className="tab-button-text"
 						withoutInteractiveFormatting
-						value={attributes.tabname}
-						placeholder={__('Add tab name…')}
-						onChange={(value) =>
-							setAttributes({
+						value={ attributes.tabname }
+						placeholder={ __( 'Add tab name…' ) }
+						onChange={ ( value ) =>
+							setAttributes( {
 								tabname: value,
-							})
+							} )
 						}
 					/>
 				</div>
 			</TabFill>
-			{isTabSelected && (
+			{ isTabSelected && (
 				<>
-					<TabsListSlot tabsClientId={tabsClientId} />
-					{hasChildBlocks ?
-						(<div {...innerBlocksProps} />)
-						: (
-							<Placeholder clientId={clientId} attributes={attributes} />
-						)
-					}
+					<TabsListSlot tabsClientId={ tabsClientId } />
+					{ hasChildBlocks ? (
+						<div { ...innerBlocksProps } />
+					) : (
+						<Placeholder
+							clientId={ clientId }
+							attributes={ attributes }
+						/>
+					) }
 				</>
-			)}
+			) }
 
 			<InspectorControls>
 				<PanelBody
-					title={__('Settings', 'blablablocks-tabs-block')}
-					initialOpen={true}
+					title={ __( 'Settings', 'blablablocks-tabs-block' ) }
+					initialOpen={ true }
 				>
 					<ToggleControl
-						label={__(
+						label={ __(
 							'Set as default tab',
 							'blablablocks-tabs-block'
-						)}
-						checked={isDefaultTab}
-						onChange={(value) => handleSetDefault(value)}
+						) }
+						checked={ isDefaultTab }
+						onChange={ ( value ) => handleSetDefault( value ) }
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -292,18 +312,18 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 			<BlockControls>
 				<ToolbarGroup>
 					<ToolbarDropdownMenu
-						controls={[
+						controls={ [
 							{
 								icon: code,
 								title: attributes.tabIcon
 									? __(
-										'Edit custom SVG icon',
-										'blablablocks-tabs-block'
-									)
+											'Edit custom SVG icon',
+											'blablablocks-tabs-block'
+									  )
 									: __(
-										'Add custom SVG icon',
-										'blablablocks-tabs-block'
-									),
+											'Add custom SVG icon',
+											'blablablocks-tabs-block'
+									  ),
 								onClick: openModal,
 							},
 							{
@@ -313,45 +333,45 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 									'blablablocks-tabs-block'
 								),
 								onClick: () => {
-									setAttributes({ tabIcon: '' });
-									setSvgCode('');
-									setIsSvgValid(false);
-									setValidationError('');
+									setAttributes( { tabIcon: '' } );
+									setSvgCode( '' );
+									setIsSvgValid( false );
+									setValidationError( '' );
 								},
-								isDisabled: !attributes.tabIcon,
+								isDisabled: ! attributes.tabIcon,
 							},
-						]}
+						] }
 						text={
 							attributes.tabIcon
 								? __(
-									'Replace icon',
-									'blablablocks-tabs-block'
-								)
-								: __('Add Icon', 'blablablocks-tabs-block')
+										'Replace icon',
+										'blablablocks-tabs-block'
+								  )
+								: __( 'Add Icon', 'blablablocks-tabs-block' )
 						}
-						icon={''}
+						icon={ '' }
 					/>
 				</ToolbarGroup>
 			</BlockControls>
 
-			{isOpen && (
+			{ isOpen && (
 				<Modal
 					className="bbb-custom-icon-modal"
 					title={
 						attributes.tabIcon
 							? __(
-								'Edit Custom Icon',
-								'blablablocks-tabs-block'
-							)
-							: __('Add Custom Icon', 'blablablocks-tabs-block')
+									'Edit Custom Icon',
+									'blablablocks-tabs-block'
+							  )
+							: __( 'Add Custom Icon', 'blablablocks-tabs-block' )
 					}
 					isFullScreen
-					onRequestClose={closeModal}
+					onRequestClose={ closeModal }
 				>
 					<Flex
 						align="stretch"
-						gap={5}
-						style={{ height: '100%' }}
+						gap={ 5 }
+						style={ { height: '100%' } }
 					>
 						<FlexBlock>
 							<TextareaControl
@@ -359,56 +379,56 @@ export default function Edit({ clientId, isSelected, attributes, setAttributes }
 								className="bbb-icon-textarea"
 								hideLabelFromVision
 								placeholder="Paste your svg code here"
-								value={svgCode || attributes.tabIcon}
-								onChange={handleSvgCodeChange}
+								value={ svgCode || attributes.tabIcon }
+								onChange={ handleSvgCodeChange }
 							/>
 						</FlexBlock>
 						<FlexBlock>
 							<VStack
-								spacing={5}
+								spacing={ 5 }
 								justify="space-between"
-								style={{ height: '100%' }}
+								style={ { height: '100%' } }
 							>
-								<VStack spacing={5}>
+								<VStack spacing={ 5 }>
 									<Card
-										style={{ height: '200px' }}
-										isRounded={false}
+										style={ { height: '200px' } }
+										isRounded={ false }
 									>
 										<div
 											className="bbb-icon-preview"
-											dangerouslySetInnerHTML={{
+											dangerouslySetInnerHTML={ {
 												__html:
 													svgCode ||
 													attributes.tabIcon,
-											}}
+											} }
 										/>
 									</Card>
-									{validationError && (
+									{ validationError && (
 										<Notice
 											status="error"
-											isDismissible={false}
+											isDismissible={ false }
 										>
-											{validationError}
+											{ validationError }
 										</Notice>
-									)}
+									) }
 								</VStack>
 								<HStack justify="flex-end">
 									<Button
-										variant={'primary'}
-										onClick={handleInsertSvg}
-										disabled={!isSvgValid}
+										variant={ 'primary' }
+										onClick={ handleInsertSvg }
+										disabled={ ! isSvgValid }
 									>
-										{__(
+										{ __(
 											'Insert custom icon',
 											'blablablocks-tabs-block'
-										)}
+										) }
 									</Button>
 								</HStack>
 							</VStack>
 						</FlexBlock>
 					</Flex>
 				</Modal>
-			)}
+			) }
 		</div>
 	);
 }

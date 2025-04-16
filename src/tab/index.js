@@ -14,8 +14,8 @@ import { TabLogo } from '../components';
 /**
  * Register a slide block
  */
-registerBlockType(metadata.name, {
+registerBlockType( metadata.name, {
 	icon: TabLogo,
 	edit: Edit,
 	save,
-});
+} );

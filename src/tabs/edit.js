@@ -32,8 +32,8 @@ const DEFAULT_BLOCK = {
  * @type {Array}
  */
 const TABS_TEMPLATE = [
-	['blablablocks/tab', { tabname: 'Tab 1' }],
-	['blablablocks/tab', { tabname: 'Tab 2' }],
+	[ 'blablablocks/tab', { tabname: 'Tab 1' } ],
+	[ 'blablablocks/tab', { tabname: 'Tab 2' } ],
 ];
 
 /**
@@ -45,7 +45,7 @@ const TABS_TEMPLATE = [
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({ clientId, attributes, setAttributes }) {
+export default function Edit( { clientId, attributes, setAttributes } ) {
 	const { allowedBlocks } = attributes;
 
 	/**
@@ -53,8 +53,8 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	 * @type {Array}
 	 */
 	const innerBlocks = useSelect(
-		(select) => select(blockEditorStore).getBlocks(clientId),
-		[clientId]
+		( select ) => select( blockEditorStore ).getBlocks( clientId ),
+		[ clientId ]
 	);
 
 	const hasInnerBlocks = innerBlocks.length > 0;
@@ -63,44 +63,41 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	 * Props for the block container.
 	 * @type {Object}
 	 */
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: 'blablablocks-tabs',
-		style: generateStyles(attributes),
-	});
+		style: generateStyles( attributes ),
+	} );
 
 	/**
 	 * Props for the inner blocks container.
 	 * @type {Object}
 	 */
-	const innerBlocksProps = useInnerBlocksProps(
-		blockProps,
-		{
-			template: TABS_TEMPLATE,
-			__experimentalCaptureToolbars: true,
-			templateLock: false,
-			defaultBlock: DEFAULT_BLOCK,
-			orientation: 'horizontal',
-			allowedBlocks
-		}
-	);
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		template: TABS_TEMPLATE,
+		__experimentalCaptureToolbars: true,
+		templateLock: false,
+		defaultBlock: DEFAULT_BLOCK,
+		orientation: 'horizontal',
+		allowedBlocks,
+	} );
 
 	return hasInnerBlocks ? (
 		<>
-			<div {...innerBlocksProps}>
-				{innerBlocksProps.children}
-				<TabFill tabsClientId={clientId}>
+			<div { ...innerBlocksProps }>
+				{ innerBlocksProps.children }
+				<TabFill tabsClientId={ clientId }>
 					<div className="blablablocks-tab_inserter">
 						<InnerBlocks.ButtonBlockAppender />
 					</div>
 				</TabFill>
 			</div>
 			<Settings
-				attributes={attributes}
-				setAttributes={setAttributes}
+				attributes={ attributes }
+				setAttributes={ setAttributes }
 			/>
-			<Styles attributes={attributes} setAttributes={setAttributes} />
+			<Styles attributes={ attributes } setAttributes={ setAttributes } />
 		</>
 	) : (
-		<Placeholder clientId={clientId} setAttributes={setAttributes} />
+		<Placeholder clientId={ clientId } setAttributes={ setAttributes } />
 	);
 }

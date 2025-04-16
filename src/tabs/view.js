@@ -6,7 +6,7 @@ import { store, getContext, getElement } from '@wordpress/interactivity';
 // Constants for store name and default values
 const STORE_NAME = 'blablablocks-tabs';
 
-const { state } = store(STORE_NAME, {
+const { state } = store( STORE_NAME, {
 	state: {
 		/**
 		 * Returns the index of the currently active tab.
@@ -16,11 +16,11 @@ const { state } = store(STORE_NAME, {
 		get activeTabIndex() {
 			const { attributes } = getElement();
 			const tabId = attributes?.id || null;
-			if (!tabId) {
+			if ( ! tabId ) {
 				return null;
 			}
 			const { tabs } = getContext();
-			const tabIndex = tabs.findIndex((t) => t.id === tabId);
+			const tabIndex = tabs.findIndex( ( t ) => t.id === tabId );
 			return tabIndex;
 		},
 
@@ -53,7 +53,7 @@ const { state } = store(STORE_NAME, {
 		setActiveTab: () => {
 			const context = getContext();
 			const tabIndex = state.activeTabIndex;
-			if (tabIndex !== null) {
+			if ( tabIndex !== null ) {
 				context.activeTab = state.activeTabIndex;
 			}
 		},
@@ -67,10 +67,12 @@ const { state } = store(STORE_NAME, {
 		 */
 		initTabs() {
 			const context = getContext();
-			const tabIndex = context.tabs.findIndex((t) => t.id === context.activeId);
-			if (tabIndex >= 0) {
+			const tabIndex = context.tabs.findIndex(
+				( t ) => t.id === context.activeId
+			);
+			if ( tabIndex >= 0 ) {
 				context.activeTab = tabIndex;
 			}
 		},
 	},
-});
+} );
