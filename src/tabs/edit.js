@@ -73,7 +73,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	 * @type {Object}
 	 */
 	const innerBlocksProps = useInnerBlocksProps(
-		{},
+		blockProps,
 		{
 			template: TABS_TEMPLATE,
 			__experimentalCaptureToolbars: true,
@@ -86,7 +86,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 
 	return hasInnerBlocks ? (
 		<>
-			<div {...blockProps}>
+			<div {...innerBlocksProps}>
 				{innerBlocksProps.children}
 				<TabFill tabsClientId={clientId}>
 					<div className="blablablocks-tab_inserter">
