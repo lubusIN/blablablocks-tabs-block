@@ -16,17 +16,17 @@
  * @param array $inner_blocks Inner blocks array.
  * @return array
  */
-function blablablocks_extract_tab_data(array $inner_blocks): array
-{
-    return array_map(static function ($inner_block, $index) {
-        $attrs = $inner_block['attrs'] ?? [];
-
-        return [
-            'id'    => 'tab-' . ($attrs['tabId'] ?? $index),
-            'label' => $attrs['tabname'] ?? sprintf(__('Tab %d', 'blablablocks'), $index + 1),
-            'icon'  => $attrs['tabIcon'] ?? '',
-        ];
-    }, $inner_blocks, array_keys($inner_blocks));
+if (! function_exists('blablablocks_extract_tab_data')) {
+    function blablablocks_extract_tab_data(array $inner_blocks): array
+    {
+        return array_map(static function ($inner_block, $index) {
+            $attrs = $inner_block['attrs'] ?? [];
+            return [
+                'id'    => 'tab-' . ($attrs['tabId'] ?? $index),
+                'label' => $attrs['tabname'] ?? sprintf(__('Tab %d', 'blablablocks'), $index + 1),
+            ];
+        }, $inner_blocks, array_keys($inner_blocks));
+    }
 }
 
 // Extract tabs data.
@@ -50,23 +50,25 @@ $data_context = [
  * @param mixed $defaultValue The default value.
  * @return string A valid CSS spacing size value.
  */
-function resolveSpacingSizeValue($value, $defaultValue = '0px')
-{
-    if (is_string($value)) {
-        if (strpos($value, 'var:') === 0) {
-            // Convert "var:some|value" into "var(--wp--some--value)"
-            $cssVariable = str_replace('|', '--', str_replace('var:', '--wp--', $value));
-            return "var($cssVariable)";
+if (! function_exists('resolveSpacingSizeValue')) {
+    function resolveSpacingSizeValue($value, $defaultValue = '0px')
+    {
+        if (is_string($value)) {
+            if (strpos($value, 'var:') === 0) {
+                // Convert "var:some|value" into "var(--wp--some--value)"
+                $cssVariable = str_replace('|', '--', str_replace('var:', '--wp--', $value));
+                return "var($cssVariable)";
+            }
+            return $value; // If it's a valid CSS string, return as-is
         }
-        return $value; // If it's a valid CSS string, return as-is
-    }
 
-    if (is_numeric($value)) {
-        return "{$value}px"; // Convert numbers to pixel values
-    }
+        if (is_numeric($value)) {
+            return "{$value}px"; // Convert numbers to pixel values
+        }
 
-    // use defaultValue if value is invalid or undefined
-    return $defaultValue;
+        // use defaultValue if value is invalid or undefined
+        return $defaultValue;
+    }
 }
 
 /**
@@ -75,20 +77,22 @@ function resolveSpacingSizeValue($value, $defaultValue = '0px')
  * @param array $border The border definition array.
  * @return array An array containing border styles.
  */
-function getBorderStyles($border = array())
-{
-    $styles = array();
-    $sides = array('top', 'right', 'bottom', 'left');
+if (! function_exists('getBorderStyles')) {
+    function getBorderStyles($border = array())
+    {
+        $styles = array();
+        $sides = array('top', 'right', 'bottom', 'left');
 
-    foreach ($sides as $side) {
-        $width = $border[$side]['width'] ?? ($border['width'] ?? '0px');
-        $style = $border[$side]['style'] ?? ($border['style'] ?? 'solid');
-        $color = $border[$side]['color'] ?? ($border['color'] ?? '');
+        foreach ($sides as $side) {
+            $width = $border[$side]['width'] ?? ($border['width'] ?? '0px');
+            $style = $border[$side]['style'] ?? ($border['style'] ?? 'solid');
+            $color = $border[$side]['color'] ?? ($border['color'] ?? '');
 
-        $styles["--bbb-tab-border-$side"] = "$width $style $color";
+            $styles["--bbb-tab-border-$side"] = "$width $style $color";
+        }
+
+        return $styles;
     }
-
-    return $styles;
 }
 
 /**
@@ -98,18 +102,20 @@ function getBorderStyles($border = array())
  * @param mixed $defaultValue The default value.
  * @return string A valid CSS border-radius value.
  */
-function getBorderRadiusStyles($borderRadius, $defaultValue = '0px')
-{
-    if (is_string($borderRadius)) {
-        return $borderRadius;
-    }
+if (! function_exists('getBorderRadiusStyles')) {
+    function getBorderRadiusStyles($borderRadius, $defaultValue = '0px')
+    {
+        if (is_string($borderRadius)) {
+            return $borderRadius;
+        }
 
-    // If it's an array, return a four-value shorthand for border-radius
-    $topLeft = $borderRadius['topLeft'] ?? $defaultValue;
-    $topRight = $borderRadius['topRight'] ?? $defaultValue;
-    $bottomRight = $borderRadius['bottomRight'] ?? $defaultValue;
-    $bottomLeft = $borderRadius['bottomLeft'] ?? $defaultValue;
-    return "$topLeft $topRight $bottomRight $bottomLeft";
+        // If it's an array, return a four-value shorthand for border-radius
+        $topLeft = $borderRadius['topLeft'] ?? $defaultValue;
+        $topRight = $borderRadius['topRight'] ?? $defaultValue;
+        $bottomRight = $borderRadius['bottomRight'] ?? $defaultValue;
+        $bottomLeft = $borderRadius['bottomLeft'] ?? $defaultValue;
+        return "$topLeft $topRight $bottomRight $bottomLeft";
+    }
 }
 
 /**
@@ -119,137 +125,139 @@ function getBorderRadiusStyles($borderRadius, $defaultValue = '0px')
  * @param array $attributes The attributes used to customize styles.
  * @return array An array with CSS variable definitions.
  */
-function generateStyles($attributes = array())
-{
-    $styles = array();
+if (! function_exists('generateStyles')) {
+    function generateStyles($attributes = array())
+    {
+        $styles = array();
 
-    // Helper function to add a style with a fallback to default values
-    $addStyle = function ($key, $value, $defaultValue = '0px') use (&$styles) {
-        if ($value !== null && $value !== '') {
-            $styles[$key] = $value;
-        } elseif ($defaultValue !== null) {
-            $styles[$key] = $defaultValue;
-        }
-    };
+        // Helper function to add a style with a fallback to default values
+        $addStyle = function ($key, $value, $defaultValue = '0px') use (&$styles) {
+            if ($value !== null && $value !== '') {
+                $styles[$key] = $value;
+            } elseif ($defaultValue !== null) {
+                $styles[$key] = $defaultValue;
+            }
+        };
 
-    // Tab Color using Tailwind's gray shades
-    $addStyle(
-        '--bbb-tab-text-color',
-        $attributes['tabColor']['textColor']['default'] ?? '#4b5563' // Tailwind gray-600
-    );
-    $addStyle(
-        '--bbb-tab-background-color',
-        $attributes['tabColor']['backgroundColor']['default'] ?? 'transparent'
-    );
-    $addStyle(
-        '--bbb-tab-icon-color',
-        $attributes['tabColor']['iconColor']['default'] ?? '#000'
-    );
-    $addStyle(
-        '--bbb-tab-text-hover-color',
-        $attributes['tabColor']['textColor']['hover'] ?? '#374151' // Tailwind gray-700
-    );
-    $addStyle(
-        '--bbb-tab-background-hover-color',
-        $attributes['tabColor']['backgroundColor']['hover'] ?? '#d1d5db8a'
-    );
-    $addStyle(
-        '--bbb-tab-icon-hover-color',
-        $attributes['tabColor']['iconColor']['hover'] ?? '#374151'
-    );
-    $addStyle(
-        '--bbb-tab-text-active-color',
-        $attributes['tabColor']['textColor']['active'] ?? '#1f2937' // Tailwind gray-800
-    );
-    $addStyle(
-        '--bbb-tab-background-active-color',
-        $attributes['tabColor']['backgroundColor']['active'] ?? '#d1d5db8a' // Tailwind gray-300
-    );
-    $addStyle(
-        '--bbb-tab-icon-active-color',
-        $attributes['tabColor']['iconColor']['active'] ?? '#374151' // Tailwind gray-300
-    );
+        // Tab Color using Tailwind's gray shades
+        $addStyle(
+            '--bbb-tab-text-color',
+            $attributes['tabColor']['textColor']['default'] ?? '#4b5563' // Tailwind gray-600
+        );
+        $addStyle(
+            '--bbb-tab-background-color',
+            $attributes['tabColor']['backgroundColor']['default'] ?? 'transparent'
+        );
+        $addStyle(
+            '--bbb-tab-icon-color',
+            $attributes['tabColor']['iconColor']['default'] ?? '#000'
+        );
+        $addStyle(
+            '--bbb-tab-text-hover-color',
+            $attributes['tabColor']['textColor']['hover'] ?? '#374151' // Tailwind gray-700
+        );
+        $addStyle(
+            '--bbb-tab-background-hover-color',
+            $attributes['tabColor']['backgroundColor']['hover'] ?? '#d1d5db8a'
+        );
+        $addStyle(
+            '--bbb-tab-icon-hover-color',
+            $attributes['tabColor']['iconColor']['hover'] ?? '#374151'
+        );
+        $addStyle(
+            '--bbb-tab-text-active-color',
+            $attributes['tabColor']['textColor']['active'] ?? '#1f2937' // Tailwind gray-800
+        );
+        $addStyle(
+            '--bbb-tab-background-active-color',
+            $attributes['tabColor']['backgroundColor']['active'] ?? '#d1d5db8a' // Tailwind gray-300
+        );
+        $addStyle(
+            '--bbb-tab-icon-active-color',
+            $attributes['tabColor']['iconColor']['active'] ?? '#374151' // Tailwind gray-300
+        );
 
-    // Tab Border Radius
-    $addStyle(
-        '--bbb-tab-border-radius',
-        getBorderRadiusStyles($attributes['tabBorderRadius'] ?? null, '4px')
-    );
+        // Tab Border Radius
+        $addStyle(
+            '--bbb-tab-border-radius',
+            getBorderRadiusStyles($attributes['tabBorderRadius'] ?? null, '4px')
+        );
 
-    // Padding styles with defaults
-    $addStyle(
-        '--bbb-tab-padding-top',
-        resolveSpacingSizeValue($attributes['tabPadding']['top'] ?? null, '5px')
-    );
-    $addStyle(
-        '--bbb-tab-padding-right',
-        resolveSpacingSizeValue($attributes['tabPadding']['right'] ?? null, '15px')
-    );
-    $addStyle(
-        '--bbb-tab-padding-bottom',
-        resolveSpacingSizeValue($attributes['tabPadding']['bottom'] ?? null, '5px')
-    );
-    $addStyle(
-        '--bbb-tab-padding-left',
-        resolveSpacingSizeValue($attributes['tabPadding']['left'] ?? null, '15px')
-    );
+        // Padding styles with defaults
+        $addStyle(
+            '--bbb-tab-padding-top',
+            resolveSpacingSizeValue($attributes['tabPadding']['top'] ?? null, '5px')
+        );
+        $addStyle(
+            '--bbb-tab-padding-right',
+            resolveSpacingSizeValue($attributes['tabPadding']['right'] ?? null, '15px')
+        );
+        $addStyle(
+            '--bbb-tab-padding-bottom',
+            resolveSpacingSizeValue($attributes['tabPadding']['bottom'] ?? null, '5px')
+        );
+        $addStyle(
+            '--bbb-tab-padding-left',
+            resolveSpacingSizeValue($attributes['tabPadding']['left'] ?? null, '15px')
+        );
 
-    // Spacing styles with defaults
-    $addStyle(
-        '--bbb-tab-spacing',
-        resolveSpacingSizeValue($attributes['tabSpacing'] ?? null, '10px')
-    );
+        // Spacing styles with defaults
+        $addStyle(
+            '--bbb-tab-spacing',
+            resolveSpacingSizeValue($attributes['tabSpacing'] ?? null, '10px')
+        );
 
-    // Border styles
-    $styles = array_merge($styles, getBorderStyles($attributes['tabBorder'] ?? array()));
+        // Border styles
+        $styles = array_merge($styles, getBorderStyles($attributes['tabBorder'] ?? array()));
 
-    // Tab Buttons styles
-    $addStyle(
-        '--bbb-tab-buttons-justify-content',
-        $attributes['justification'] ?? 'left'
-    );
-    $addStyle(
-        '--bbb-tab-buttons-flex-direction',
-        $attributes['orientation'] ?? 'column'
-    );
+        // Tab Buttons styles
+        $addStyle(
+            '--bbb-tab-buttons-justify-content',
+            $attributes['justification'] ?? 'left'
+        );
+        $addStyle(
+            '--bbb-tab-buttons-flex-direction',
+            $attributes['orientation'] ?? 'column'
+        );
 
-    // Tabs styles
-    if (($attributes['orientation'] ?? '') === 'column') {
-        $addStyle('--bbb-tabs-display', 'flex');
-        if (($attributes['verticalPosition'] ?? '') === 'right') {
-            $addStyle('--bbb-tabs-flex-direction', 'row-reverse');
+        // Tabs styles
+        if (($attributes['orientation'] ?? '') === 'column') {
+            $addStyle('--bbb-tabs-display', 'flex');
+            if (($attributes['verticalPosition'] ?? '') === 'right') {
+                $addStyle('--bbb-tabs-flex-direction', 'row-reverse');
+            } else {
+                $addStyle('--bbb-tabs-flex-direction', 'row');
+            }
         } else {
-            $addStyle('--bbb-tabs-flex-direction', 'row');
+            $addStyle('--bbb-tabs-display', '');
+            $addStyle('--bbb-tabs-flex-direction', 'column');
         }
-    } else {
-        $addStyle('--bbb-tabs-display', '');
-        $addStyle('--bbb-tabs-flex-direction', 'column');
+
+        // Icon Position
+        $iconDirection = 'row';
+        if (($attributes['iconPosition'] ?? '') === 'top') {
+            $iconDirection = 'column';
+        } elseif (($attributes['iconPosition'] ?? '') === 'bottom') {
+            $iconDirection = 'column-reverse';
+        } elseif (($attributes['iconPosition'] ?? '') === 'right') {
+            $iconDirection = 'row-reverse';
+        }
+        $addStyle('--bbb-tab-icon-position', $iconDirection);
+
+        // Icon Size
+        $addStyle(
+            '--bbb-tab-icon-size',
+            isset($attributes['iconSize']) ? "{$attributes['iconSize']}px" : '24px'
+        );
+
+        // Auto width
+        $addStyle(
+            '--bbb-tab-auto-width',
+            (($attributes['autoWidth'] ?? false) && ($attributes['orientation'] ?? '') === 'row') ? '100%' : 'auto'
+        );
+
+        return $styles;
     }
-
-    // Icon Position
-    $iconDirection = 'row';
-    if (($attributes['iconPosition'] ?? '') === 'top') {
-        $iconDirection = 'column';
-    } elseif (($attributes['iconPosition'] ?? '') === 'bottom') {
-        $iconDirection = 'column-reverse';
-    } elseif (($attributes['iconPosition'] ?? '') === 'right') {
-        $iconDirection = 'row-reverse';
-    }
-    $addStyle('--bbb-tab-icon-position', $iconDirection);
-
-    // Icon Size
-    $addStyle(
-        '--bbb-tab-icon-size',
-        isset($attributes['iconSize']) ? "{$attributes['iconSize']}px" : '24px'
-    );
-
-    // Auto width
-    $addStyle(
-        '--bbb-tab-auto-width',
-        (($attributes['autoWidth'] ?? false) && ($attributes['orientation'] ?? '') === 'row') ? '100%' : 'auto'
-    );
-
-    return $styles;
 }
 
 // Generate tabs styles
@@ -274,7 +282,9 @@ $wrapper_attributes = get_block_wrapper_attributes(
     data-wp-init="callbacks.initTabs">
 
     <ul class="blablablocks-tabs-buttons" role="tablist">
-        <?php foreach ($tabs as $index => $tab) : ?>
+        <?php foreach ($tabs as $index => $tab) :
+            $icon = $block->parsed_block['innerBlocks'][$index]['attrs']['tabIcon'] ?? '';
+        ?>
             <li class="blablablock-tab-btn"
                 id="<?php echo esc_attr($tab['id']); ?>"
                 role="tab"
@@ -284,9 +294,9 @@ $wrapper_attributes = get_block_wrapper_attributes(
                 data-wp-on--click="actions.setActiveTab"
                 data-wp-class--is-bbb-active-tab="state.isActive">
 
-                <?php if (!empty($tab['icon'])) : ?>
+                <?php if (!empty($icon)) : ?>
                     <span class="bbb-tab-icon">
-                        <?php echo wp_kses_post($tab['icon']); ?>
+                        <?php echo $icon; ?>
                     </span>
                 <?php endif; ?>
 
