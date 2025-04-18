@@ -12,10 +12,7 @@
 	height: fit-content;
 	margin-top: auto;
 	flex-direction: var(--bbb-tab-icon-position, row);
-
-	&.is-bbb-full-width-tab {
-		width: var(--bbb-tab-auto-width, auto);
-	}
+	flex: var(--bbb-tab-auto-width);
 }
 
 /* Icon position */
@@ -31,6 +28,7 @@
 	justify-content: var(--bbb-tab-buttons-justify-content, left);
 	flex-direction: var(--bbb-tab-buttons-flex-direction, column);
 	padding: 0px;
+	flex-wrap: wrap;
 
 	.blablablock-tab-btn {
 		cursor: pointer;
@@ -118,4 +116,8 @@
 .wp-block-blablablocks-tabs.is-style-style-2 .blablablock-tab-btn.is-bbb-active-tab::after {
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
+}
+
+.wp-block-blablablocks-tabs.is-style-style-3 .blablablocks-tabs-buttons {
+	border-bottom: 1px solid black;
 }

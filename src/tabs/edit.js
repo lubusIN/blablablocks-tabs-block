@@ -75,10 +75,10 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const innerBlocksProps = useInnerBlocksProps( blockProps, {
 		template: TABS_TEMPLATE,
 		__experimentalCaptureToolbars: true,
-		templateLock: false,
 		defaultBlock: DEFAULT_BLOCK,
 		orientation: 'horizontal',
 		allowedBlocks,
+		renderAppender: false
 	} );
 
 	return hasInnerBlocks ? (

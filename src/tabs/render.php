@@ -142,11 +142,11 @@ if (! function_exists('generateStyles')) {
         // Tab Color using Tailwind's gray shades
         $addStyle(
             '--bbb-tab-text-color',
-            $attributes['tabColor']['textColor']['default'] ?? '#4b5563' // Tailwind gray-600
+            $attributes['tabColor']['textColor']['default'] ?? '#000'
         );
         $addStyle(
             '--bbb-tab-background-color',
-            $attributes['tabColor']['backgroundColor']['default'] ?? 'transparent'
+            $attributes['tabColor']['backgroundColor']['default'] ?? '#fff'
         );
         $addStyle(
             '--bbb-tab-icon-color',
@@ -154,33 +154,33 @@ if (! function_exists('generateStyles')) {
         );
         $addStyle(
             '--bbb-tab-text-hover-color',
-            $attributes['tabColor']['textColor']['hover'] ?? '#374151' // Tailwind gray-700
+            $attributes['tabColor']['textColor']['hover'] ?? '#fff'
         );
         $addStyle(
             '--bbb-tab-background-hover-color',
-            $attributes['tabColor']['backgroundColor']['hover'] ?? '#d1d5db8a'
+            $attributes['tabColor']['backgroundColor']['hover'] ?? '#000'
         );
         $addStyle(
             '--bbb-tab-icon-hover-color',
-            $attributes['tabColor']['iconColor']['hover'] ?? '#374151'
+            $attributes['tabColor']['iconColor']['hover'] ?? '#fff'
         );
         $addStyle(
             '--bbb-tab-text-active-color',
-            $attributes['tabColor']['textColor']['active'] ?? '#1f2937' // Tailwind gray-800
+            $attributes['tabColor']['textColor']['active'] ?? '#fff'
         );
         $addStyle(
             '--bbb-tab-background-active-color',
-            $attributes['tabColor']['backgroundColor']['active'] ?? '#d1d5db8a' // Tailwind gray-300
+            $attributes['tabColor']['backgroundColor']['active'] ?? '#000'
         );
         $addStyle(
             '--bbb-tab-icon-active-color',
-            $attributes['tabColor']['iconColor']['active'] ?? '#374151' // Tailwind gray-300
+            $attributes['tabColor']['iconColor']['active'] ?? '#fff'
         );
 
         // Tab Border Radius
         $addStyle(
             '--bbb-tab-border-radius',
-            getBorderRadiusStyles($attributes['tabBorderRadius'] ?? null, '4px')
+            getBorderRadiusStyles($attributes['tabBorderRadius'] ?? null, '0px')
         );
 
         // Padding styles with defaults
@@ -253,7 +253,7 @@ if (! function_exists('generateStyles')) {
         // Auto width
         $addStyle(
             '--bbb-tab-auto-width',
-            (($attributes['autoWidth'] ?? false) && ($attributes['orientation'] ?? '') === 'row') ? '100%' : 'auto'
+            (($attributes['autoWidth'] ?? false) && ($attributes['orientation'] ?? '') === 'row') ? '1 1 auto' : 'none'
         );
 
         return $styles;

@@ -38,24 +38,23 @@ add_action('init', 'bbb_tabs_block_init');
 function blablablocks_register_tabs_styles()
 {
 	if (! function_exists('register_block_style')) {
-		return; // Exit if the function is not available.
+		return;
 	}
 
-	$styles = array(
-		array(
-			'name'  => 'style-1',
-			'label' => __('Style 1', 'blablablocks-tabs-block'),
-		),
-		array(
-			'name'  => 'style-2',
-			'label' => __('Style 2', 'blablablocks-tabs-block'),
-		),
-		array(
-			'name'       => 'style-3',
-			'label'      => __('Style 3', 'blablablocks-tabs-block'),
-			'is_default' => true,
-		),
-	);
+	$styles = [
+		[
+			'name'   => 'style-1',
+			'label'  => __('Style 1', 'blablablocks-tabs-block'),
+		],
+		[
+			'name'   => 'style-2',
+			'label'  => __('Style 2', 'blablablocks-tabs-block'),
+		],
+		[
+			'name'   => 'style-3',
+			'label'  => __('Style 3', 'blablablocks-tabs-block'),
+		],
+	];
 
 	// Loop through and register each style.
 	foreach ($styles as $style) {

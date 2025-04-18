@@ -135,15 +135,8 @@
 			"full"
 		],
 		"spacing": {
-			"margin": [
-				"top",
-				"bottom"
-			],
-			"padding": true,
-			"__experimentalDefaultControls": {
-				"padding": true,
-				"blockGap": true
-			}
+			"margin":false,
+			"padding": false
 		},
 		"typography": {
 			"fontSize": true,
