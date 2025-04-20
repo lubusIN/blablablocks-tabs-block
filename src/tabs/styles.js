@@ -4,15 +4,14 @@
 import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
-    __experimentalSpacingSizesControl as SpacingSizesControl, // eslint-disable-line
-    __experimentalBorderRadiusControl as BorderRadiusControl, // eslint-disable-line
+	__experimentalSpacingSizesControl as SpacingSizesControl, // eslint-disable-line
 } from '@wordpress/block-editor';
 import {
-    __experimentalHeading as Heading, // eslint-disable-line
-    __experimentalVStack as VStack, // eslint-disable-line
-    __experimentalToolsPanel as ToolsPanel, // eslint-disable-line
-    __experimentalToolsPanelItem as ToolsPanelItem, // eslint-disable-line
-    __experimentalBorderBoxControl as BorderBoxControl, // eslint-disable-line
+	__experimentalHeading as Heading,                         // eslint-disable-line
+	__experimentalVStack as VStack, 						  // eslint-disable-line
+	__experimentalToolsPanel as ToolsPanel, 				  // eslint-disable-line
+	__experimentalToolsPanelItem as ToolsPanelItem, 		  // eslint-disable-line
+	__experimentalBorderBoxControl as BorderBoxControl, 	  // eslint-disable-line
 } from '@wordpress/components';
 
 /**
@@ -29,13 +28,13 @@ import { ColorControlDropdown } from '../components';
  *
  * @return {JSX.Element} Styles panel
  */
-function Styles( { attributes, setAttributes } ) {
+function Styles({ attributes, setAttributes }) {
 	return (
 		<InspectorControls group="styles">
 			<ToolsPanel
-				label={ __( 'Tab', 'blablablocks-tabs-block' ) }
-				resetAll={ () =>
-					setAttributes( {
+				label={__('Tab', 'blablablocks-tabs-block')}
+				resetAll={() =>
+					setAttributes({
 						tabColor: {
 							textColor: {
 								default: undefined,
@@ -54,28 +53,26 @@ function Styles( { attributes, setAttributes } ) {
 							},
 						},
 						tabPadding: undefined,
-						tabBorderRadius: undefined,
 						tabBorder: undefined,
-						tabSpacing: undefined,
-					} )
+					})
 				}
 			>
 				<ToolsPanelItem
-					label={ __( 'Color', 'blablablocks-tabs-block' ) }
+					label={__('Color', 'blablablocks-tabs-block')}
 					isShownByDefault
-					hasValue={ () =>
-						!! attributes?.tabColor?.textColor?.default ||
-						!! attributes?.tabColor?.textColor?.hover ||
-						!! attributes?.tabColor?.textColor?.active ||
-						!! attributes?.tabColor?.backgroundColor?.default ||
-						!! attributes?.tabColor?.backgroundColor?.hover ||
-						!! attributes?.tabColor?.backgroundColor?.active ||
-						!! attributes?.tabColor?.iconColor?.default ||
-						!! attributes?.tabColor?.iconColor?.hover ||
-						!! attributes?.tabColor?.iconColor?.active
+					hasValue={() =>
+						!!attributes?.tabColor?.textColor?.default ||
+						!!attributes?.tabColor?.textColor?.hover ||
+						!!attributes?.tabColor?.textColor?.active ||
+						!!attributes?.tabColor?.backgroundColor?.default ||
+						!!attributes?.tabColor?.backgroundColor?.hover ||
+						!!attributes?.tabColor?.backgroundColor?.active ||
+						!!attributes?.tabColor?.iconColor?.default ||
+						!!attributes?.tabColor?.iconColor?.hover ||
+						!!attributes?.tabColor?.iconColor?.active
 					}
-					onDeselect={ () =>
-						setAttributes( {
+					onDeselect={() =>
+						setAttributes({
 							tabColor: {
 								textColor: {
 									default: undefined,
@@ -93,155 +90,116 @@ function Styles( { attributes, setAttributes } ) {
 									active: undefined,
 								},
 							},
-						} )
+						})
 					}
 				>
-					<VStack spacing={ 0 }>
+					<VStack spacing={0}>
 						<Heading
-							lineHeight={ 1 }
-							level={ 3 }
-							weight={ 500 }
+							lineHeight={1}
+							level={3}
+							weight={500}
 							upperCase
 						>
 							Color
 						</Heading>
 						<VStack
 							className="tabs_color-support-panel"
-							spacing={ 0 }
+							spacing={0}
 						>
 							<ColorControlDropdown
-								label={ __(
+								label={__(
 									'Text',
 									'blablablocks-tabs-block'
-								) }
+								)}
 								colorValue={
 									attributes?.tabColor?.textColor || {}
 								}
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
+								onChangeColor={(newColor) =>
+									setAttributes({
 										tabColor: {
 											...attributes.tabColor,
 											textColor: newColor,
 										},
-									} )
+									})
 								}
-								hasHover={ true }
-								hasActive={ true }
+								hasHover={true}
+								hasActive={true}
 							/>
 							<ColorControlDropdown
-								label={ __(
+								label={__(
 									'Background',
 									'blablablocks-tabs-block'
-								) }
+								)}
 								colorValue={
 									attributes?.tabColor?.backgroundColor || {}
 								}
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
+								onChangeColor={(newColor) =>
+									setAttributes({
 										tabColor: {
 											...attributes?.tabColor,
 											backgroundColor: newColor,
 										},
-									} )
+									})
 								}
-								hasHover={ true }
-								hasActive={ true }
+								hasHover={true}
+								hasActive={true}
 							/>
 							<ColorControlDropdown
-								label={ __(
+								label={__(
 									'Icon',
 									'blablablocks-tabs-block'
-								) }
+								)}
 								colorValue={
 									attributes?.tabColor?.iconColor || {}
 								}
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
+								onChangeColor={(newColor) =>
+									setAttributes({
 										tabColor: {
 											...attributes?.tabColor,
 											iconColor: newColor,
 										},
-									} )
+									})
 								}
-								hasHover={ true }
-								hasActive={ true }
+								hasHover={true}
+								hasActive={true}
 							/>
 						</VStack>
 					</VStack>
 				</ToolsPanelItem>
 				<ToolsPanelItem
-					label={ __( 'Padding', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabPadding }
-					onDeselect={ () =>
-						setAttributes( { tabPadding: undefined } )
+					label={__('Padding', 'blablablocks-tabs-block')}
+					hasValue={() => !!attributes.tabPadding}
+					onDeselect={() =>
+						setAttributes({ tabPadding: undefined })
 					}
 				>
 					<SpacingSizesControl
-						values={ attributes.tabPadding }
-						onChange={ ( value ) =>
-							setAttributes( { tabPadding: value } )
+						values={attributes.tabPadding}
+						onChange={(value) =>
+							setAttributes({ tabPadding: value })
 						}
-						label={ __( 'Padding', 'blablablocks-tabs-block' ) }
-						allowReset={ false }
-						splitOnAxis={ true }
+						label={__('Padding', 'blablablocks-tabs-block')}
+						allowReset={false}
+						splitOnAxis={true}
 					/>
 				</ToolsPanelItem>
 				<ToolsPanelItem
-					label={ __( 'Spacing', 'blablablocks-tabs-block' ) }
-					className="bbb-tab-spacing"
-					hasValue={ () => !! attributes.tabSpacing }
-					onDeselect={ () =>
-						setAttributes( {
-							tabSpacing: undefined,
-						} )
-					}
-				>
-					<SpacingSizesControl
-						values={ { top: attributes.tabSpacing } }
-						onChange={ ( value ) => {
-							setAttributes( { tabSpacing: value.top } );
-						} }
-						label={ __( 'Spacing', 'blablablocks-tabs-block' ) }
-						showSideInLabel={ false }
-						allowReset={ false }
-						sides={ [ 'top' ] }
-					/>
-				</ToolsPanelItem>
-				<ToolsPanelItem
-					label={ __( 'Border', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabBorder }
-					onDeselect={ () =>
-						setAttributes( {
+					label={__('Border', 'blablablocks-tabs-block')}
+					hasValue={() => !!attributes.tabBorder}
+					onDeselect={() =>
+						setAttributes({
 							tabBorder: undefined,
-						} )
+						})
 					}
 				>
 					<BorderBoxControl
 						__next40pxDefaultSize
-						label={ __( 'Border', 'blablablocks-tabs-block' ) }
-						value={ attributes.tabBorder }
-						onChange={ ( value ) =>
-							setAttributes( {
+						label={__('Border', 'blablablocks-tabs-block')}
+						value={attributes.tabBorder}
+						onChange={(value) =>
+							setAttributes({
 								tabBorder: value,
-							} )
-						}
-					/>
-				</ToolsPanelItem>
-				<ToolsPanelItem
-					label={ __( 'Radius', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabBorderRadius }
-					onDeselect={ () =>
-						setAttributes( {
-							tabBorderRadius: undefined,
-						} )
-					}
-				>
-					<BorderRadiusControl
-						values={ attributes.tabBorderRadius }
-						onChange={ ( value ) =>
-							setAttributes( {
-								tabBorderRadius: value,
-							} )
+							})
 						}
 					/>
 				</ToolsPanelItem>

@@ -119,6 +119,69 @@ if (! function_exists('getBorderRadiusStyles')) {
 }
 
 /**
+ * Generates CSS gap styles for the tabs block.
+ *
+ * @param array  $attributes  Block attributes.
+ * @return string A string of CSS variables.
+ */
+if (! function_exists('getGapStyles')) {
+    function getGapStyles($attributes)
+    {
+        $DEFAULT_GAP = '0.5em';
+        $orientation = isset($attributes['orientation']) ? $attributes['orientation'] : 'horizontal';
+
+        // Get blockGap from attributes
+        $blockGap = isset($attributes['style']['spacing']['blockGap'])
+            ? $attributes['style']['spacing']['blockGap']
+            : null;
+
+        // Compute the two CSS values
+        $tabListGap = $blockGap
+            ? (is_string($blockGap)
+                ? $blockGap
+                : (isset($blockGap['top']) ? $blockGap['top'] : $DEFAULT_GAP))
+            : $DEFAULT_GAP;
+
+        $tabGap = $blockGap
+            ? (is_string($blockGap)
+                ? $blockGap
+                : (isset($blockGap['left']) ? $blockGap['left'] : $DEFAULT_GAP))
+            : $DEFAULT_GAP;
+
+        // Convert to valid CSS values
+        $main = getGapCSSValue($tabListGap);
+        $cross = getGapCSSValue($tabGap);
+
+        // If vertical, swap main and cross
+        list($listGap, $tabsGap) = $orientation === 'vertical'
+            ? [$main, $cross]
+            : [$cross, $main];
+
+        return [
+            '--bbb-tabs-list-gap' => $listGap,
+            '--bbb-tabs-gap' => $tabsGap
+        ];
+    }
+}
+
+/**
+ * Converts a gap value to a valid CSS value.
+ * Handles preset values (e.g., "var:preset|spacing|40") by converting them to CSS variables.
+ *
+ * @param string $value The gap value to convert.
+ * @return string The converted CSS value.
+ */
+if (! function_exists('getGapCSSValue')) {
+    function getGapCSSValue($value)
+    {
+        if (preg_match('/^var:preset\|spacing\|\d+$/', $value)) {
+            return 'var(--wp--preset--spacing--' . substr($value, strrpos($value, '|') + 1) . ')';
+        }
+        return $value;
+    }
+}
+
+/**
  * Generates a set of CSS variable mappings based on provided attributes.
  * The returned array excludes variables with invalid or undefined values.
  *
@@ -138,6 +201,9 @@ if (! function_exists('generateStyles')) {
                 $styles[$key] = $defaultValue;
             }
         };
+
+        // Add gap styles
+        $styles = array_merge($styles, getGapStyles($attributes));
 
         // Tab Color using Tailwind's gray shades
         $addStyle(
@@ -201,12 +267,6 @@ if (! function_exists('generateStyles')) {
             resolveSpacingSizeValue($attributes['tabPadding']['left'] ?? null, '15px')
         );
 
-        // Spacing styles with defaults
-        $addStyle(
-            '--bbb-tab-spacing',
-            resolveSpacingSizeValue($attributes['tabSpacing'] ?? null, '10px')
-        );
-
         // Border styles
         $styles = array_merge($styles, getBorderStyles($attributes['tabBorder'] ?? array()));
 
@@ -215,45 +275,11 @@ if (! function_exists('generateStyles')) {
             '--bbb-tab-buttons-justify-content',
             $attributes['justification'] ?? 'left'
         );
-        $addStyle(
-            '--bbb-tab-buttons-flex-direction',
-            $attributes['orientation'] ?? 'column'
-        );
-
-        // Tabs styles
-        if (($attributes['orientation'] ?? '') === 'column') {
-            $addStyle('--bbb-tabs-display', 'flex');
-            if (($attributes['verticalPosition'] ?? '') === 'right') {
-                $addStyle('--bbb-tabs-flex-direction', 'row-reverse');
-            } else {
-                $addStyle('--bbb-tabs-flex-direction', 'row');
-            }
-        } else {
-            $addStyle('--bbb-tabs-display', '');
-            $addStyle('--bbb-tabs-flex-direction', 'column');
-        }
-
-        // Icon Position
-        $iconDirection = 'row';
-        if (($attributes['iconPosition'] ?? '') === 'top') {
-            $iconDirection = 'column';
-        } elseif (($attributes['iconPosition'] ?? '') === 'bottom') {
-            $iconDirection = 'column-reverse';
-        } elseif (($attributes['iconPosition'] ?? '') === 'right') {
-            $iconDirection = 'row-reverse';
-        }
-        $addStyle('--bbb-tab-icon-position', $iconDirection);
 
         // Icon Size
         $addStyle(
             '--bbb-tab-icon-size',
             isset($attributes['iconSize']) ? "{$attributes['iconSize']}px" : '24px'
-        );
-
-        // Auto width
-        $addStyle(
-            '--bbb-tab-auto-width',
-            (($attributes['autoWidth'] ?? false) && ($attributes['orientation'] ?? '') === 'row') ? '1 1 auto' : 'none'
         );
 
         return $styles;
@@ -269,8 +295,20 @@ foreach ($tabs_styles as $property => $value) {
     $style_string .= "$property:$value;";
 }
 
+$wrapper_classes = [
+    'blablablocks-tabs',
+    'blablablocks-tabs__' . ($attributes['orientation'] ?? 'horizontal'),
+    isset($attributes['verticalPosition']) && 'right' == $attributes['verticalPosition'] ? 'blablablocks-tabs__right' : '',
+    isset($attributes['autoWidth']) && $attributes['autoWidth'] && ($attributes['orientation'] ?? 'horizontal') === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
+    'blablablocks-tabs-icon__' . ($attributes['iconPosition'] ?? 'left'),
+];
+
+// Filter out empty classes
+$wrapper_classes = array_filter($wrapper_classes);
+
 $wrapper_attributes = get_block_wrapper_attributes(
     [
+        'class' => implode(' ', $wrapper_classes),
         'style' => $style_string,
     ]
 );

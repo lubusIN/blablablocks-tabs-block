@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import clsx from 'clsx';
 import { useSelect } from '@wordpress/data';
 import {
 	useBlockProps,
@@ -64,7 +65,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	 * @type {Object}
 	 */
 	const blockProps = useBlockProps( {
-		className: 'blablablocks-tabs',
+		className: clsx(
+			'blablablocks-tabs',
+			'blablablocks-tabs__' + attributes.orientation,
+			'right' == attributes.verticalPosition ? 'blablablocks-tabs__right' : '',
+			attributes?.autoWidth && attributes.orientation === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
+			'blablablocks-tabs-icon__' + attributes.iconPosition,
+		),
 		style: generateStyles( attributes ),
 	} );
 

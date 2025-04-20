@@ -1,32 +1,70 @@
 .blablablocks-tab {
-	display: var(--bbb-tabs-display, flex);
-	flex-direction: var(--bbb-tabs-flex-direction, column);
-	gap: 10px;
+	display: flex;
+	gap: var(--bbb-tabs-gap, 0px);
 }
 
 .blablablock-tab-btn {
 	position: relative;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	gap: 8px;
 	height: fit-content;
 	margin-top: auto;
-	flex-direction: var(--bbb-tab-icon-position, row);
-	flex: var(--bbb-tab-auto-width);
+	flex: none;
 }
 
-/* Icon position */
-.blablablocks-tabs .blablablock-tab-btn {
-	flex-direction: var(--bbb-tab-icon-position, row);
-	align-items: center;
-	justify-content: center;
+.blablablocks-tabs {
+
+	&.blablablocks-tabs__horizontal {
+		.blablablocks-tab {
+			flex-direction: column;
+		}
+
+		.blablablocks-tabs-buttons {
+			flex-direction: row;
+		}
+	}
+
+	&.blablablocks-tabs__vertical {
+		&.blablablocks-tabs__right .blablablocks-tab {
+			flex-direction: row-reverse;
+		}
+
+		.blablablocks-tab {
+			flex-direction: row;
+		}
+
+		.blablablocks-tabs-buttons {
+			flex-direction: column;
+		}
+	}
+
+	&.blablablocks-tabs__autoWidth .blablablock-tab-btn {
+		flex: 1 1 auto;
+	}
+
+	&.blablablocks-tabs-icon__top .blablablock-tab-btn {
+		flex-direction: column;
+	}
+
+	&.blablablocks-tabs-icon__bottom .blablablock-tab-btn {
+		flex-direction: column-reverse;
+	}
+
+	&.blablablocks-tabs-icon__right .blablablock-tab-btn {
+		flex-direction: row-reverse;
+	}
+
+	&.blablablocks-tabs-icon__left .blablablock-tab-btn {
+		flex-direction: row;
+	}
 }
 
 .blablablocks-tabs-buttons {
-	gap: var(--bbb-tab-spacing);
+	gap: var(--bbb-tabs-list-gap, 0px);
 	display: flex;
 	justify-content: var(--bbb-tab-buttons-justify-content, left);
-	flex-direction: var(--bbb-tab-buttons-flex-direction, column);
 	padding: 0px;
 	flex-wrap: wrap;
 
@@ -34,11 +72,6 @@
 		cursor: pointer;
 		padding: var(--bbb-tab-padding-top) var(--bbb-tab-padding-right) var(--bbb-tab-padding-bottom) var(--bbb-tab-padding-left);
 		background-color: var(--bbb-tab-background-color);
-		border-radius: var(--bbb-tab-border-radius);
-		border-bottom: var(--bbb-tab-border-bottom);
-		border-left: var(--bbb-tab-border-left);
-		border-right: var(--bbb-tab-border-right);
-		border-top: var(--bbb-tab-border-top);
 
 		.tab-button-text {
 			color: var(--bbb-tab-text-color);

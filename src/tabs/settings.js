@@ -36,7 +36,7 @@ function Settings( { attributes, setAttributes } ) {
 			<InspectorControls>
 				<PanelBody title={ __( 'Layout', 'blablablocks-tabs-block' ) }>
 					<HStack align={ 'start' }>
-						{ attributes.orientation === 'row' && (
+						{ attributes.orientation === 'horizontal' && (
 							<ToggleGroupControl
 								label={ __(
 									'Justification',
@@ -66,7 +66,7 @@ function Settings( { attributes, setAttributes } ) {
 								/>
 							</ToggleGroupControl>
 						) }
-						{ attributes.orientation === 'column' && (
+						{ attributes.orientation === 'vertical' && (
 							<ToggleGroupControl
 								label={ __(
 									'Position',
@@ -105,12 +105,12 @@ function Settings( { attributes, setAttributes } ) {
 						>
 							<ToggleGroupControlOptionIcon
 								icon={ arrowRight }
-								value="row"
+								value="horizontal"
 								label="Horizontal"
 							/>
 							<ToggleGroupControlOptionIcon
 								icon={ arrowDown }
-								value="column"
+								value="vertical"
 								label="Vertical"
 							/>
 						</ToggleGroupControl>

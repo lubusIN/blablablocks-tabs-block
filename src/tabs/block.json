@@ -16,7 +16,7 @@
 		},
 		"orientation": {
 			"type": "string",
-			"default": "row"
+			"default": "horizontal"
 		},
 		"verticalPosition": {
 			"type": "string",
@@ -84,14 +84,8 @@
 		"tabPadding": {
 			"type": "object"
 		},
-		"tabBorderRadius": {
-			"type": "string"
-		},
 		"tabBorder": {
 			"type": "object"
-		},
-		"tabSpacing": {
-			"type": "string"
 		}
 	},
 	"example": {
@@ -136,7 +130,8 @@
 		],
 		"spacing": {
 			"margin":false,
-			"padding": false
+			"padding": false,
+			"blockGap": [ "horizontal", "vertical" ]
 		},
 		"typography": {
 			"fontSize": true,
