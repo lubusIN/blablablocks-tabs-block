@@ -16,37 +16,34 @@ import ToolbarButton from './toolbar-button';
  * and modal interface. It manages the open/close state of the modal and
  * the SVG code selected.
  *
- * @param {Object} props                 - Component props.
- * @param {Object} props.attributes      - The block attributes.
+ * @param {Object}   props               - Component props.
+ * @param {Object}   props.attributes    - The block attributes.
  * @param {Function} props.setAttributes - Function to update block attributes.
  *
- * @returns {JSX.Element} The rendered IconPicker component.
+ * @return {JSX.Element} The rendered IconPicker component.
  */
-function IconPicker({
-    attributes,
-    setAttributes
-}) {
-    const [isOpen, setOpen] = useState(false);
-    const [svgCode, setSvgCode] = useState('');
+function IconPicker( { attributes, setAttributes } ) {
+	const [ isOpen, setOpen ] = useState( false );
+	const [ svgCode, setSvgCode ] = useState( '' );
 
-    return (
-        <>
-            <ToolbarButton
-                attributes={attributes}
-                setAttributes={setAttributes}
-                setOpen={setOpen}
-                setSvgCode={setSvgCode}
-            />
-            <Modal
-                attributes={attributes}
-                setAttributes={setAttributes}
-                isOpen={isOpen}
-                setOpen={setOpen}
-                setSvgCode={setSvgCode}
-                svgCode={svgCode}
-            />
-        </>
-    );
-};
+	return (
+		<>
+			<ToolbarButton
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				setOpen={ setOpen }
+				setSvgCode={ setSvgCode }
+			/>
+			<Modal
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				isOpen={ isOpen }
+				setOpen={ setOpen }
+				setSvgCode={ setSvgCode }
+				svgCode={ svgCode }
+			/>
+		</>
+	);
+}
 
 export default IconPicker;

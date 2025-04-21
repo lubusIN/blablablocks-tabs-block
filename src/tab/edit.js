@@ -13,10 +13,7 @@ import {
 	store as blockEditorStore,
 	InspectorControls,
 } from '@wordpress/block-editor';
-import {
-	ToggleControl,
-	PanelBody
-} from '@wordpress/components';
+import { ToggleControl, PanelBody } from '@wordpress/components';
 
 /**
  * Internal dependencies
@@ -35,14 +32,14 @@ import IconPicker from '../components/icon-picker';
  * @param {Function} props.setAttributes - Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({
+export default function Edit( {
 	clientId,
 	isSelected,
 	attributes,
 	setAttributes,
-}) {
+} ) {
 	const { updateBlockAttributes, selectBlock } =
-		useDispatch(blockEditorStore);
+		useDispatch( blockEditorStore );
 
 	/**
 	 * Retrieve block-related data using the `useSelect` hook.
@@ -56,9 +53,9 @@ export default function Edit({
 		isTabsClientSelected,
 		forceDisplay,
 		hasInnerBlocksSelected,
-		lastSelectedTabClientId
+		lastSelectedTabClientId,
 	} = useSelect(
-		(select) => {
+		( select ) => {
 			const {
 				getBlockOrder,
 				getBlockIndex,
@@ -66,11 +63,11 @@ export default function Edit({
 				getBlockAttributes,
 				hasSelectedInnerBlock,
 				isBlockSelected,
-				getMultiSelectedBlocksEndClientId
-			} = select('core/block-editor');
+				getMultiSelectedBlocksEndClientId,
+			} = select( 'core/block-editor' );
 
-			const rootClientId = getBlockRootClientId(clientId);
-			const parentBlockAttrs = getBlockAttributes(rootClientId);
+			const rootClientId = getBlockRootClientId( clientId );
+			const parentBlockAttrs = getBlockAttributes( rootClientId );
 			const innerHasTabSelected = hasSelectedInnerBlock(
 				rootClientId,
 				true
@@ -79,8 +76,8 @@ export default function Edit({
 				clientId,
 				true
 			);
-			const innerBlockIndex = getBlockIndex(clientId);
-			const totalTabsCount = getBlockOrder(rootClientId).length;
+			const innerBlockIndex = getBlockIndex( clientId );
+			const totalTabsCount = getBlockOrder( rootClientId ).length;
 
 			// Check if activeTab is a valid index and if this tab is the active one
 			const activeTab = parentBlockAttrs?.activeTab;
@@ -91,22 +88,21 @@ export default function Edit({
 			const innerIsDefaultTab = isValidActiveTab
 				? activeTab === innerBlockIndex
 				: innerBlockIndex === 0;
-			const innerIsTabsClientSelected = isBlockSelected(rootClientId);
+			const innerIsTabsClientSelected = isBlockSelected( rootClientId );
 
 			return {
 				blockIndex: innerBlockIndex,
 				tabsClientId: rootClientId,
-				hasChildBlocks: getBlockOrder(clientId).length > 0,
+				hasChildBlocks: getBlockOrder( clientId ).length > 0,
 				hasInnerBlocksSelected: innerHasInnerBlocksSelected,
 				isTabsClientSelected: innerIsTabsClientSelected,
 				isDefaultTab: innerIsDefaultTab,
 				forceDisplay: innerIsDefaultTab && innerIsTabsClientSelected,
 				hasTabSelected: innerHasTabSelected,
-				lastSelectedTabClientId: getMultiSelectedBlocksEndClientId()
+				lastSelectedTabClientId: getMultiSelectedBlocksEndClientId(),
 			};
-
 		},
-		[clientId]
+		[ clientId ]
 	);
 
 	/**
@@ -115,60 +111,65 @@ export default function Edit({
 	 *
 	 * @type {boolean}
 	 */
-	const isTabSelected = useMemo(() => {
-
-		if (isSelected || hasInnerBlocksSelected || forceDisplay) {
+	const isTabSelected = useMemo( () => {
+		if ( isSelected || hasInnerBlocksSelected || forceDisplay ) {
 			return true;
 		}
 
 		if (
 			isDefaultTab &&
-			!isTabsClientSelected &&
-			!isSelected &&
-			!hasTabSelected
+			! isTabsClientSelected &&
+			! isSelected &&
+			! hasTabSelected
 		) {
 			return true;
 		}
 
 		// If multiple tabs are selected, only show the last one
-		if (hasTabSelected && lastSelectedTabClientId === clientId) {
+		if ( hasTabSelected && lastSelectedTabClientId === clientId ) {
 			return true;
 		}
 
 		return false;
 	}, [
+		clientId,
 		isSelected,
 		hasInnerBlocksSelected,
 		isDefaultTab,
 		forceDisplay,
 		isTabsClientSelected,
 		hasTabSelected,
-		lastSelectedTabClientId
-	]);
+		lastSelectedTabClientId,
+	] );
 
 	/**
 	 * Props for the block container.
 	 * @type {Object}
 	 */
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: 'blablablocks-tab',
-	});
+	} );
 
 	/**
 	 * Props for the inner blocks container.
 	 * @type {Object}
 	 */
-	const innerBlocksProps = useInnerBlocksProps();
+	const innerBlocksProps = useInnerBlocksProps( {
+		'aria-labelledby': `tab-${ attributes.tabId }`,
+		id: `tab-${ attributes.tabId }`,
+		role: 'tabpanel',
+		tabIndex: isTabSelected ? 0 : -1,
+	} );
 
 	/**
 	 * Sets the default tab by updating the `activeTab` attribute of the parent Tabs block.
 	 *
 	 * @param {boolean} value - The value to set for the active tab.
 	 */
-	const handleSetDefault = (value) => {
-		updateBlockAttributes(tabsClientId, {
+	const handleSetDefault = ( value ) => {
+		updateBlockAttributes( tabsClientId, {
 			activeTab: value ? blockIndex : 0,
-		});
+		} );
 	};
 
 	/**
@@ -177,81 +178,83 @@ export default function Edit({
 	 * This effect ensures each tab has a unique identifier by setting the tabId
 	 * attribute to the clientId.
 	 */
-	useEffect(() => {
-		setAttributes({ tabId: clientId });
-	}, [clientId, attributes.tabId, setAttributes]);
+	useEffect( () => {
+		setAttributes( { tabId: clientId } );
+	}, [ clientId, attributes.tabId, setAttributes ] );
 
 	return (
 		<>
-			<div {...blockProps}>
-				<TabFill tabsClientId={tabsClientId}>
+			<div { ...blockProps }>
+				<TabFill tabsClientId={ tabsClientId }>
 					<div
-						className={clsx('blablablock-tab-btn', {
+						id={ attributes.tabId }
+						className={ clsx( 'blablablock-tab-btn', {
 							'is-bbb-active-tab': isTabSelected,
-						})}
+						} ) }
 						role="tab"
-						aria-selected={isTabSelected}
-						onClick={() => selectBlock(clientId)}
+						tabIndex={ 0 }
+						aria-selected={ isTabSelected }
+						onClick={ () => selectBlock( clientId ) }
 					>
-						{ /* Render the tab icon if it exists */}
-						{attributes.tabIcon && (
+						{ /* Render the tab icon if it exists */ }
+						{ attributes.tabIcon && (
 							<span
 								className="bbb-tab-icon"
-								dangerouslySetInnerHTML={{
+								dangerouslySetInnerHTML={ {
 									__html: attributes.tabIcon,
-								}}
+								} }
 							/>
-						)}
-						{ /* Render the tab name */}
+						) }
+						{ /* Render the tab name */ }
 						<RichText
 							tagName="span"
 							className="tab-button-text"
 							withoutInteractiveFormatting
-							value={attributes.tabname}
-							placeholder={__('Add tab name…')}
-							onChange={(value) =>
-								setAttributes({
+							value={ attributes.tabname }
+							placeholder={ __( 'Add tab name…' ) }
+							onChange={ ( value ) =>
+								setAttributes( {
 									tabname: value,
-								})
+								} )
 							}
 						/>
 					</div>
 				</TabFill>
-				{isTabSelected && (
+				{ isTabSelected && (
 					<>
-						<TabsListSlot tabsClientId={tabsClientId} />
-						{hasChildBlocks ? (
-							<div {...innerBlocksProps} />
+						<TabsListSlot tabsClientId={ tabsClientId } />
+						{ hasChildBlocks ? (
+							<div { ...innerBlocksProps } />
 						) : (
 							<Placeholder
-								clientId={clientId}
-								attributes={attributes}
+								clientId={ clientId }
+								attributes={ attributes }
 							/>
-						)}
+						) }
 					</>
-				)}
+				) }
 			</div>
 
 			<InspectorControls>
 				<PanelBody
-					title={__('Settings', 'blablablocks-tabs-block')}
-					initialOpen={true}
+					title={ __( 'Settings', 'blablablocks-tabs-block' ) }
+					initialOpen={ true }
 				>
 					<ToggleControl
-						label={__(
+						label={ __(
 							'Set as default tab',
 							'blablablocks-tabs-block'
-						)}
-						checked={isDefaultTab}
-						onChange={(value) => handleSetDefault(value)}
+						) }
+						checked={ isDefaultTab }
+						onChange={ ( value ) => handleSetDefault( value ) }
 					/>
 				</PanelBody>
 			</InspectorControls>
 
 			<BlockControls>
 				<IconPicker
-					attributes={attributes}
-					setAttributes={setAttributes}
+					attributes={ attributes }
+					setAttributes={ setAttributes }
 				/>
 			</BlockControls>
 		</>

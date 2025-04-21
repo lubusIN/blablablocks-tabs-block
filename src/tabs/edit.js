@@ -68,9 +68,13 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		className: clsx(
 			'blablablocks-tabs',
 			'blablablocks-tabs__' + attributes.orientation,
-			'right' == attributes.verticalPosition ? 'blablablocks-tabs__right' : '',
-			attributes?.autoWidth && attributes.orientation === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
-			'blablablocks-tabs-icon__' + attributes.iconPosition,
+			'right' === attributes.verticalPosition
+				? 'blablablocks-tabs__right'
+				: '',
+			attributes?.autoWidth && attributes.orientation === 'horizontal'
+				? 'blablablocks-tabs__autoWidth'
+				: '',
+			'blablablocks-tabs-icon__' + attributes.iconPosition
 		),
 		style: generateStyles( attributes ),
 	} );
@@ -85,7 +89,7 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		defaultBlock: DEFAULT_BLOCK,
 		orientation: 'horizontal',
 		allowedBlocks,
-		renderAppender: false
+		renderAppender: false,
 	} );
 
 	return hasInnerBlocks ? (

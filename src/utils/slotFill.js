@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import React from 'react';
 import { createSlotFill } from '@wordpress/components';
 
 /**

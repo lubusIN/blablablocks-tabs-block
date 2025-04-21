@@ -1,4 +1,4 @@
-.tabs_color_popover .components-popover__content>div {
+.tabs_color_popover .components-popover__content > div {
 	margin: -8px;
 	width: 260px;
 }
@@ -76,7 +76,7 @@
 	}
 }
 
-.bbb-custom-icon-modal .components-modal__content>div:nth-child(2) {
+.bbb-custom-icon-modal .components-modal__content > div:nth-child(2) {
 	height: 100%;
 }
 
@@ -117,7 +117,7 @@
 	width: 100%;
 }
 
-.tabs-patterns-grid .block-editor-block-preview__container:after {
+.tabs-patterns-grid .block-editor-block-preview__container::after {
 	border-radius: 4px;
 	outline: 1px solid #0000001a;
 	outline-offset: -1px;
