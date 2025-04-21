@@ -50,10 +50,6 @@ function blablablocks_register_tabs_styles()
 			'name'   => 'style-2',
 			'label'  => __('Style 2', 'blablablocks-tabs-block'),
 		],
-		[
-			'name'   => 'style-3',
-			'label'  => __('Style 3', 'blablablocks-tabs-block'),
-		],
 	];
 
 	// Loop through and register each style.

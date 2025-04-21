@@ -53,7 +53,6 @@ function Styles( { attributes, setAttributes } ) {
 							},
 						},
 						tabPadding: undefined,
-						tabBorder: undefined,
 					} )
 				}
 			>
@@ -181,26 +180,6 @@ function Styles( { attributes, setAttributes } ) {
 						label={ __( 'Padding', 'blablablocks-tabs-block' ) }
 						allowReset={ false }
 						splitOnAxis={ true }
-					/>
-				</ToolsPanelItem>
-				<ToolsPanelItem
-					label={ __( 'Border', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabBorder }
-					onDeselect={ () =>
-						setAttributes( {
-							tabBorder: undefined,
-						} )
-					}
-				>
-					<BorderBoxControl
-						__next40pxDefaultSize
-						label={ __( 'Border', 'blablablocks-tabs-block' ) }
-						value={ attributes.tabBorder }
-						onChange={ ( value ) =>
-							setAttributes( {
-								tabBorder: value,
-							} )
-						}
 					/>
 				</ToolsPanelItem>
 			</ToolsPanel>

@@ -62,29 +62,6 @@ const resolveSpacingSizeValue = ( value, defaultValue = '0px' ) => {
 };
 
 /**
- * Generates border styles based on provided attributes.
- *
- * @param {Object} border - The border definition object.
- * @return {Object} - An object containing border styles.
- */
-const getBorderStyles = ( border = {} ) => {
-	const styles = {};
-
-	// Loop through each border side and assign styles
-	[ 'top', 'right', 'bottom', 'left' ].forEach( ( side ) => {
-		const width = border?.[ side ]?.width ?? border?.width ?? '0px';
-		const style = border?.[ side ]?.style ?? border?.style ?? 'solid';
-		const color = border?.[ side ]?.color ?? border?.color ?? '';
-
-		styles[
-			`--bbb-tab-border-${ side }`
-		] = `${ width } ${ style } ${ color }`;
-	} );
-
-	return styles;
-};
-
-/**
  * Generates a set of CSS variable mappings based on provided attributes.
  * The returned object excludes variables with invalid or undefined values.
  *
@@ -159,9 +136,6 @@ export const generateStyles = ( attributes = {} ) => {
 		'--bbb-tab-padding-left',
 		resolveSpacingSizeValue( attributes?.tabPadding?.left, '15px' )
 	);
-
-	// Border styles
-	Object.assign( styles, getBorderStyles( attributes?.tabBorder ) );
 
 	// Tab Buttons styles
 	addStyle(

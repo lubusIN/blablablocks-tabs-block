@@ -72,53 +72,6 @@ if (! function_exists('resolveSpacingSizeValue')) {
 }
 
 /**
- * Generates border styles based on provided attributes.
- *
- * @param array $border The border definition array.
- * @return array An array containing border styles.
- */
-if (! function_exists('getBorderStyles')) {
-    function getBorderStyles($border = array())
-    {
-        $styles = array();
-        $sides = array('top', 'right', 'bottom', 'left');
-
-        foreach ($sides as $side) {
-            $width = $border[$side]['width'] ?? ($border['width'] ?? '0px');
-            $style = $border[$side]['style'] ?? ($border['style'] ?? 'solid');
-            $color = $border[$side]['color'] ?? ($border['color'] ?? '');
-
-            $styles["--bbb-tab-border-$side"] = "$width $style $color";
-        }
-
-        return $styles;
-    }
-}
-
-/**
- * Generates a border-radius string from either a string or an array.
- *
- * @param mixed $borderRadius The border radius definition.
- * @param mixed $defaultValue The default value.
- * @return string A valid CSS border-radius value.
- */
-if (! function_exists('getBorderRadiusStyles')) {
-    function getBorderRadiusStyles($borderRadius, $defaultValue = '0px')
-    {
-        if (is_string($borderRadius)) {
-            return $borderRadius;
-        }
-
-        // If it's an array, return a four-value shorthand for border-radius
-        $topLeft = $borderRadius['topLeft'] ?? $defaultValue;
-        $topRight = $borderRadius['topRight'] ?? $defaultValue;
-        $bottomRight = $borderRadius['bottomRight'] ?? $defaultValue;
-        $bottomLeft = $borderRadius['bottomLeft'] ?? $defaultValue;
-        return "$topLeft $topRight $bottomRight $bottomLeft";
-    }
-}
-
-/**
  * Generates CSS gap styles for the tabs block.
  *
  * @param array  $attributes  Block attributes.
@@ -243,12 +196,6 @@ if (! function_exists('generateStyles')) {
             $attributes['tabColor']['iconColor']['active'] ?? '#fff'
         );
 
-        // Tab Border Radius
-        $addStyle(
-            '--bbb-tab-border-radius',
-            getBorderRadiusStyles($attributes['tabBorderRadius'] ?? null, '0px')
-        );
-
         // Padding styles with defaults
         $addStyle(
             '--bbb-tab-padding-top',
@@ -266,9 +213,6 @@ if (! function_exists('generateStyles')) {
             '--bbb-tab-padding-left',
             resolveSpacingSizeValue($attributes['tabPadding']['left'] ?? null, '15px')
         );
-
-        // Border styles
-        $styles = array_merge($styles, getBorderStyles($attributes['tabBorder'] ?? array()));
 
         // Tab Buttons styles
         $addStyle(
