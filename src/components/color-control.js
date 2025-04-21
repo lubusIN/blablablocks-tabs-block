@@ -7,9 +7,9 @@ import {
 	Button,
 	Dropdown,
 	ColorIndicator,
-    __experimentalZStack as ZStack, // eslint-disable-line
-    __experimentalHStack as HStack, // eslint-disable-line
-    __experimentalText as Text, // eslint-disable-line
+    __experimentalZStack as ZStack,  // eslint-disable-line
+    __experimentalHStack as HStack,  // eslint-disable-line
+    __experimentalText as Text,      // eslint-disable-line
 	TabPanel,
 } from '@wordpress/components';
 
