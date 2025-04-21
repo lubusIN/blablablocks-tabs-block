@@ -194,6 +194,7 @@ export default function Edit( {
 						role="tab"
 						tabIndex={ 0 }
 						aria-selected={ isTabSelected }
+						aria-controls={ attributes.tabId }
 						onClick={ () => selectBlock( clientId ) }
 					>
 						{ /* Render the tab icon if it exists */ }
