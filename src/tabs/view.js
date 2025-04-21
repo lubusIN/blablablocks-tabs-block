@@ -1,26 +1,26 @@
 /**
  * Wordpress dependencies
  */
-import { store, getContext, getElement } from '@wordpress/interactivity';
+import { store, getContext, getElement, withSyncEvent } from '@wordpress/interactivity';
 
 // Constants for store name and default values
 const STORE_NAME = 'blablablocks-tabs';
 
-const { state } = store( STORE_NAME, {
+const { state } = store(STORE_NAME, {
 	state: {
 		/**
-		 * Returns the index of the currently active tab.
+		 * Returns the index of the active tab.
 		 *
 		 * @type {number|null}
 		 */
 		get activeTabIndex() {
 			const { attributes } = getElement();
 			const tabId = attributes?.id || null;
-			if ( ! tabId ) {
+			if (!tabId) {
 				return null;
 			}
 			const { tabs } = getContext();
-			const tabIndex = tabs.findIndex( ( t ) => t.id === tabId );
+			const tabIndex = tabs.findIndex((t) => t.id === tabId);
 			return tabIndex;
 		},
 
@@ -46,6 +46,48 @@ const { state } = store( STORE_NAME, {
 	},
 	actions: {
 		/**
+		 * Handle keyboard navigation on a tab.
+		 *
+		 * @param {KeyboardEvent} event
+		 */
+		handleOnKeyDown: withSyncEvent((event) => {
+			const context = getContext();
+			const tabIndex = state.activeTabIndex;
+			if (tabIndex === null) {
+				return;
+			}
+
+			const { tabs } = context;
+			let newIndex = tabIndex;
+
+			switch (event.key) {
+				case 'Enter':
+				case ' ':
+					context.activeTab = tabIndex;
+					break;
+
+				case 'ArrowRight':
+					newIndex = (tabIndex + 1) % tabs.length;
+					context.activeTab = newIndex;
+					break;
+
+				case 'ArrowLeft':
+					newIndex = (tabIndex - 1 + tabs.length) % tabs.length;
+					context.activeTab = newIndex;
+					break;
+
+				default:
+					return;
+			}
+
+			// After updating activeTab, move keyboard focus to the new button.
+			requestAnimationFrame(() => {
+				const newBtn = document.getElementById(tabs[newIndex].id);
+				newBtn?.focus();
+			});
+		}),
+
+		/**
 		 * Sets the active tab to the current tab's ID.
 		 *
 		 * @return {void}
@@ -53,7 +95,7 @@ const { state } = store( STORE_NAME, {
 		setActiveTab: () => {
 			const context = getContext();
 			const tabIndex = state.activeTabIndex;
-			if ( tabIndex !== null ) {
+			if (tabIndex !== null) {
 				context.activeTab = state.activeTabIndex;
 			}
 		},
@@ -68,11 +110,11 @@ const { state } = store( STORE_NAME, {
 		initTabs() {
 			const context = getContext();
 			const tabIndex = context.tabs.findIndex(
-				( t ) => t.id === context.activeId
+				(t) => t.id === context.activeId
 			);
-			if ( tabIndex >= 0 ) {
+			if (tabIndex >= 0) {
 				context.activeTab = tabIndex;
 			}
 		},
 	},
-} );
+});

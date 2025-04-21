@@ -274,6 +274,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
                 data-wp-bind--tabindex="state.tabIndex"
                 data-wp-bind--aria-selected="state.isActive"
                 data-wp-on--click="actions.setActiveTab"
+                data-wp-on--keydown="actions.handleOnKeyDown"
                 data-wp-class--is-bbb-active-tab="state.isActive">
 
                 <?php if (!empty($icon)) : ?>
