@@ -281,14 +281,14 @@ $wrapper_attributes = get_block_wrapper_attributes(
                 data-wp-on--keydown="actions.handleOnKeyDown"
                 data-wp-class--is-bbb-active-tab="state.isActive">
 
-                <?php if (isset($icon)) : ?>
+                <?php if (!empty($icon)) : ?>
                     <span class="bbb-tab-icon">
                         <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  
                         ?>
                     </span>
                 <?php endif; ?>
 
-                <?php if (isset($tab['label'])) : ?>
+                <?php if (!empty($tab['label'])) : ?>
                     <span class="tab-button-text">
                         <?php echo esc_html($tab['label']); ?>
                     </span>
