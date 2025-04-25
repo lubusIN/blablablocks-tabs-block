@@ -21,27 +21,15 @@ if (! function_exists('blablablocks_extract_tab_data')) {
     {
         return array_map(static function ($inner_block, $index) {
             $attrs = $inner_block['attrs'] ?? [];
+            $hasInnerblock = !empty($inner_block['innerBlocks']);
             return [
-                'id'    => 'tab-' . ($attrs['tabId'] ?? $index),
-                'label' => $attrs['tabname'] ?? sprintf(__('Tab %d', 'blablablocks'), $index + 1),
+                'id'            => 'tab-' . ($attrs['tabId'] ?? $index),
+                'label'         => $attrs['tabname'] ?? sprintf('Tab %d', $index + 1),
+                'hasInnerblock' => $hasInnerblock,
             ];
         }, $inner_blocks, array_keys($inner_blocks));
     }
 }
-
-// Extract tabs data.
-$tabs = blablablocks_extract_tab_data($block->parsed_block['innerBlocks'] ?? []);
-
-// Determine active tab safely.
-$active_tab_index = isset($attributes['activeTab'], $tabs[$attributes['activeTab']]) ? $attributes['activeTab'] : 0;
-$active_tab_id = $tabs[$active_tab_index]['id'];
-
-// Prepare data context.
-$data_context = [
-    'tabs'      => $tabs,
-    'activeTab' => $active_tab_index,
-    'activeId'  => $active_tab_id,
-];
 
 /**
  * Resolves a spacing size value into a usable CSS value.
@@ -230,6 +218,22 @@ if (! function_exists('generateStyles')) {
     }
 }
 
+
+// Extract tabs data.
+$all_tabs = blablablocks_extract_tab_data($block->parsed_block['innerBlocks'] ?? []);
+$tabs     = array_values(array_filter($all_tabs, fn($tab) => $tab['hasInnerblock']));
+
+// Determine active tab safely.
+$active_tab_index = isset($attributes['activeTab'], $tabs[$attributes['activeTab']]) ? $attributes['activeTab'] : 0;
+$active_tab_id    = $tabs[$active_tab_index]['id'];
+
+// Prepare data context.
+$data_context = [
+    'tabs'      => $tabs,
+    'activeTab' => $active_tab_index,
+    'activeId'  => $active_tab_id,
+];
+
 // Generate tabs styles
 $tabs_styles = generateStyles($attributes);
 
@@ -258,7 +262,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 );
 
 ?>
-<div <?php echo $wrapper_attributes; ?>
+<div <?php echo wp_kses_data($wrapper_attributes); ?>
     data-wp-interactive="blablablocks-tabs"
     data-wp-context='<?php echo wp_json_encode($data_context); ?>'
     data-wp-init="callbacks.initTabs">
@@ -279,7 +283,8 @@ $wrapper_attributes = get_block_wrapper_attributes(
 
                 <?php if (!empty($icon)) : ?>
                     <span class="bbb-tab-icon">
-                        <?php echo $icon; ?>
+                        <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  
+                        ?>
                     </span>
                 <?php endif; ?>
 
@@ -291,6 +296,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
     </ul>
 
     <div class="blablablocks-tabs-content">
-        <?php echo $content;  ?>
+        <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+        ?>
     </div>
 </div>

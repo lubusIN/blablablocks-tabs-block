@@ -18,6 +18,7 @@ $wrapper_attributes = get_block_wrapper_attributes([
     'aria-labelledby' => esc_attr('tab-' . $attributes['tabId'])
 ]);
 ?>
-<div <?php echo $wrapper_attributes; ?>>
-    <?php echo $content; ?>
+<div <?php echo wp_kses_data($wrapper_attributes); ?>>
+    <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+    ?>
 </div>
