@@ -1,4 +1,4 @@
-.tabs_color_popover .components-popover__content > div {
+.tabs_color_popover .components-popover__content>div {
 	margin: -8px;
 	width: 260px;
 }
@@ -76,7 +76,7 @@
 	}
 }
 
-.bbb-custom-icon-modal .components-modal__content > div:nth-child(2) {
+.bbb-custom-icon-modal .components-modal__content>div:nth-child(2) {
 	height: 100%;
 }
 
@@ -125,9 +125,18 @@
 
 .blablablocks-tab_inserter {
 	padding: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
 	button {
 		height: 35px !important;
 		width: 40px;
+	}
+}
+
+.blablablocks-tabs.blablablocks-tabs__vertical {
+	.blablablocks-tab_inserter button {
+		width: 100%;
 	}
 }

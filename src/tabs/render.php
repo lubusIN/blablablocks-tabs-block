@@ -24,7 +24,7 @@ if (! function_exists('blablablocks_extract_tab_data')) {
             $hasInnerblock = !empty($inner_block['innerBlocks']);
             return [
                 'id'            => 'tab-' . ($attrs['tabId'] ?? $index),
-                'label'         => $attrs['tabname'] ?? sprintf('Tab %d', $index + 1),
+                'label'         => $attrs['tabname'] ?? '',
                 'hasInnerblock' => $hasInnerblock,
             ];
         }, $inner_blocks, array_keys($inner_blocks));
@@ -281,16 +281,22 @@ $wrapper_attributes = get_block_wrapper_attributes(
                 data-wp-on--keydown="actions.handleOnKeyDown"
                 data-wp-class--is-bbb-active-tab="state.isActive">
 
-                <?php if (!empty($icon)) : ?>
+                <?php if (isset($icon)) : ?>
                     <span class="bbb-tab-icon">
                         <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  
                         ?>
                     </span>
                 <?php endif; ?>
 
-                <span class="tab-button-text">
-                    <?php echo esc_html($tab['label']); ?>
-                </span>
+                <?php if (isset($tab['label'])) : ?>
+                    <span class="tab-button-text">
+                        <?php echo esc_html($tab['label']); ?>
+                    </span>
+                <?php elseif (empty($icon) && empty($tab['label'])) : ?>
+                    <span class="tab-button-text">
+                        <?php echo esc_html('Tab ' . ($index + 1)); ?>
+                    </span>
+                <?php endif; ?>
             </li>
         <?php endforeach; ?>
     </ul>
