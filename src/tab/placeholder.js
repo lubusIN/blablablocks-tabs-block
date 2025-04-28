@@ -42,7 +42,7 @@ function Placeholder( { clientId, attributes } ) {
 	/**
 	 * Creates a blank tab with default content
 	 */
-	const handleStartBlank = useCallback( () => {
+	const handleSkip = useCallback( () => {
 		try {
 			const defaultTemplate = [
 				[
@@ -140,7 +140,7 @@ function Placeholder( { clientId, attributes } ) {
 				<PlaceholderComponent
 					icon={ TabLogo }
 					instructions={ __(
-						'Choose a pattern for the tab or start with a blank tab.',
+						'Choose a pattern for the tab or skip.',
 						'blablablocks-tabs-block'
 					) }
 					label={ sprintf(
@@ -149,10 +149,10 @@ function Placeholder( { clientId, attributes } ) {
 					) }
 				>
 					<Button variant="primary" onClick={ openPatternModal }>
-						{ __( 'Choose Pattern', 'blablablocks-tabs-block' ) }
+						{ __( 'Choose', 'blablablocks-tabs-block' ) }
 					</Button>
-					<Button variant="secondary" onClick={ handleStartBlank }>
-						{ __( 'Start Blank', 'blablablocks-tabs-block' ) }
+					<Button variant="link" onClick={ handleSkip }>
+						{ __( 'Skip', 'blablablocks-tabs-block' ) }
 					</Button>
 				</PlaceholderComponent>
 			) }
