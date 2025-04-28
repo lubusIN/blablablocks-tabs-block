@@ -1,17 +1,17 @@
-.tabs_color_popover .components-popover__content>div {
+.bbb-tabs_color_popover .components-popover__content>div {
 	margin: -8px;
 	width: 260px;
 }
 
-.tabs_color_popover {
+.bbb-tabs_color_popover {
 
 	.components-tab-panel__tab-content,
-	.ls-color-pallete-container {
+	.bbb-color-pallete-container {
 		padding: 18px;
 	}
 }
 
-.tabs_color-support-panel {
+.bbb-tabs_color-support-panel {
 
 	.components-dropdown {
 		width: 100%;
@@ -42,12 +42,12 @@
 		padding: 20px 10px;
 	}
 
-	.tabs_color_button.isOpen {
+	.bbb-tabs_color_button.isOpen {
 		background-color: #f0f0f0;
 	}
 
-	.tabs_color_button:hover span,
-	.tabs_color_button.isOpen span {
+	.bbb-tabs_color_button:hover span,
+	.bbb-tabs_color_button.isOpen span {
 		color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 	}
 }

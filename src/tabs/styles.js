@@ -102,7 +102,7 @@ function Styles( { attributes, setAttributes } ) {
 							Color
 						</Heading>
 						<VStack
-							className="tabs_color-support-panel"
+							className="bbb-tabs_color-support-panel"
 							spacing={ 0 }
 						>
 							<ColorControlDropdown
