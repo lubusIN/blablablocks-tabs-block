@@ -41,20 +41,20 @@ const generateGapStyles = ( blockGap, orientation = 'horizontal' ) => {
  * @param {string|number} defaultValue - The default value.
  * @return {string} - A valid CSS spacing size value.
  */
-const resolveSpacingSizeValue = ( value, defaultValue = '0px' ) => {
-	if ( typeof value === 'string' ) {
-		if ( value.startsWith( 'var:' ) ) {
+const resolveSpacingSizeValue = (value, defaultValue = '0px') => {
+	if (typeof value === 'string') {
+		if (value.startsWith('var:')) {
 			// Convert "var:some|value" into "var(--wp--some--value)"
 			const cssVariable = value
-				.replace( 'var:', '--wp--' )
-				.replace( /\|/g, '--' );
-			return `var(${ cssVariable })`;
+				.replace('var:', '--wp--')
+				.replace(/\|/g, '--');
+			return `var(${cssVariable})`;
 		}
 		return value; // If it's a valid CSS string, return as-is
 	}
 
-	if ( typeof value === 'number' ) {
-		return `${ value }px`; // Convert numbers to pixel values
+	if (typeof value === 'number') {
+		return `${value}px`; // Convert numbers to pixel values
 	}
 
 	// use defaultValue if value is invalid or undefined
@@ -69,15 +69,15 @@ const resolveSpacingSizeValue = ( value, defaultValue = '0px' ) => {
  *
  * @return {Object} - An object with CSS variable definitions.
  */
-export const generateStyles = ( attributes = {} ) => {
+export const generateStyles = (attributes = {}) => {
 	const styles = {};
 
 	// Helper function to add a style with a fallback to default values
-	const addStyle = ( key, value, defaultValue = '0px' ) => {
-		if ( value !== undefined && value !== null ) {
-			styles[ key ] = value;
-		} else if ( defaultValue ) {
-			styles[ key ] = defaultValue;
+	const addStyle = (key, value, defaultValue = '0px') => {
+		if (value !== undefined && value !== null) {
+			styles[key] = value;
+		} else if (defaultValue) {
+			styles[key] = defaultValue;
 		}
 	};
 
@@ -122,21 +122,21 @@ export const generateStyles = ( attributes = {} ) => {
 	// Padding styles with defaults
 	addStyle(
 		'--bbb-tab-padding-top',
-		resolveSpacingSizeValue( attributes?.tabPadding?.top, '5px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.top, '5px')
 	);
 	addStyle(
 		'--bbb-tab-padding-right',
-		resolveSpacingSizeValue( attributes?.tabPadding?.right, '15px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.right, '15px')
 	);
 	addStyle(
 		'--bbb-tab-padding-bottom',
-		resolveSpacingSizeValue( attributes?.tabPadding?.bottom, '5px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.bottom, '5px')
 	);
 	addStyle(
 		'--bbb-tab-padding-left',
-		resolveSpacingSizeValue( attributes?.tabPadding?.left, '15px' )
+		resolveSpacingSizeValue(attributes?.tabPadding?.left, '15px')
 	);
-
+  
 	// Tab Buttons styles
 	addStyle(
 		'--bbb-tab-buttons-justify-content',
@@ -146,7 +146,7 @@ export const generateStyles = ( attributes = {} ) => {
 	// Icon Size
 	addStyle(
 		'--bbb-tab-icon-size',
-		attributes?.iconSize ? `${ attributes?.iconSize }px` : '24px'
+		attributes?.iconSize ? `${attributes?.iconSize}px` : '24px'
 	);
 
 	// Tab List Gap

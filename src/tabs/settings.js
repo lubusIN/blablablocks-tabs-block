@@ -30,7 +30,7 @@ import {
  *
  * @return {JSX.Element} Settings panel
  */
-function Settings( { attributes, setAttributes } ) {
+function Settings({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
@@ -38,29 +38,29 @@ function Settings( { attributes, setAttributes } ) {
 					<HStack align={ 'start' }>
 						{ attributes.orientation === 'horizontal' && (
 							<ToggleGroupControl
-								label={ __(
+								label={__(
 									'Justification',
 									'blablablocks-tabs-block'
-								) }
-								value={ attributes.justification }
+								)}
+								value={attributes.justification}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
-								onChange={ ( value ) =>
-									setAttributes( { justification: value } )
+								onChange={(value) =>
+									setAttributes({ justification: value })
 								}
 							>
 								<ToggleGroupControlOptionIcon
-									icon={ justifyLeft }
+									icon={justifyLeft}
 									value="left"
 									label="Justify items left"
 								/>
 								<ToggleGroupControlOptionIcon
-									icon={ justifyCenter }
+									icon={justifyCenter}
 									value="center"
 									label="Justify items center"
 								/>
 								<ToggleGroupControlOptionIcon
-									icon={ justifyRight }
+									icon={justifyRight}
 									value="right"
 									label="Justify items right"
 								/>
@@ -68,39 +68,39 @@ function Settings( { attributes, setAttributes } ) {
 						) }
 						{ attributes.orientation === 'vertical' && (
 							<ToggleGroupControl
-								label={ __(
+								label={__(
 									'Position',
 									'blablablocks-tabs-block'
-								) }
-								value={ attributes.verticalPosition }
+								)}
+								value={attributes.verticalPosition}
 								__nextHasNoMarginBottom
 								__next40pxDefaultSize
-								onChange={ ( value ) =>
-									setAttributes( { verticalPosition: value } )
+								onChange={(value) =>
+									setAttributes({ verticalPosition: value })
 								}
 							>
 								<ToggleGroupControlOptionIcon
-									icon={ justifyLeft }
+									icon={justifyLeft}
 									value="left"
 									label="Left"
 								/>
 								<ToggleGroupControlOptionIcon
-									icon={ justifyRight }
+									icon={justifyRight}
 									value="right"
 									label="Right"
 								/>
 							</ToggleGroupControl>
-						) }
+						)}
 						<ToggleGroupControl
-							label={ __(
+							label={__(
 								'Orientation',
 								'blablablocks-tabs-block'
-							) }
-							value={ attributes.orientation }
+							)}
+							value={attributes.orientation}
 							__nextHasNoMarginBottom
 							__next40pxDefaultSize
-							onChange={ ( value ) =>
-								setAttributes( { orientation: value } )
+							onChange={(value) =>
+								setAttributes({ orientation: value })
 							}
 						>
 							<ToggleGroupControlOptionIcon
@@ -116,64 +116,64 @@ function Settings( { attributes, setAttributes } ) {
 						</ToggleGroupControl>
 					</HStack>
 					<ToggleControl
-						checked={ attributes.autoWidth }
-						label={ __(
+						checked={attributes.autoWidth}
+						label={__(
 							'Auto-adjust tab width',
 							'blablablocks-tabs-block'
-						) }
-						onChange={ ( value ) =>
-							setAttributes( { autoWidth: value } )
+						)}
+						onChange={(value) =>
+							setAttributes({ autoWidth: value })
 						}
 					/>
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Icon Settings', 'blablablocks-tabs-block' ) }
+					title={__('Icon Settings', 'blablablocks-tabs-block')}
 				>
 					<ToggleGroupControl
-						label={ __(
+						label={__(
 							'Icon Position',
 							'blablablocks-tabs-block'
-						) }
-						value={ attributes.iconPosition }
+						)}
+						value={attributes.iconPosition}
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						isBlock
-						onChange={ ( value ) =>
-							setAttributes( { iconPosition: value } )
+						onChange={(value) =>
+							setAttributes({ iconPosition: value })
 						}
 					>
 						<ToggleGroupControlOptionIcon
-							icon={ justifyTop }
+							icon={justifyTop}
 							value="top"
 							label="Align top"
 						/>
 						<ToggleGroupControlOptionIcon
-							icon={ justifyLeft }
+							icon={justifyLeft}
 							value="left"
 							label="Align left"
 						/>
 						<ToggleGroupControlOptionIcon
-							icon={ justifyBottom }
+							icon={justifyBottom}
 							value="bottom"
 							label="Align bottom"
 						/>
 						<ToggleGroupControlOptionIcon
-							icon={ justifyRight }
+							icon={justifyRight}
 							value="right"
 							label="Align right"
 						/>
 					</ToggleGroupControl>
 					<RangeControl
-						label={ __( 'Size', 'blablablocks-tabs-block' ) }
-						value={ attributes.iconSize }
-						initialPosition={ attributes.iconSize }
-						onChange={ ( value ) =>
-							setAttributes( { iconSize: value } )
+						label={__('Size', 'blablablocks-tabs-block')}
+						value={attributes.iconSize}
+						initialPosition={attributes.iconSize}
+						onChange={(value) =>
+							setAttributes({ iconSize: value })
 						}
-						min={ 10 }
-						max={ 100 }
+						min={10}
+						max={100}
 					/>
 				</PanelBody>
 			</InspectorControls>
