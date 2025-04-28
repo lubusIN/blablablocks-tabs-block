@@ -47,7 +47,6 @@ function Placeholder( { clientId, attributes } ) {
 			const defaultTemplate = [
 				[
 					'core/paragraph',
-					{ placeholder: 'Type / to add a block in the tab' },
 				],
 			];
 			const blocks =
