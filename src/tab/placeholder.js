@@ -144,7 +144,7 @@ function Placeholder( { clientId, attributes } ) {
 						'blablablocks-tabs-block'
 					) }
 					label={ sprintf(
-						__( 'Tab %s', 'blablablocks-tabs-block' ),
+						__( 'Tab: %s', 'blablablocks-tabs-block' ),
 						attributes.tabname ?? ''
 					) }
 				>

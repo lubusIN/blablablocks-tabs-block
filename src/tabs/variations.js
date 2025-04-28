@@ -10,8 +10,8 @@ import { TabsLogo, TabsVerticalLogo } from '../components';
 const variations = [
 	{
 		name: 'horizontal-tabs',
-		title: __( 'Horizontal Tabs', 'blablablocks-tabs-block' ),
-		description: __( 'Horizontal Tabs', 'blablablocks-tabs-block' ),
+		title: __( 'Horizontal', 'blablablocks-tabs-block' ),
+		description: __( 'Horizontal', 'blablablocks-tabs-block' ),
 		icon: TabsLogo,
 		attributes: {
 			orientation: 'horizontal',
@@ -21,8 +21,8 @@ const variations = [
 	},
 	{
 		name: 'vertical-tabs',
-		title: __( 'Vertical Tabs', 'blablablocks-tabs-block' ),
-		description: __( 'Vertical Tabs', 'blablablocks-tabs-block' ),
+		title: __( 'Vertical', 'blablablocks-tabs-block' ),
+		description: __( 'Vertical', 'blablablocks-tabs-block' ),
 		icon: TabsVerticalLogo,
 		attributes: {
 			orientation: 'vertical',
