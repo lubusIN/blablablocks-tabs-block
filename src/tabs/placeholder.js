@@ -75,7 +75,7 @@ function Placeholder( { clientId, setAttributes } ) {
 				<PlaceholderComponent
 					icon={ TabsLogo }
 					instructions={ __(
-						'Choose a pattern for the tabs.',
+						'Choose a template for the tabs or start blank.',
 						'blablablocks-tabs-block'
 					) }
 					label={ __( 'Tabs', 'blablablocks-tabs-block' ) }
