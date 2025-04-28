@@ -17,23 +17,23 @@ import { Button, SearchControl } from '@wordpress/components';
  *
  * @return {JSX.Element} The rendered sidebar component.
  */
-const PatternSidebar = ( {
+const PatternSidebar = ({
 	selectedCategory,
 	setSelectedCategory,
 	searchTerm,
 	setSearchTerm,
-} ) => {
+}) => {
 	// Fetch pattern categories and block patterns with error handling.
 	const { patternCategories, blockPatterns, error } = useSelect(
-		( select ) => {
+		(select) => {
 			try {
-				const core = select( 'core' );
+				const core = select('core');
 				return {
 					patternCategories: core.getBlockPatternCategories() || [],
 					blockPatterns: core.getBlockPatterns() || [],
 					error: null,
 				};
-			} catch ( err ) {
+			} catch (err) {
 				return {
 					patternCategories: [],
 					blockPatterns: [],
@@ -45,90 +45,92 @@ const PatternSidebar = ( {
 	);
 
 	// Show an error message if data fetching fails.
-	if ( error ) {
+	if (error) {
 		return (
 			<div className="bbb-tabs-patterns-sidebar--error">
-				{ __(
+				{__(
 					'Failed to load block patterns.',
 					'blablablocks-tabs-block'
-				) }
+				)}
 			</div>
 		);
 	}
 
 	// Simple loading state when no data is available.
-	if ( ! patternCategories.length && ! blockPatterns.length ) {
+	if (!patternCategories.length && !blockPatterns.length) {
 		return (
 			<div className="bbb-tabs-patterns-sidebar--loading">
-				{ __( 'Loading…', 'blablablocks-tabs-block' ) }
+				{__('Loading…', 'blablablocks-tabs-block')}
 			</div>
 		);
 	}
 
 	// Memoize the filtered categories to optimize performance.
-	const filteredCategories = useMemo( () => {
-		return patternCategories.filter( ( category ) =>
+	const filteredCategories = useMemo(() => {
+		return patternCategories.filter((category) =>
 			blockPatterns.some(
-				( pattern ) =>
-					Array.isArray( pattern.categories ) &&
-					pattern.categories.includes( category.name )
+				(pattern) =>
+					Array.isArray(pattern.categories) &&
+					pattern.categories.includes(category.name)
 			)
 		);
-	}, [ patternCategories, blockPatterns ] );
+	}, [patternCategories, blockPatterns]);
 
 	return (
 		<div className="bbb-tabs-patterns-sidebar">
 			<SearchControl
 				__nextHasNoMarginBottom
-				value={ searchTerm }
-				placeholder={ __( 'Search', 'blablablocks-tabs-block' ) }
-				onChange={ setSearchTerm }
+				value={searchTerm}
+				placeholder={__('Search', 'blablablocks-tabs-block')}
+				onChange={setSearchTerm}
 			/>
-			<div className="bbb-tabs-patterns-sidebar__list">
-				<Button
-					__next40pxDefaultSize
-					isPressed={ selectedCategory === null }
-					onClick={ () => setSelectedCategory( null ) }
-					style={ {
-						display: 'flex',
-						justifyContent: 'space-between',
-						width: '100%',
-						textAlign: 'left',
-					} }
-				>
-					{ __( 'All', 'blablablocks-tabs-block' ) }
-					<span className="bbb-tabs-patterns-sidebar__count">
-						{ blockPatterns.length }
-					</span>
-				</Button>
-				{ filteredCategories.map( ( { name, label } ) => {
-					const count =
-						blockPatterns.filter(
-							( pattern ) =>
-								Array.isArray( pattern.categories ) &&
-								pattern.categories.includes( name )
-						).length || 0;
-					return (
-						<Button
-							__next40pxDefaultSize
-							key={ name }
-							isPressed={ selectedCategory === name }
-							onClick={ () => setSelectedCategory( name ) }
-							style={ {
-								display: 'flex',
-								justifyContent: 'space-between',
-								width: '100%',
-								textAlign: 'left',
-							} }
-						>
-							{ label }
-							<span className="bbb-tabs-patterns-sidebar__count">
-								{ count }
-							</span>
-						</Button>
-					);
-				} ) }
-			</div>
+			{!searchTerm && (
+				<div className="bbb-tabs-patterns-sidebar__list">
+					<Button
+						__next40pxDefaultSize
+						isPressed={selectedCategory === null}
+						onClick={() => setSelectedCategory(null)}
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							width: '100%',
+							textAlign: 'left',
+						}}
+					>
+						{__('All', 'blablablocks-tabs-block')}
+						<span className="bbb-tabs-patterns-sidebar__count">
+							{blockPatterns.length}
+						</span>
+					</Button>
+					{filteredCategories.map(({ name, label }) => {
+						const count =
+							blockPatterns.filter(
+								(pattern) =>
+									Array.isArray(pattern.categories) &&
+									pattern.categories.includes(name)
+							).length || 0;
+						return (
+							<Button
+								__next40pxDefaultSize
+								key={name}
+								isPressed={selectedCategory === name}
+								onClick={() => setSelectedCategory(name)}
+								style={{
+									display: 'flex',
+									justifyContent: 'space-between',
+									width: '100%',
+									textAlign: 'left',
+								}}
+							>
+								{label}
+								<span className="bbb-tabs-patterns-sidebar__count">
+									{count}
+								</span>
+							</Button>
+						);
+					})}
+				</div>
+			)}
 		</div>
 	);
 };
