@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name:       Blablablocks Tabs Block
+ * Plugin Name:       BlaBlablocks Tabs Block
  * Description:       Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.
  * Version:           1.0.0
  * Requires at least: 6.7
@@ -11,7 +11,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       blablablocks-tabs-block
  *
- * @package BlablablocksTabsBlock
+ * @package 		  BlaBlaBlocks Tabs Block
  */
 
 if (! defined('ABSPATH')) {
@@ -38,24 +38,19 @@ add_action('init', 'bbb_tabs_block_init');
 function blablablocks_register_tabs_styles()
 {
 	if (! function_exists('register_block_style')) {
-		return; // Exit if the function is not available.
+		return;
 	}
 
-	$styles = array(
-		array(
-			'name'  => 'style-1',
-			'label' => __('Style 1', 'blablablocks-tabs-block'),
-		),
-		array(
-			'name'  => 'style-2',
-			'label' => __('Style 2', 'blablablocks-tabs-block'),
-		),
-		array(
-			'name'       => 'style-3',
-			'label'      => __('Style 3', 'blablablocks-tabs-block'),
-			'is_default' => true,
-		),
-	);
+	$styles = [
+		[
+			'name'   => 'style-1',
+			'label'  => __('Style 1', 'blablablocks-tabs-block'),
+		],
+		[
+			'name'   => 'style-2',
+			'label'  => __('Style 2', 'blablablocks-tabs-block'),
+		],
+	];
 
 	// Loop through and register each style.
 	foreach ($styles as $style) {

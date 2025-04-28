@@ -7,9 +7,9 @@ import {
 	Button,
 	Dropdown,
 	ColorIndicator,
-    __experimentalZStack as ZStack, // eslint-disable-line
-    __experimentalHStack as HStack, // eslint-disable-line
-    __experimentalText as Text, // eslint-disable-line
+    __experimentalZStack as ZStack,  // eslint-disable-line
+    __experimentalHStack as HStack,  // eslint-disable-line
+    __experimentalText as Text,      // eslint-disable-line
 	TabPanel,
 } from '@wordpress/components';
 
@@ -39,10 +39,10 @@ function ColorControlDropdown( {
 				offset: 36,
 				shift: true,
 			} }
-			contentClassName="tabs_color_popover"
+			contentClassName="bbb-tabs_color_popover"
 			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button
-					className={ `tabs_color_button ${
+					className={ `bbb-tabs_color_button ${
 						isOpen ? 'isOpen' : ''
 					}` }
 					aria-expanded={ isOpen }
@@ -106,7 +106,7 @@ function ColorControlDropdown( {
 					</TabPanel>
 				) : (
 					<ColorPalette
-						className="ls-color-pallete-container"
+						className="bbb-color-pallete-container"
 						__experimentalIsRenderedInSidebar
 						value={ colorValue.default || '' }
 						onChange={ ( color ) => {

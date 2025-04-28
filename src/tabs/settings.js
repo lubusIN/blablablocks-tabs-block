@@ -34,9 +34,9 @@ function Settings({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={__('Layout', 'blablablocks-tabs-block')}>
-					<HStack align={'start'}>
-						{attributes.orientation === 'row' && (
+				<PanelBody title={ __( 'Layout', 'blablablocks-tabs-block' ) }>
+					<HStack align={ 'start' }>
+						{ attributes.orientation === 'horizontal' && (
 							<ToggleGroupControl
 								label={__(
 									'Justification',
@@ -65,8 +65,8 @@ function Settings({ attributes, setAttributes }) {
 									label="Justify items right"
 								/>
 							</ToggleGroupControl>
-						)}
-						{attributes.orientation === 'column' && (
+						) }
+						{ attributes.orientation === 'vertical' && (
 							<ToggleGroupControl
 								label={__(
 									'Position',
@@ -104,13 +104,13 @@ function Settings({ attributes, setAttributes }) {
 							}
 						>
 							<ToggleGroupControlOptionIcon
-								icon={arrowRight}
-								value="row"
+								icon={ arrowRight }
+								value="horizontal"
 								label="Horizontal"
 							/>
 							<ToggleGroupControlOptionIcon
-								icon={arrowDown}
-								value="column"
+								icon={ arrowDown }
+								value="vertical"
 								label="Vertical"
 							/>
 						</ToggleGroupControl>
@@ -174,20 +174,6 @@ function Settings({ attributes, setAttributes }) {
 						}
 						min={10}
 						max={100}
-					/>
-					<ToggleControl
-						checked={attributes.iconFill}
-						label={__(
-							'Use icon color to fill',
-							'blablablocks-tabs-block'
-						)}
-						help={__(
-							'Apply icon color to SVG fill. Disable if needed.',
-							'blablablocks-tabs-block'
-						)}
-						onChange={(value) =>
-							setAttributes({ iconFill: value })
-						}
 					/>
 				</PanelBody>
 			</InspectorControls>

@@ -6,11 +6,16 @@ import { useState } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import { createBlocksFromInnerBlocksTemplate } from '@wordpress/blocks';
 import {
+	Modal,
 	Placeholder as PlaceholderComponent,
 	Button,
+    __experimentalGrid as Grid,		 	// eslint-disable-line
+    __experimentalVStack as VStack, 	// eslint-disable-line
+	__experimentalText as Text,			// eslint-disable-line
 } from '@wordpress/components';
 import {
 	useBlockProps,
+	BlockPreview,
     __experimentalBlockVariationPicker as BlockVariationPicker, // eslint-disable-line
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
@@ -32,10 +37,12 @@ import { TabsLogo } from '../components';
  * @return {JSX.Element} The placeholder component for the Tabs block.
  */
 function Placeholder( { clientId, setAttributes } ) {
+	const [ step, setStep ] = useState( null );
+	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const { replaceInnerBlocks } = useDispatch( blockEditorStore );
 	const blockProps = useBlockProps();
 
-	const [ step, setStep ] = useState( null );
+	const defaultPatterns = [];
 
 	const onSelectVariation = ( variation ) => {
 		if ( variation?.attributes ) {
@@ -50,6 +57,18 @@ function Placeholder( { clientId, setAttributes } ) {
 		}
 	};
 
+	const openTemplatesModal = () => {
+		setIsModalOpen( true );
+	};
+
+	const applyPattern = ( pattern ) => {
+		const parsedBlocks = wp.blocks.parse( pattern.content );
+		wp.data
+			.dispatch( 'core/block-editor' )
+			.replaceBlock( clientId, parsedBlocks );
+		setIsModalOpen( false );
+	};
+
 	return (
 		<div { ...blockProps }>
 			{ ! step && (
@@ -61,7 +80,7 @@ function Placeholder( { clientId, setAttributes } ) {
 					) }
 					label={ __( 'Tabs', 'blablablocks-tabs-block' ) }
 				>
-					<Button variant="primary" onClick={ () => {} }>
+					<Button variant="primary" onClick={ openTemplatesModal }>
 						{ __( 'Choose', 'blablablocks-tabs-block' ) }
 					</Button>
 					<Button
@@ -87,6 +106,43 @@ function Placeholder( { clientId, setAttributes } ) {
 					} }
 					allowSkip
 				/>
+			) }
+
+			{ isModalOpen && (
+				<Modal
+					title={ __(
+						'Choose a Template',
+						'blablablocks-slider-block'
+					) }
+					isFullScreen
+					onRequestClose={ () => setIsModalOpen( false ) }
+				>
+					<Grid gap={ 4 } columns={ [ 1, 2, 3 ] } align="start">
+						{ defaultPatterns?.map( ( pattern ) => (
+							<Button
+								key={ pattern.name }
+								className={ 'slider-pattern-item' }
+								onClick={ () => applyPattern( pattern ) }
+								style={ { width: '100%', height: '100%' } }
+							>
+								<VStack
+									alignment="top"
+									align="left"
+									style={ { width: '100%', height: '100%' } }
+								>
+									<BlockPreview
+										blocks={ wp.blocks.parse(
+											pattern.content
+										) }
+									/>
+									<Text align="left" size={ 12 }>
+										{ pattern.title }
+									</Text>
+								</VStack>
+							</Button>
+						) ) }
+					</Grid>
+				</Modal>
 			) }
 		</div>
 	);

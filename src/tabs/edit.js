@@ -1,8 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { useEffect } from '@wordpress/element';
-import { useDispatch, useSelect } from '@wordpress/data';
+import clsx from 'clsx';
+import { useSelect } from '@wordpress/data';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -47,8 +47,7 @@ const TABS_TEMPLATE = [
  * @return {JSX.Element} The component rendering for the block editor.
  */
 export default function Edit( { clientId, attributes, setAttributes } ) {
-	const { allowedBlocks, activeTab } = attributes;
-	const { selectBlock } = useDispatch( blockEditorStore );
+	const { allowedBlocks } = attributes;
 
 	/**
 	 * Get the inner blocks of the current block.
@@ -62,45 +61,21 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	const hasInnerBlocks = innerBlocks.length > 0;
 
 	/**
-	 * Get the currently selected block's client ID in the editor.
-	 * @type {string}
-	 */
-	const selectedBlockClientId = useSelect(
-		( select ) => select( blockEditorStore ).getSelectedBlockClientId(),
-		[]
-	);
-
-	useEffect(() => {
-		if (
-			innerBlocks.length > 0 &&
-			innerBlocks[ activeTab ] &&
-			selectedBlockClientId !== innerBlocks[ activeTab ].clientId
-		) {
-			selectBlock(innerBlocks[ activeTab ].clientId);
-		}
-	}, []);	
-
-	/**
-	 * Update the activeTab attribute when a tab is selected from the List View.
-	 */
-	useEffect( () => {
-		if ( selectedBlockClientId ) {
-			const selectedTabIndex = innerBlocks.findIndex(
-				( tab ) => tab.clientId === selectedBlockClientId
-			);
-
-			if ( selectedTabIndex !== -1 && selectedTabIndex !== activeTab ) {
-				setAttributes( { activeTab: selectedTabIndex } );
-			}
-		}
-	}, [ selectedBlockClientId, innerBlocks, activeTab, setAttributes ] );
-
-	/**
 	 * Props for the block container.
 	 * @type {Object}
 	 */
 	const blockProps = useBlockProps( {
-		className: 'blablablocks-tabs',
+		className: clsx(
+			'blablablocks-tabs',
+			'blablablocks-tabs__' + attributes.orientation,
+			'right' === attributes.verticalPosition
+				? 'blablablocks-tabs__right'
+				: '',
+			attributes?.autoWidth && attributes.orientation === 'horizontal'
+				? 'blablablocks-tabs__autoWidth'
+				: '',
+			'blablablocks-tabs-icon__' + attributes.iconPosition
+		),
 		style: generateStyles( attributes ),
 	} );
 
@@ -108,34 +83,18 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	 * Props for the inner blocks container.
 	 * @type {Object}
 	 */
-	const innerBlocksProps = useInnerBlocksProps(
-		{},
-		{
-			template: TABS_TEMPLATE,
-			__experimentalCaptureToolbars: true,
-			templateLock: false,
-			defaultBlock: DEFAULT_BLOCK,
-			orientation: 'horizontal',
-			allowedBlocks,
-		}
-	);
-
-	/**
-	 * Update the tabs attribute when inner blocks change.
-	 */
-	useEffect( () => {
-		const newTabs = innerBlocks.map( ( tab ) => ( {
-			id: tab.attributes.tabId || tab.clientId,
-			label: tab.attributes.tabname,
-			icon: tab.attributes.tabIcon,
-			isDefault: tab.attributes.isDefault,
-		} ) );
-		setAttributes( { tabs: newTabs } );
-	}, [ innerBlocks, setAttributes ] );
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		template: TABS_TEMPLATE,
+		__experimentalCaptureToolbars: true,
+		defaultBlock: DEFAULT_BLOCK,
+		orientation: 'horizontal',
+		allowedBlocks,
+		renderAppender: false,
+	} );
 
 	return hasInnerBlocks ? (
 		<>
-			<div { ...blockProps }>
+			<div { ...innerBlocksProps }>
 				{ innerBlocksProps.children }
 				<TabFill tabsClientId={ clientId }>
 					<div className="blablablocks-tab_inserter">

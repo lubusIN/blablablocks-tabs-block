@@ -6,21 +6,17 @@
 	"category": "widgets",
 	"description": "A dynamic tab block that lets you organize content into interactive, customizable tabs. Easily manage and display information in a clean, user-friendly layout.",
 	"attributes": {
-		"tabs": {
-			"type": "array",
-			"default": []
-		},
 		"autoWidth": {
 			"type": "boolean",
 			"default": false
 		},
 		"activeTab": {
-			"type": "integer",
+			"type": "number",
 			"default": 0
 		},
 		"orientation": {
 			"type": "string",
-			"default": "row"
+			"default": "horizontal"
 		},
 		"verticalPosition": {
 			"type": "string",
@@ -91,15 +87,6 @@
 		},
 		"tabPadding": {
 			"type": "object"
-		},
-		"tabBorderRadius": {
-			"type": "string"
-		},
-		"tabBorder": {
-			"type": "object"
-		},
-		"tabSpacing": {
-			"type": "string"
 		}
 	},
 	"example": {
@@ -143,15 +130,9 @@
 			"full"
 		],
 		"spacing": {
-			"margin": [
-				"top",
-				"bottom"
-			],
-			"padding": true,
-			"__experimentalDefaultControls": {
-				"padding": true,
-				"blockGap": true
-			}
+			"margin":false,
+			"padding": false,
+			"blockGap": [ "horizontal", "vertical" ]
 		},
 		"typography": {
 			"fontSize": true,
@@ -175,5 +156,6 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
+	"render": "file:./render.php",
 	"viewScriptModule": "file:./view.js"
 }

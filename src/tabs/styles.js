@@ -4,15 +4,14 @@
 import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
-    __experimentalSpacingSizesControl as SpacingSizesControl, // eslint-disable-line
-    __experimentalBorderRadiusControl as BorderRadiusControl, // eslint-disable-line
+	__experimentalSpacingSizesControl as SpacingSizesControl, // eslint-disable-line
 } from '@wordpress/block-editor';
 import {
-    __experimentalHeading as Heading, // eslint-disable-line
-    __experimentalVStack as VStack, // eslint-disable-line
-    __experimentalToolsPanel as ToolsPanel, // eslint-disable-line
-    __experimentalToolsPanelItem as ToolsPanelItem, // eslint-disable-line
-    __experimentalBorderBoxControl as BorderBoxControl, // eslint-disable-line
+	__experimentalHeading as Heading,                         // eslint-disable-line
+	__experimentalVStack as VStack, 						  // eslint-disable-line
+	__experimentalToolsPanel as ToolsPanel, 				  // eslint-disable-line
+	__experimentalToolsPanelItem as ToolsPanelItem, 		  // eslint-disable-line
+	__experimentalBorderBoxControl as BorderBoxControl, 	  // eslint-disable-line
 } from '@wordpress/components';
 
 /**
@@ -54,9 +53,6 @@ function Styles( { attributes, setAttributes } ) {
 							},
 						},
 						tabPadding: undefined,
-						tabBorderRadius: undefined,
-						tabBorder: undefined,
-						tabSpacing: undefined,
 					} )
 				}
 			>
@@ -106,7 +102,7 @@ function Styles( { attributes, setAttributes } ) {
 							Color
 						</Heading>
 						<VStack
-							className="tabs_color-support-panel"
+							className="bbb-tabs_color-support-panel"
 							spacing={ 0 }
 						>
 							<ColorControlDropdown
@@ -184,65 +180,6 @@ function Styles( { attributes, setAttributes } ) {
 						label={ __( 'Padding', 'blablablocks-tabs-block' ) }
 						allowReset={ false }
 						splitOnAxis={ true }
-					/>
-				</ToolsPanelItem>
-				<ToolsPanelItem
-					label={ __( 'Spacing', 'blablablocks-tabs-block' ) }
-					className="bbb-tab-spacing"
-					hasValue={ () => !! attributes.tabSpacing }
-					onDeselect={ () =>
-						setAttributes( {
-							tabSpacing: undefined,
-						} )
-					}
-				>
-					<SpacingSizesControl
-						values={ { top: attributes.tabSpacing } }
-						onChange={ ( value ) => {
-							setAttributes( { tabSpacing: value.top } );
-						} }
-						label={ __( 'Spacing', 'blablablocks-tabs-block' ) }
-						showSideInLabel={ false }
-						allowReset={ false }
-						sides={ [ 'top' ] }
-					/>
-				</ToolsPanelItem>
-				<ToolsPanelItem
-					label={ __( 'Border', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabBorder }
-					onDeselect={ () =>
-						setAttributes( {
-							tabBorder: undefined,
-						} )
-					}
-				>
-					<BorderBoxControl
-						__next40pxDefaultSize
-						label={ __( 'Border', 'blablablocks-tabs-block' ) }
-						value={ attributes.tabBorder }
-						onChange={ ( value ) =>
-							setAttributes( {
-								tabBorder: value,
-							} )
-						}
-					/>
-				</ToolsPanelItem>
-				<ToolsPanelItem
-					label={ __( 'Radius', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabBorderRadius }
-					onDeselect={ () =>
-						setAttributes( {
-							tabBorderRadius: undefined,
-						} )
-					}
-				>
-					<BorderRadiusControl
-						values={ attributes.tabBorderRadius }
-						onChange={ ( value ) =>
-							setAttributes( {
-								tabBorderRadius: value,
-							} )
-						}
 					/>
 				</ToolsPanelItem>
 			</ToolsPanel>

@@ -14,7 +14,7 @@ const variations = [
 		description: __( 'Horizontal Tabs', 'blablablocks-tabs-block' ),
 		icon: TabsLogo,
 		attributes: {
-			orientation: 'row',
+			orientation: 'horizontal',
 		},
 		innerBlocks: [ [ 'blablablocks/tab' ], [ 'blablablocks/tab' ] ],
 		scope: [ 'block' ],
@@ -25,7 +25,7 @@ const variations = [
 		description: __( 'Vertical Tabs', 'blablablocks-tabs-block' ),
 		icon: TabsVerticalLogo,
 		attributes: {
-			orientation: 'column',
+			orientation: 'vertical',
 		},
 		innerBlocks: [ [ 'blablablocks/tab' ], [ 'blablablocks/tab' ] ],
 		scope: [ 'block' ],
