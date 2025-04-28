@@ -17,7 +17,7 @@ import {
 /**
  * Internal dependencies
  */
-import { ColorControlDropdown } from '../components';
+import { ColorControlDropdown } from '../../components';
 
 /**
  * Styles component
