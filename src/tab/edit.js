@@ -225,7 +225,7 @@ export default function Edit({
 				</TabFill>
 				{isTabSelected && (
 					<>
-						<TabsListSlot tabsClientId={tabsClientId} />
+						<TabsListSlot key={blockIndex} tabsClientId={tabsClientId} />
 						{hasChildBlocks ? (
 							<div {...innerBlocksProps} />
 						) : (
@@ -246,6 +246,10 @@ export default function Edit({
 					<ToggleControl
 						label={__(
 							'Set as default tab',
+							'blablablocks-tabs-block'
+						)}
+						help={__(
+							'This tab will be active when the page first loads.',
 							'blablablocks-tabs-block'
 						)}
 						checked={isDefaultTab}
