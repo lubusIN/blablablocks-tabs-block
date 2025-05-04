@@ -1,0 +1,57 @@
+name: PR Preview (private plugin)
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install wp-now & LocalTunnel
+        run: |
+          npm install -g @wp-now/wp-now localtunnel
+
+      - name: Start WP-Now (in background)
+        run: |
+          # WP-Now will load your plugin directly from the runner's workspace
+          npx @wp-now/wp-now start --port=8881 --skip-browser &
+          echo $! > wpnow.pid
+
+      - name: Wait for WP to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sSf http://localhost:8881/wp-admin > /dev/null; then
+              echo "WP-Now is up!"
+              break
+            fi
+            sleep 2
+          done
+
+      - name: Expose via LocalTunnel
+        id: tunnel
+        run: |
+          # Expose port 8881; request subdomain pr-<PR_NUMBER>
+          URL=$(npx localtunnel --port 8881 --subdomain "pr-${{ github.event.pull_request.number }}" \
+                | grep -Eo 'https://[^ ]+')
+          echo "tunnel-url=$URL" >> $GITHUB_OUTPUT
+
+      - name: Comment Preview Link
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            🚀 **Live WP-Now Preview for this PR**
+            You can test your plugin here: ${{ steps.tunnel.outputs.tunnel-url }}
+            _(Link remains active while the workflow is running.)_
