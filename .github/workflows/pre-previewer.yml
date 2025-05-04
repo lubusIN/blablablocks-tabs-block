@@ -1,4 +1,4 @@
-name: PR Preview (private plugin)
+name: PR Preview via Cloudflare Tunnel
 
 on:
   pull_request:
@@ -7,56 +7,46 @@ on:
 jobs:
   preview:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout PR code
+      - name: Checkout PR
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install wp-now & LocalTunnel
+      - name: Install & Start WP-Now
         run: |
-          npm install -g @wp-now/wp-now localtunnel
-
-      - name: Start WP-Now (in background)
-        run: |
-          # WP-Now will load your plugin directly from the runner's workspace
-          npx @wp-now/wp-now start --port=8881 --skip-browser &
+          npm install -g @wp-now/wp-now
+          npx @wp-now/wp-now start --skip-browser &
           echo $! > wpnow.pid
 
-      - name: Wait for WP to be ready
+      - name: Wait for WP-Now
         run: |
-          for i in $(seq 1 30); do
+          for i in {1..30}; do
             if curl -sSf http://localhost:8881/wp-admin > /dev/null; then
-              echo "WP-Now is up!"
               break
             fi
             sleep 2
           done
 
-      # 5. Install Cloudflare Tunnel client
-      - name: Setup Cloudflared
-        uses: debugci/setup-cloudflared@v1
-      # (Installs the `cloudflared` binary on the runner) :contentReference[oaicite:1]{index=1}
+      - name: Install cloudflared
+        run: |
+          wget -qO cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+          sudo mv cloudflared /usr/local/bin/cloudflared && sudo chmod +x /usr/local/bin/cloudflared
 
-      # 6. Start a Quick Tunnel and capture the public URL
       - name: Start Cloudflare Quick Tunnel
         id: cf
         run: |
-          # Launch tunnel in background, log to cf.log
           nohup cloudflared tunnel --url http://localhost:8881 &> cf.log &
-          # Give it a few seconds to spin up
           sleep 5
-          # Extract the trycloudflare.com URL from the logs
           TUNNEL_URL=$(grep -Eo 'https://[[:alnum:].-]+\.trycloudflare\.com' cf.log)
           echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
-        # (Quick Tunnel needs no auth—your URL appears in the Actions log) :contentReference[oaicite:2]{index=2}
 
-      # 7. Comment (or update) the PR with that live link
       - name: Comment Preview Link
         uses: peter-evans/create-or-update-comment@v3
         with:
@@ -65,4 +55,4 @@ jobs:
           body: |
             🚀 **WP-Now Preview via Cloudflare Tunnel**
             Test your plugin live here: ${{ steps.cf.outputs.tunnel-url }}
-            _(Tunnel stays live while this workflow runs.)_
+            _(Tunnel stays live while the workflow is running.)_
