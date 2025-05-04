@@ -36,23 +36,36 @@ jobs:
 
       - name: Install cloudflared
         run: |
-          wget -qO cloudflared https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
-          sudo mv cloudflared /usr/local/bin/cloudflared && sudo chmod +x /usr/local/bin/cloudflared
+         wget -qO cloudflared \
+           https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+         sudo mv cloudflared /usr/local/bin/cloudflared
+         sudo chmod +x /usr/local/bin/cloudflared
 
       - name: Start Cloudflare Quick Tunnel
         id: cf
         run: |
-          nohup cloudflared tunnel --url http://localhost:8881 &> cf.log &
-          sleep 5
-          TUNNEL_URL=$(grep -Eo 'https://[[:alnum:].-]+\.trycloudflare\.com' cf.log)
-          echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
+         # Launch tunnel in the background, rewrite Host header so WP-Now sees "localhost:8881"
+         nohup cloudflared tunnel --url http://localhost:8881 \
+           --http-host-header localhost:8881 \
+           &> cf.log &
+         # Wait up to 15s for the trycloudflare.com URL to appear
+         for i in $(seq 1 15); do
+           if grep -qE 'https://[A-Za-z0-9.-]+\.trycloudflare\.com' cf.log; then
+             break
+           fi
+           sleep 1
+         done
+         # Extract the URL
+         TUNNEL_URL=$(grep -Eo 'https://[A-Za-z0-9.-]+\.trycloudflare\.com' cf.log)
+         echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
 
       - name: Comment Preview Link
         uses: peter-evans/create-or-update-comment@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            🚀 **WP-Now Preview via Cloudflare Tunnel**
-            Test your plugin live here: ${{ steps.cf.outputs.tunnel-url }}
-            _(Tunnel stays live while the workflow is running.)_
+         token: ${{ secrets.GITHUB_TOKEN }}
+         issue-number: ${{ github.event.pull_request.number }}
+         body: |
+           🚀 **WP-Now Preview via Cloudflare Tunnel**
+           Test your plugin live here: ${{ steps.cf.outputs.tunnel-url }}
+           _(Tunnel stays live while this workflow runs.)_
+
