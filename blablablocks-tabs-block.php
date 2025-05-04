@@ -40,7 +40,6 @@ function blablablocks_register_tabs_styles()
 	if (! function_exists('register_block_style')) {
 		return;
 	}
-
 	$styles = [
 		[
 			'name'   => 'style-1',
