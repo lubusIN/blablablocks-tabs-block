@@ -38,20 +38,31 @@ jobs:
             sleep 2
           done
 
-      - name: Expose via LocalTunnel
-        id: tunnel
-        run: |
-          # Expose port 8881; request subdomain pr-<PR_NUMBER>
-          URL=$(npx localtunnel --port 8881 --subdomain "pr-${{ github.event.pull_request.number }}" \
-                | grep -Eo 'https://[^ ]+')
-          echo "tunnel-url=$URL" >> $GITHUB_OUTPUT
+      # 5. Install Cloudflare Tunnel client
+      - name: Setup Cloudflared
+        uses: debugci/setup-cloudflared@v1
+      # (Installs the `cloudflared` binary on the runner) :contentReference[oaicite:1]{index=1}
 
+      # 6. Start a Quick Tunnel and capture the public URL
+      - name: Start Cloudflare Quick Tunnel
+        id: cf
+        run: |
+          # Launch tunnel in background, log to cf.log
+          nohup cloudflared tunnel --url http://localhost:8881 &> cf.log &
+          # Give it a few seconds to spin up
+          sleep 5
+          # Extract the trycloudflare.com URL from the logs
+          TUNNEL_URL=$(grep -Eo 'https://[[:alnum:].-]+\.trycloudflare\.com' cf.log)
+          echo "tunnel-url=$TUNNEL_URL" >> $GITHUB_OUTPUT
+        # (Quick Tunnel needs no auth—your URL appears in the Actions log) :contentReference[oaicite:2]{index=2}
+
+      # 7. Comment (or update) the PR with that live link
       - name: Comment Preview Link
         uses: peter-evans/create-or-update-comment@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            🚀 **Live WP-Now Preview for this PR**
-            You can test your plugin here: ${{ steps.tunnel.outputs.tunnel-url }}
-            _(Link remains active while the workflow is running.)_
+            🚀 **WP-Now Preview via Cloudflare Tunnel**
+            Test your plugin live here: ${{ steps.cf.outputs.tunnel-url }}
+            _(Tunnel stays live while this workflow runs.)_
