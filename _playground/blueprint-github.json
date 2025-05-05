@@ -1,0 +1,38 @@
+{
+    "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+    "landingPage": "/wp-admin/post.php?post=9&action=edit",
+    "login": true,
+    "features": {
+        "networking": true
+    },
+    "steps": [
+        {
+            "step": "updateUserMeta",
+            "meta": {
+                "admin_color": "modern",
+                "show_welcome_panel": 0
+            },
+            "userId": 1
+        },
+        {
+            "step": "setSiteOptions",
+            "options": {
+                "blogname": "Wordpress BlaBlaBlocks Tabs Block"
+            }
+        },
+        {
+            "step": "installPlugin",
+            "pluginData": {
+                "resource": "url",
+                "url": "https://github-proxy.com/proxy/?repo=lubusIN/blablablocks-tabs-block&branch=playground"
+            }
+        },
+        {
+            "step": "importWxr",
+            "file": {
+                "resource": "url",
+                "url": "https://raw.githubusercontent.com/lubusIN/blablablocks-tabs-block/playground/_playground/demo-content.xml"
+            }
+        }
+    ]
+}
