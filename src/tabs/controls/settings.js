@@ -18,6 +18,7 @@ import {
 	justifyCenter,
 	justifyLeft,
 	justifyRight,
+	justifyStretch,
 	justifyTop,
 } from '@wordpress/icons';
 
@@ -34,9 +35,9 @@ function Settings({ attributes, setAttributes }) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Layout', 'blablablocks-tabs-block' ) }>
-					<HStack align={ 'start' }>
-						{ attributes.orientation === 'horizontal' && (
+				<PanelBody title={__('Layout', 'blablablocks-tabs-block')}>
+					<HStack align={'start'}>
+						{attributes.orientation === 'horizontal' && (
 							<ToggleGroupControl
 								label={__(
 									'Justification',
@@ -64,9 +65,14 @@ function Settings({ attributes, setAttributes }) {
 									value="right"
 									label="Justify items right"
 								/>
+								<ToggleGroupControlOptionIcon
+									icon={justifyStretch}
+									value="stretch"
+									label="Justify items stretch"
+								/>
 							</ToggleGroupControl>
-						) }
-						{ attributes.orientation === 'vertical' && (
+						)}
+						{attributes.orientation === 'vertical' && (
 							<ToggleGroupControl
 								label={__(
 									'Position',
@@ -104,27 +110,17 @@ function Settings({ attributes, setAttributes }) {
 							}
 						>
 							<ToggleGroupControlOptionIcon
-								icon={ arrowRight }
+								icon={arrowRight}
 								value="horizontal"
 								label="Horizontal"
 							/>
 							<ToggleGroupControlOptionIcon
-								icon={ arrowDown }
+								icon={arrowDown}
 								value="vertical"
 								label="Vertical"
 							/>
 						</ToggleGroupControl>
 					</HStack>
-					<ToggleControl
-						checked={attributes.autoWidth}
-						label={__(
-							'Auto-adjust tab width',
-							'blablablocks-tabs-block'
-						)}
-						onChange={(value) =>
-							setAttributes({ autoWidth: value })
-						}
-					/>
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls>

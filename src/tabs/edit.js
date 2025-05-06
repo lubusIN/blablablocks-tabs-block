@@ -70,7 +70,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 			'right' === attributes.verticalPosition
 				? 'blablablocks-tabs__right'
 				: '',
-			attributes?.autoWidth && attributes.orientation === 'horizontal'
+			attributes?.justification === 'stretch' && attributes.orientation === 'horizontal'
 				? 'blablablocks-tabs__autoWidth'
 				: '',
 			'blablablocks-tabs-icon__' + attributes.iconPosition

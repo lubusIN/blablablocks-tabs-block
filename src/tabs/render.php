@@ -247,7 +247,7 @@ $wrapper_classes = [
     'blablablocks-tabs',
     'blablablocks-tabs__' . ($attributes['orientation'] ?? 'horizontal'),
     isset($attributes['verticalPosition']) && 'right' == $attributes['verticalPosition'] ? 'blablablocks-tabs__right' : '',
-    isset($attributes['autoWidth']) && $attributes['autoWidth'] && ($attributes['orientation'] ?? 'horizontal') === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
+    isset($attributes['justification']) && 'stretch' == $attributes['justification'] && ($attributes['orientation'] ?? 'horizontal') === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
     'blablablocks-tabs-icon__' . ($attributes['iconPosition'] ?? 'left'),
 ];
 

@@ -6,10 +6,6 @@
 	"category": "widgets",
 	"description": "A dynamic tab block that lets you organize content into interactive, customizable tabs. Easily manage and display information in a clean, user-friendly layout.",
 	"attributes": {
-		"autoWidth": {
-			"type": "boolean",
-			"default": false
-		},
 		"activeTab": {
 			"type": "number",
 			"default": 0
