@@ -223,6 +223,10 @@ if (! function_exists('generateStyles')) {
 $all_tabs = blablablocks_extract_tab_data($block->parsed_block['innerBlocks'] ?? []);
 $tabs     = array_values(array_filter($all_tabs, fn($tab) => $tab['hasInnerblock']));
 
+if (empty($tabs)) {
+    return;
+}
+
 // Determine active tab safely.
 $active_tab_index = isset($attributes['activeTab'], $tabs[$attributes['activeTab']]) ? $attributes['activeTab'] : 0;
 $active_tab_id    = $tabs[$active_tab_index]['id'];
