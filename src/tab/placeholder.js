@@ -32,7 +32,7 @@ import { TabLogo, PatternSidebar, PatternList } from '../components';
  */
 function Placeholder( { clientId, attributes } ) {
 	const { replaceInnerBlocks } = useDispatch( blockEditorStore );
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps({ className: 'bbb-tab-placeholder' });
 	const [ step, setStep ] = useState( null );
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCategory, setSelectedCategory ] = useState( null );
