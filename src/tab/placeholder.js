@@ -140,7 +140,7 @@ function Placeholder( { clientId, attributes } ) {
 				<PlaceholderComponent
 					icon={ TabLogo }
 					instructions={ __(
-						'Choose a pattern for the tab or skip.',
+						'Choose a pattern or skip.',
 						'blablablocks-tabs-block'
 					) }
 					label={ sprintf(
