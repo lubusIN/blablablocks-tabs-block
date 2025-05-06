@@ -156,6 +156,7 @@ export default function Edit({
 	 */
 	const innerBlocksProps = useInnerBlocksProps(
 		{
+			className: 'blablablocks-tab-content',
 			'aria-labelledby': `tab-${attributes.tabId}`,
 			id: `tab-${attributes.tabId}`,
 			role: 'tabpanel',

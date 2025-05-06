@@ -12,6 +12,7 @@
 
 $wrapper_attributes = get_block_wrapper_attributes([
     'id' => esc_attr('tab-' . $attributes['tabId']),
+    'class' => esc_attr('blablablocks-tab-content'),
     'role' => "tabpanel",
     'tabindex' => "0",
     'data-wp-bind--hidden' => "!state.isActive",
