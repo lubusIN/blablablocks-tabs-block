@@ -214,7 +214,7 @@ export default function Edit({
 							className="tab-button-text"
 							withoutInteractiveFormatting
 							value={attributes.tabname}
-							placeholder={__('Add tab name…')}
+							placeholder={__('Tab')}
 							onChange={(value) =>
 								setAttributes({
 									tabname: value,
