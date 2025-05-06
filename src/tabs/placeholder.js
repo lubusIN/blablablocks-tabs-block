@@ -75,7 +75,7 @@ function Placeholder( { clientId, setAttributes } ) {
 				<PlaceholderComponent
 					icon={ TabsLogo }
 					instructions={ __(
-						'Choose a template for the tabs or start blank.',
+						'Choose a template or start blank',
 						'blablablocks-tabs-block'
 					) }
 					label={ __( 'Tabs', 'blablablocks-tabs-block' ) }
@@ -97,7 +97,7 @@ function Placeholder( { clientId, setAttributes } ) {
 					icon={ TabsLogo }
 					label={ __( 'Tabs', 'blablablocks-tabs-block' ) }
 					instructions={ __(
-						'Select a variation to start with:',
+						'Select a variation to start',
 						'blablablocks-tabs-block'
 					) }
 					variations={ variations }
