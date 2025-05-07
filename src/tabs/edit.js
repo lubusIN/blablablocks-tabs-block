@@ -66,14 +66,9 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 	const blockProps = useBlockProps({
 		className: clsx(
 			'blablablocks-tabs',
-			'blablablocks-tabs__' + attributes.orientation,
-			'right' === attributes.verticalPosition
-				? 'blablablocks-tabs__right'
-				: '',
 			attributes?.justification === 'stretch' && attributes.orientation === 'horizontal'
 				? 'blablablocks-tabs__autoWidth'
-				: '',
-			'blablablocks-tabs-icon__' + attributes.iconPosition
+				: ''
 		),
 		style: generateStyles(attributes),
 	});

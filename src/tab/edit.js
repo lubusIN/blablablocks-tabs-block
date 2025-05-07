@@ -54,6 +54,7 @@ export default function Edit({
 		forceDisplay,
 		hasInnerBlocksSelected,
 		lastSelectedTabClientId,
+		parentAttrs,
 	} = useSelect(
 		(select) => {
 			const {
@@ -100,6 +101,7 @@ export default function Edit({
 				forceDisplay: innerIsDefaultTab && innerIsTabsClientSelected,
 				hasTabSelected: innerHasTabSelected,
 				lastSelectedTabClientId: getMultiSelectedBlocksEndClientId(),
+				parentAttrs: parentBlockAttrs
 			};
 		},
 		[clientId]
@@ -147,7 +149,13 @@ export default function Edit({
 	 * @type {Object}
 	 */
 	const blockProps = useBlockProps({
-		className: 'blablablocks-tab',
+		className: clsx(
+			'blablablocks-tab',
+			'blablablocks-tab-container',
+			'blablablocks-tabs__' + parentAttrs.orientation,
+			'blablablocks-tabs__' + parentAttrs.verticalPosition,
+			'blablablocks-tabs-icon__' + parentAttrs.iconPosition
+		),
 	});
 
 	/**

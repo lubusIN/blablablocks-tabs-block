@@ -249,8 +249,9 @@ foreach ($tabs_styles as $property => $value) {
 
 $wrapper_classes = [
     'blablablocks-tabs',
+    'blablablocks-tab-container',
     'blablablocks-tabs__' . ($attributes['orientation'] ?? 'horizontal'),
-    isset($attributes['verticalPosition']) && 'right' == $attributes['verticalPosition'] ? 'blablablocks-tabs__right' : '',
+    'blablablocks-tabs__' . ($attributes['verticalPosition'] ?? 'left'),
     isset($attributes['justification']) && 'stretch' == $attributes['justification'] && ($attributes['orientation'] ?? 'horizontal') === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
     'blablablocks-tabs-icon__' . ($attributes['iconPosition'] ?? 'left'),
 ];
