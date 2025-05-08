@@ -11,6 +11,7 @@ import {
 	RichText,
 	BlockControls,
 	store as blockEditorStore,
+	getTypographyClassesAndStyles as useTypographyProps,
 	InspectorControls,
 } from '@wordpress/block-editor';
 import { ToggleControl, PanelBody } from '@wordpress/components';
@@ -144,6 +145,8 @@ export default function Edit({
 		lastSelectedTabClientId,
 	]);
 
+	const typographyProps = useTypographyProps(parentAttrs);
+
 	/**
 	 * Props for the block container.
 	 * @type {Object}
@@ -220,7 +223,7 @@ export default function Edit({
 						{ /* Render the tab name */}
 						<RichText
 							tagName="span"
-							className="tab-button-text"
+							className={clsx("tab-button-text", typographyProps.className)}
 							withoutInteractiveFormatting
 							value={attributes.tabname}
 							placeholder={__('Tab')}
@@ -229,6 +232,7 @@ export default function Edit({
 									tabname: value,
 								})
 							}
+							style={typographyProps.style}
 						/>
 					</div>
 				</TabFill>
