@@ -44,7 +44,7 @@
 	.blablablocks-tabs__vertical,
 	&.blablablocks-tabs__vertical {
 		&.blablablocks-tabs__left .blablablocks-tabs-buttons {
-			border-left: 1px solid var(--bbb-tab-background-active-color);
+			border-right: 1px solid var(--bbb-tab-background-active-color);
 		}
 	}
 }
@@ -54,7 +54,7 @@
 	.blablablocks-tabs__vertical,
 	&.blablablocks-tabs__vertical {
 		&.blablablocks-tabs__right .blablablocks-tabs-buttons {
-			border-right: 1px solid var(--bbb-tab-background-active-color);
+			border-left: 1px solid var(--bbb-tab-background-active-color);
 		}
 	}
 }
