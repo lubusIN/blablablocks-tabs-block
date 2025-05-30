@@ -99,8 +99,10 @@
 			color: var(--bbb-tab-text-color);
 		}
 
-		.bbb-tab-icon svg {
-			fill: var(--bbb-tab-icon-color);
+		&:not(.is-bbb-active-tab) {
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-color);
+			}
 		}
 
 		&.is-bbb-active-tab {
@@ -111,7 +113,7 @@
 			}
 
 			.bbb-tab-icon svg {
-				fill: var(--bbb-tab-icon-active-color);
+				color: var(--bbb-tab-icon-active-color);
 			}
 		}
 
@@ -123,7 +125,7 @@
 			}
 
 			.bbb-tab-icon svg {
-				fill: var(--bbb-tab-icon-hover-color);
+				color: var(--bbb-tab-icon-hover-color);
 			}
 		}
 	}
