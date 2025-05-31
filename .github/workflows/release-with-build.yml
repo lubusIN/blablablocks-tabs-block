@@ -1,0 +1,57 @@
+name: Build & Package Everything on Release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build_and_package:
+    name: Build, Archive All Folders & Upload
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Check out the repository at the exact tag/commit for this Release
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      # 2) Remove the folders you do NOT want anywhere in the final artifact
+      - name: Remove ignored folders
+        run: |
+          rm -rf .github
+          rm -rf _playground
+
+      # 3) (Node.js example) Set up Node, install deps, and build
+      #    → If you use a different toolchain, replace these three steps
+      - name: Set up Node.js v16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      # 4) Delete node_modules so it never ends up in the ZIP
+      - name: Cleanup node_modules
+        run: rm -rf node_modules
+
+      # 5) Archive EVERYTHING that remains (all folders/files + the build/ folder)
+      #    Exclude the ZIP itself, so zip doesn’t recurse into itself.
+      - name: Archive entire workspace
+        run: |
+          zip -r release-artifact.zip . -x release-artifact.zip
+
+      # 6) Upload release-artifact.zip to the newly-created GitHub Release
+      - name: Upload ZIP to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./release-artifact.zip
+          asset_name: ${{ github.event.repository.name }}.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
