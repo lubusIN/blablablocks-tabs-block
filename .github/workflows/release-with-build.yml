@@ -45,13 +45,18 @@ jobs:
       # 5) Archive EVERYTHING that remains (all folders/files + the build/ folder)
       #    Exclude the ZIP itself, so zip doesn’t recurse into itself.
       - name: Archive entire workspace
+        id: archive
         run: |
-          zip -r release-artifact.zip . -x release-artifact.zip
+          ARTIFACT_NAME="${{ github.event.repository.name }}.zip"
+          zip -r "$ARTIFACT_NAME" . -x "$ARTIFACT_NAME"
 
-      # 6) Upload release-artifact.zip to the newly-created GitHub Release
+          # Expose the filename as an output, so later steps can reference it
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+
+      # 6) Upload the ZIP (named <repo-name>-<tag>.zip) to the Release
       - name: Upload ZIP to Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ github.event.repository.name }}.zip
+          files: ${{ steps.archive.outputs.artifact_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
