@@ -42,6 +42,19 @@ jobs:
       - name: Cleanup node_modules
         run: rm -rf node_modules
 
+        # 5) Set up PHP & Composer (conditional PHP support)
+      - name: Setup PHP (for Composer)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer
+
+      # 6) If there is a composer.json, install & optimize vendor/
+      - name: Install PHP dependencies
+        if: ${{ hashFiles('composer.json') != '' }}
+        run: |
+          composer install --no-dev --optimize-autoloader
+
       # 5) Archive EVERYTHING that remains (all folders/files + the build/ folder)
       #    Exclude the ZIP itself, so zip doesn’t recurse into itself.
       - name: Archive entire workspace
