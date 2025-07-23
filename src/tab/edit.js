@@ -238,7 +238,7 @@ export default function Edit({
 				</TabFill>
 				{isTabSelected && (
 					<>
-						<TabsListSlot key={blockIndex} tabsClientId={tabsClientId} />
+						<TabsListSlot key={blockIndex} tabsClientId={tabsClientId} attributes={parentAttrs} />
 						{hasChildBlocks ? (
 							<div {...innerBlocksProps} />
 						) : (

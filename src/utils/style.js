@@ -2,7 +2,9 @@
  * WordPress dependencies
  */
 import {
-	__experimentalGetGapCSSValue as getGapCSSValue // eslint-disable-line
+	__experimentalGetGapCSSValue as getGapCSSValue, 					   // eslint-disable-line
+	__experimentalUseBorderProps as useBorderProps,                        // eslint-disable-line
+	__experimentalGetSpacingClassesAndStyles as getSpacingClassesAndStyles // eslint-disable-line
 } from '@wordpress/block-editor';
 
 const DEFAULT_GAP = '0.5em';
@@ -14,24 +16,24 @@ const DEFAULT_GAP = '0.5em';
  * @param {string}        [orientation='horizontal'] - The orientation of the block. Can be 'horizontal' or 'vertical'.
  * @return {Array<string>} - An array containing two CSS gap values
  */
-const generateGapStyles = ( blockGap, orientation = 'horizontal' ) => {
+const generateGapStyles = (blockGap, orientation = 'horizontal') => {
 	let tabListGap = DEFAULT_GAP;
 	let tabGap = DEFAULT_GAP;
 
-	if ( typeof blockGap === 'string' ) {
+	if (typeof blockGap === 'string') {
 		tabListGap = blockGap;
 		tabGap = blockGap;
-	} else if ( typeof blockGap === 'object' && blockGap !== null ) {
+	} else if (typeof blockGap === 'object' && blockGap !== null) {
 		tabListGap = blockGap.top || DEFAULT_GAP;
 		tabGap = blockGap.left || DEFAULT_GAP;
 	}
 
 	// Convert to valid CSS values
-	const main = getGapCSSValue( tabListGap );
-	const cross = getGapCSSValue( tabGap );
+	const main = getGapCSSValue(tabListGap);
+	const cross = getGapCSSValue(tabGap);
 
 	// If vertical, swap main⇄cross
-	return orientation === 'vertical' ? [ main, cross ] : [ cross, main ];
+	return orientation === 'vertical' ? [main, cross] : [cross, main];
 };
 
 /**
@@ -81,6 +83,24 @@ export const generateStyles = (attributes = {}) => {
 		}
 	};
 
+	const padTop = resolveSpacingSizeValue(
+		attributes?.tabPadding?.top,
+		'5px'
+	);
+	const padRight = resolveSpacingSizeValue(
+		attributes?.tabPadding?.right,
+		'15px'
+	);
+	const padBottom = resolveSpacingSizeValue(
+		attributes?.tabPadding?.bottom,
+		'5px'
+	);
+	const padLeft = resolveSpacingSizeValue(
+		attributes?.tabPadding?.left,
+		'15px'
+	);
+
+
 	// Tab Color using Tailwind's gray shades
 	addStyle(
 		'--bbb-tab-text-color',
@@ -121,22 +141,10 @@ export const generateStyles = (attributes = {}) => {
 
 	// Padding styles with defaults
 	addStyle(
-		'--bbb-tab-padding-top',
-		resolveSpacingSizeValue(attributes?.tabPadding?.top, '5px')
+		'--bbb-tab-padding',
+		`${padTop} ${padRight} ${padBottom} ${padLeft}`
 	);
-	addStyle(
-		'--bbb-tab-padding-right',
-		resolveSpacingSizeValue(attributes?.tabPadding?.right, '15px')
-	);
-	addStyle(
-		'--bbb-tab-padding-bottom',
-		resolveSpacingSizeValue(attributes?.tabPadding?.bottom, '5px')
-	);
-	addStyle(
-		'--bbb-tab-padding-left',
-		resolveSpacingSizeValue(attributes?.tabPadding?.left, '15px')
-	);
-  
+
 	// Tab Buttons styles
 	addStyle(
 		'--bbb-tab-buttons-justify-content',
@@ -150,12 +158,66 @@ export const generateStyles = (attributes = {}) => {
 	);
 
 	// Tab List Gap
-	const [ listGap, tabsGap ] = generateGapStyles(
+	const [listGap, tabsGap] = generateGapStyles(
 		attributes.style?.spacing?.blockGap || null,
 		attributes.orientation
 	);
-	addStyle( '--bbb-tabs-list-gap', listGap );
-	addStyle( '--bbb-tabs-gap', tabsGap );
+	addStyle('--bbb-tabs-list-gap', listGap);
+	addStyle('--bbb-tabs-gap', tabsGap);
 
 	return styles;
 };
+
+
+/**
+ * Return consolidated className + style for the Tabs container:
+ * – spacing classes & styles
+ * – border props (with numeric radius)
+ * – horizontal margin based on orientation/justification
+ *
+ * @param {Object} attributes
+ * @return {{ className: string, style: Object }}
+ */
+export function getTabsContainerProps(attributes) {
+	// 1. spacing
+	const spacingProps = getSpacingClassesAndStyles(attributes);
+
+	// 2. border (useBorderProps gives { className, style })
+	const rawBorder = useBorderProps(attributes);
+	const borderRadius = attributes.style?.border?.radius;
+	const borderProps = {
+		...rawBorder,
+		style: {
+			...rawBorder.style,
+			// if radius is a number, append "px"
+			...(typeof borderRadius === 'number'
+				? { borderRadius: `${borderRadius}px` }
+				: {}),
+		},
+	};
+
+	// 3. margin
+	const marginStyle =
+		attributes.orientation === 'horizontal'
+			? (() => {
+				switch (attributes.justification) {
+					case 'right': return { margin: '0 0 0 auto' };
+					case 'center': return { margin: '0 auto' };
+					case 'left':
+					default: return { margin: '0 0 auto' };
+				}
+			})()
+			: {};
+
+	// 4. combine
+	return {
+		className: [spacingProps.classes, borderProps.className]
+			.filter(Boolean)
+			.join(' '),
+		style: {
+			...spacingProps.style,
+			...borderProps.style,
+			...marginStyle,
+		},
+	};
+}

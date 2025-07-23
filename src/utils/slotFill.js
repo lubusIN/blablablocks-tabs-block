@@ -2,12 +2,14 @@
  * WordPress dependencies
  */
 import React from 'react';
+import clsx from 'clsx';
 import { createSlotFill } from '@wordpress/components';
+import { getTabsContainerProps } from './style';
 
 /**
  * Create a unique SlotFill pair using a Symbol to avoid name collisions.
  */
-const { Fill, Slot } = createSlotFill( Symbol( 'TabsList' ) );
+const { Fill, Slot } = createSlotFill(Symbol('TabsList'));
 
 /**
  * TabFill Component
@@ -19,8 +21,8 @@ const { Fill, Slot } = createSlotFill( Symbol( 'TabsList' ) );
  * @param {string}          props.tabsClientId - Unique identifier used to scope the Fill to a specific Tabs instance.
  * @return {JSX.Element} A Fill component scoped to the specified Tabs instance.
  */
-export const TabFill = ( { children, tabsClientId } ) => {
-	return <Fill name={ `TabsList-${ tabsClientId }` }>{ children }</Fill>;
+export const TabFill = ({ children, tabsClientId }) => {
+	return <Fill name={`TabsList-${tabsClientId}`}>{children}</Fill>;
 };
 
 /**
@@ -33,14 +35,18 @@ export const TabFill = ( { children, tabsClientId } ) => {
  * @param {string} props.tabsClientId - Unique identifier used to scope the Slot to a specific Tabs instance.
  * @return {JSX.Element} A Slot component that renders TabFill components matching the specified Tabs instance.
  */
-export const TabsListSlot = ( { tabsClientId } ) => {
+export const TabsListSlot = ({ tabsClientId, attributes }) => {
+
+	const { className, style } = getTabsContainerProps(attributes);
+
 	return (
 		<Slot
-			name={ `TabsList-${ tabsClientId }` }
+			name={`TabsList-${tabsClientId}`}
 			bubblesVirtually
 			as="div"
 			role="tablist"
-			className="blablablocks-tabs-buttons"
+			className={clsx(className, "blablablocks-tabs-buttons")}
+			style={style}
 		/>
 	);
 };

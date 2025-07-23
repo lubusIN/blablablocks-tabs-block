@@ -199,6 +199,157 @@ if (! function_exists('bbb_get_typography_styles')) {
 }
 
 /**
+ * Generate a single border declaration.
+ *
+ * @param array       $attributes Block attributes.
+ * @param string      $property   'width', 'color' or 'style'.
+ * @param string|null $side       null|top|right|bottom|left.
+ * @return string    CSS declaration or empty string.
+ */
+if (! function_exists('apply_tabs_border_style')) {
+    function apply_tabs_border_style(array $attributes, string $property, ?string $side = null): string
+    {
+        // Build the path into the attrs array.
+        $path = ['style', 'border', $property];
+        if ($side) {
+            array_splice($path, 2, 0, $side);
+        }
+
+        // Grab the value or bail.
+        $value = _wp_array_get($attributes, $path, '');
+        if ($value === '' || $value === null) {
+            return '';
+        }
+
+        // If it's a color preset like "var:preset|color|sky", convert it
+        if ('color' === $property && str_starts_with($value, 'var:preset|color|')) {
+            $named = substr($value, strrpos($value, '|') + 1);
+            $value = sprintf('var(--wp--preset--color--%s)', $named);
+        }
+
+        // Determine the CSS property name
+        $prop_name = $side
+            ? sprintf('border-%s-%s', $side, $property)
+            : "border-{$property}";
+
+        return sprintf('%s: %s;', esc_attr($prop_name), esc_attr($value));
+    }
+}
+
+/**
+ * Collect all border declarations for a given property.
+ *
+ * @param array  $attributes Block attributes.
+ * @param string $property   'width', 'color' or 'style'.
+ * @return string[] Array of CSS declarations.
+ */
+if (! function_exists('apply_tabs_border_styles')) {
+    function apply_tabs_border_styles(array $attributes, string $property): array
+    {
+        $declarations = [];
+
+        // check the shorthand + each side
+        foreach ([null, 'top', 'right', 'bottom', 'left'] as $side) {
+            $decl = apply_tabs_border_style($attributes, $property, $side);
+            if ($decl) {
+                $declarations[] = $decl;
+            }
+        }
+
+        return $declarations;
+    }
+}
+
+/**
+ * Build the complete border CSS (width, color, style, radius).
+ *
+ * @param array $attributes Block attributes.
+ * @return string Space‑separated CSS declarations.
+ */
+if (! function_exists('get_tabs_border_styles')) {
+    function get_tabs_border_styles(array $attributes): string
+    {
+        $styles = [];
+
+        // 1. border-radius shorthand
+        $radius = _wp_array_get($attributes, ['style', 'border', 'radius'], null);
+        if ($radius !== null && $radius !== '') {
+            if (is_array($radius)) {
+                // grab each corner (default to 0)
+                $tl = $radius['topLeft']     ?? 0;
+                $tr = $radius['topRight']    ?? 0;
+                $br = $radius['bottomRight'] ?? 0;
+                $bl = $radius['bottomLeft']  ?? 0;
+
+                // normalize numeric → px
+                foreach (['tl', 'tr', 'br', 'bl'] as $corner) {
+                    if (is_numeric($$corner)) {
+                        $$corner .= 'px';
+                    }
+                }
+
+                $styles[] = sprintf(
+                    'border-radius: %s %s %s %s;',
+                    esc_attr($tl),
+                    esc_attr($tr),
+                    esc_attr($br),
+                    esc_attr($bl)
+                );
+            } else {
+                $val = is_numeric($radius) ? "{$radius}px" : $radius;
+                $styles[] = sprintf('border-radius: %s;', esc_attr($val));
+            }
+        }
+
+        // 2. per‑side color/style (unchanged)
+        $styles = array_merge(
+            $styles,
+            apply_tabs_border_styles($attributes, 'color'),
+            apply_tabs_border_styles($attributes, 'style')
+        );
+
+        // 3. border-width shorthand
+        $wTop    = _wp_array_get($attributes, ['style', 'border', 'top', 'width'], '');
+        $wRight  = _wp_array_get($attributes, ['style', 'border', 'right', 'width'], '');
+        $wBottom = _wp_array_get($attributes, ['style', 'border', 'bottom', 'width'], '');
+        $wLeft   = _wp_array_get($attributes, ['style', 'border', 'left', 'width'], '');
+
+        if ($wTop !== '' || $wRight !== '' || $wBottom !== '' || $wLeft !== '') {
+            // normalize numeric → px
+            foreach (['wTop', 'wRight', 'wBottom', 'wLeft'] as $w) {
+                if (is_numeric($$w)) {
+                    $$w .= 'px';
+                }
+            }
+
+            if ($wTop === $wBottom && $wRight === $wLeft) {
+                // can collapse to 1 or 2 values
+                if ($wTop === $wRight) {
+                    $styles[] = sprintf('border-width: %s;', esc_attr($wTop));
+                } else {
+                    $styles[] = sprintf(
+                        'border-width: %s %s;',
+                        esc_attr($wTop),
+                        esc_attr($wRight)
+                    );
+                }
+            } else {
+                // explicit top | right | bottom | left
+                $styles[] = sprintf(
+                    'border-width: %s %s %s %s;',
+                    esc_attr($wTop),
+                    esc_attr($wRight),
+                    esc_attr($wBottom),
+                    esc_attr($wLeft)
+                );
+            }
+        }
+
+        return implode(' ', $styles);
+    }
+}
+
+/**
  * Generates a set of CSS variable mappings based on provided attributes.
  * The returned array excludes variables with invalid or undefined values.
  *
@@ -206,9 +357,9 @@ if (! function_exists('bbb_get_typography_styles')) {
  * @return array An array with CSS variable definitions.
  */
 if (! function_exists('generateStyles')) {
-    function generateStyles($attributes = array())
+    function generateStyles($attributes = [])
     {
-        $styles = array();
+        $styles = [];
 
         // Helper function to add a style with a fallback to default values
         $addStyle = function ($key, $value, $defaultValue = '0px') use (&$styles) {
@@ -221,6 +372,12 @@ if (! function_exists('generateStyles')) {
 
         // Add gap styles
         $styles = array_merge($styles, getGapStyles($attributes));
+
+        // Padding styles with defaults
+        $padding_top = resolveSpacingSizeValue($attributes['tabPadding']['top'] ?? null, '5px');
+        $padding_bottom = resolveSpacingSizeValue($attributes['tabPadding']['bottom'] ?? null, '5px');
+        $padding_left = resolveSpacingSizeValue($attributes['tabPadding']['left'] ?? null, '15px');
+        $padding_right = resolveSpacingSizeValue($attributes['tabPadding']['right'] ?? null, '15px');
 
         // Tab Color using Tailwind's gray shades
         $addStyle(
@@ -260,22 +417,9 @@ if (! function_exists('generateStyles')) {
             $attributes['tabColor']['iconColor']['active'] ?? '#fff'
         );
 
-        // Padding styles with defaults
         $addStyle(
-            '--bbb-tab-padding-top',
-            resolveSpacingSizeValue($attributes['tabPadding']['top'] ?? null, '5px')
-        );
-        $addStyle(
-            '--bbb-tab-padding-right',
-            resolveSpacingSizeValue($attributes['tabPadding']['right'] ?? null, '15px')
-        );
-        $addStyle(
-            '--bbb-tab-padding-bottom',
-            resolveSpacingSizeValue($attributes['tabPadding']['bottom'] ?? null, '5px')
-        );
-        $addStyle(
-            '--bbb-tab-padding-left',
-            resolveSpacingSizeValue($attributes['tabPadding']['left'] ?? null, '15px')
+            '--bbb-tab-padding',
+            $padding_top . ' ' . $padding_right . ' ' . $padding_bottom . ' ' . $padding_left
         );
 
         // Tab Buttons styles
@@ -291,5 +435,57 @@ if (! function_exists('generateStyles')) {
         );
 
         return $styles;
+    }
+}
+
+/**
+ * Build the complete border + padding CSS for a Tabs container.
+ *
+ * @param array $attributes Block attributes.
+ * @return string A string of CSS declarations (border + padding).
+ */
+if (! function_exists('get_tabs_container_styles')) {
+    function get_tabs_container_styles(array $attributes): string
+    {
+        $border_css = get_tabs_border_styles($attributes);
+
+        // Padding shorthand — resolves via resolveSpacingSizeValue():
+        $padding = $attributes['style']['spacing']['padding'] ?? [];
+        $top    = resolveSpacingSizeValue($padding['top']    ?? null, '0px');
+        $right  = resolveSpacingSizeValue($padding['right']  ?? null, '0px');
+        $bottom = resolveSpacingSizeValue($padding['bottom'] ?? null, '0px');
+        $left   = resolveSpacingSizeValue($padding['left']   ?? null, '0px');
+
+        $padding_css = sprintf(
+            'padding: %s %s %s %s;',
+            esc_attr($top),
+            esc_attr($right),
+            esc_attr($bottom),
+            esc_attr($left)
+        );
+
+        // horizontal-justification via margins:
+        $margin_css = '';
+        $orientation = $attributes['orientation'] ?? 'horizontal';
+        if ('horizontal' === $orientation) {
+            switch ($attributes['justification'] ?? 'left') {
+                case 'right':
+                    $margin_css = 'margin: 0 0 0 auto;';
+                    break;
+                case 'center':
+                    $margin_css = 'margin: 0 auto;';
+                    break;
+                case 'left':
+                default:
+                    $margin_css = 'margin: 0 0 auto;';
+                    break;
+            }
+        }
+
+        return trim(implode(' ', array_filter([
+            $border_css,
+            $padding_css,
+            $margin_css,
+        ])));
     }
 }

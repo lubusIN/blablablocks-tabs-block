@@ -126,9 +126,13 @@
 			"full"
 		],
 		"spacing": {
-			"margin":false,
-			"padding": false,
-			"blockGap": [ "horizontal", "vertical" ]
+			"margin": false,
+			"padding": true,
+			"blockGap": [
+				"horizontal",
+				"vertical"
+			],
+			"__experimentalSkipSerialization": true
 		},
 		"typography": {
 			"fontSize": true,
@@ -142,6 +146,13 @@
 			"__experimentalDefaultControls": {
 				"fontSize": true
 			},
+			"__experimentalSkipSerialization": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
 			"__experimentalSkipSerialization": true
 		},
 		"interactivity": true

@@ -67,7 +67,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
     data-wp-context='<?php echo wp_json_encode($data_context); ?>'
     data-wp-init="callbacks.initTabs">
 
-    <ul class="blablablocks-tabs-buttons" role="tablist">
+    <ul class="blablablocks-tabs-buttons" role="tablist" style="<?php echo get_tabs_container_styles($attributes); ?>">
         <?php foreach ($tabs as $index => $tab) :
             $icon = $block->parsed_block['innerBlocks'][$index]['attrs']['tabIcon'] ?? '';
         ?>
