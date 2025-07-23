@@ -26,6 +26,12 @@
 			margin-left: 0px;
 			transform: translateY(-50%) rotate(270deg);
 		}
+
+		&.blablablocks-tabs__right .blablablock-tab-btn.is-bbb-active-tab::after {
+			left: 0%;
+			margin-left: -20px;
+			transform: translateY(-50%) rotate(90deg);
+		}
 	}
 }
 
