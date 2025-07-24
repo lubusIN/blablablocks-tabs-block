@@ -136,7 +136,7 @@ export const generateStyles = (attributes = {}) => {
 	);
 	addStyle(
 		'--bbb-tab-icon-active-color',
-		attributes?.tabColor?.iconColor?.active || '#fff'
+		attributes?.tabColor?.iconColor?.active || attributes?.tabColor?.iconColor?.default || '#fff'
 	);
 
 	// Padding styles with defaults
@@ -209,7 +209,12 @@ export function getTabsContainerProps(attributes) {
 			})()
 			: {};
 
-	// 4. combine
+	// 4. width
+	const width = attributes.orientation === 'vertical'
+		? { maxWidth: `${attributes.width || 50}%` }
+		: {};
+
+	// 5. combine
 	return {
 		className: [spacingProps.classes, borderProps.className]
 			.filter(Boolean)
@@ -218,6 +223,7 @@ export function getTabsContainerProps(attributes) {
 			...spacingProps.style,
 			...borderProps.style,
 			...marginStyle,
+			...width
 		},
 	};
 }

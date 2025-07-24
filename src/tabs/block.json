@@ -10,6 +10,10 @@
 			"type": "number",
 			"default": 0
 		},
+		"width": {
+			"type": "number",
+			"default": 50
+		},
 		"orientation": {
 			"type": "string",
 			"default": "horizontal"
@@ -27,8 +31,8 @@
 			"default": "left"
 		},
 		"iconSize": {
-			"type": "string",
-			"default": "24"
+			"type": "number",
+			"default": 24
 		},
 		"iconFill": {
 			"type": "boolean",

@@ -84,7 +84,21 @@
 	}
 
 	&:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
-		width: max-content;
+		max-width: fit-content;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.blablablocks-tab-content {
+		width: 100%;
+	}
+}
+
+.blablablocks-tabs__vertical {
+	.blablablock-tab-btn {
+		width: 100% !important;
+		flex: 0 0 auto !important;
+		justify-content: var(--bbb-tab-buttons-justify-content, left) !important;
 	}
 }
 
@@ -106,6 +120,8 @@
 		transition:
 			background-color 0.25s ease-in-out,
 			color 0.25s ease-in-out;
+		box-sizing: border-box;
+		width: fit-content;
 
 		.bbb-tab-icon {
 			width: var(--bbb-tab-icon-size, 24px);
@@ -114,6 +130,11 @@
 
 		.tab-button-text {
 			color: var(--bbb-tab-text-color);
+		}
+
+		.bbb-tab-icon svg {
+			color: var(--bbb-tab-icon-color);
+			height: 100%;
 		}
 
 		&:not(.is-bbb-active-tab) {

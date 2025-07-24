@@ -273,6 +273,7 @@ if (! function_exists('get_tabs_border_styles')) {
 
         // 1. border-radius shorthand
         $radius = _wp_array_get($attributes, ['style', 'border', 'radius'], null);
+
         if ($radius !== null && $radius !== '') {
             if (is_array($radius)) {
                 // grab each corner (default to 0)
@@ -305,7 +306,8 @@ if (! function_exists('get_tabs_border_styles')) {
         $styles = array_merge(
             $styles,
             apply_tabs_border_styles($attributes, 'color'),
-            apply_tabs_border_styles($attributes, 'style')
+            apply_tabs_border_styles($attributes, 'style'),
+            apply_tabs_border_styles($attributes, 'width')
         );
 
         // 3. border-width shorthand
