@@ -13,6 +13,7 @@
 		border-top-color: var(--bbb-tab-background-active-color);
 		content: "";
 		pointer-events: none;
+		transition: border-top-color 0.25s ease-in-out;
 	}
 }
 
@@ -102,6 +103,9 @@
 		cursor: pointer;
 		padding: var(--bbb-tab-padding);
 		background-color: var(--bbb-tab-background-color);
+		transition:
+			background-color 0.25s ease-in-out,
+			color 0.25s ease-in-out;
 
 		.bbb-tab-icon {
 			width: var(--bbb-tab-icon-size, 24px);
