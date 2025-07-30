@@ -1,9 +1,9 @@
 {
 	"name": "blablablocks-tabs-block",
-	"version": "0.1.0",
-	"description": "Example block scaffolded with Create Block tool.",
-	"author": "The WordPress Contributors",
-	"license": "GPL-2.0-or-later",
+	"version": "1.0.0",
+	"description": "Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.",
+	"author": "Lubus",
+	"license": "MIT",
 	"main": "build/index.js",
 	"scripts": {
 		"build": "wp-scripts build --experimental-modules",
@@ -15,7 +15,7 @@
 		"lint:js:fix": "wp-scripts lint-js --fix",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"serve": "npx @wp-now/wp-now start"
+		"serve": "npx @wp-playground/cli server --auto-mount"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^30.10.0"
