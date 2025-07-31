@@ -138,6 +138,14 @@
 			],
 			"__experimentalSkipSerialization": true
 		},
+		"color": {
+			"__experimentalSkipSerialization": true,
+			"gradients": true,
+			"text": false,
+			"__experimentalDefaultControls": {
+				"background": true
+			}
+		},
 		"typography": {
 			"fontSize": true,
 			"lineHeight": true,

@@ -97,7 +97,7 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 				</TabFill>
 			</div>
 			<Settings attributes={attributes} setAttributes={setAttributes} />
-			<Styles attributes={attributes} setAttributes={setAttributes} />
+			<Styles attributes={attributes} setAttributes={setAttributes} clientId={clientId} />
 		</>
 	) : (
 		<Placeholder clientId={clientId} setAttributes={setAttributes} />

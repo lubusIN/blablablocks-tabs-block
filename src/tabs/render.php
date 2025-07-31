@@ -7,8 +7,12 @@
  * @param string   $content    Block content.
  * @param WP_Block $block      Block instance.
  *
- * @package BlaBlaBlocks Tabs Block
+ * @package        BlaBlaBlocks Tabs Block
  */
+
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
 
 require plugin_dir_path(dirname(__DIR__)) . '/src/tabs/helpers.php';
 

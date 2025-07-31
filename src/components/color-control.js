@@ -2,14 +2,17 @@
  * WordPress dependencies.
  */
 import { __ } from '@wordpress/i18n';
-import { ColorPalette } from '@wordpress/block-editor';
+import {
+	ColorPalette,
+	__experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients // eslint-disable-line
+} from '@wordpress/block-editor';
 import {
 	Button,
 	Dropdown,
 	ColorIndicator,
-    __experimentalZStack as ZStack,  // eslint-disable-line
-    __experimentalHStack as HStack,  // eslint-disable-line
-    __experimentalText as Text,      // eslint-disable-line
+	__experimentalZStack as ZStack,  // eslint-disable-line
+	__experimentalHStack as HStack,  // eslint-disable-line
+	__experimentalText as Text,      // eslint-disable-line
 	TabPanel,
 } from '@wordpress/components';
 
@@ -25,51 +28,53 @@ import {
  *
  * @return {JSX.Element} The rendered ColorControlDropdown component.
  */
-function ColorControlDropdown( {
+function ColorControlDropdown({
 	label,
 	colorValue = {},
 	onChangeColor,
 	hasHover = false,
 	hasActive = false,
-} ) {
+}) {
+
+	const colorGradientSettings = useMultipleOriginColorsAndGradients()
+
 	return (
 		<Dropdown
-			popoverProps={ {
+			popoverProps={{
 				placement: 'left-start',
 				offset: 36,
 				shift: true,
-			} }
+			}}
 			contentClassName="bbb-tabs_color_popover"
-			renderToggle={ ( { isOpen, onToggle } ) => (
+			renderToggle={({ isOpen, onToggle }) => (
 				<Button
-					className={ `bbb-tabs_color_button ${
-						isOpen ? 'isOpen' : ''
-					}` }
-					aria-expanded={ isOpen }
-					onClick={ onToggle }
+					className={`bbb-tabs_color_button ${isOpen ? 'isOpen' : ''
+						}`}
+					aria-expanded={isOpen}
+					onClick={onToggle}
 				>
 					<HStack justify="left">
-						<ZStack offset={ 10 }>
-							<ColorIndicator colorValue={ colorValue.default } />
-							{ hasHover && (
+						<ZStack offset={10}>
+							<ColorIndicator colorValue={colorValue.default} />
+							{hasHover && (
 								<ColorIndicator
-									colorValue={ colorValue.hover }
+									colorValue={colorValue.hover}
 								/>
-							) }
-							{ hasActive && (
+							)}
+							{hasActive && (
 								<ColorIndicator
-									colorValue={ colorValue.active }
+									colorValue={colorValue.active}
 								/>
-							) }
+							)}
 						</ZStack>
-						<Text>{ label }</Text>
+						<Text>{label}</Text>
 					</HStack>
 				</Button>
-			) }
-			renderContent={ () =>
+			)}
+			renderContent={() =>
 				hasHover || hasActive ? (
 					<TabPanel
-						tabs={ [
+						tabs={[
 							{
 								name: 'default',
 								title: __(
@@ -79,7 +84,7 @@ function ColorControlDropdown( {
 							},
 							{
 								name: 'hover',
-								title: __( 'Hover', 'blablablocks-tabs-block' ),
+								title: __('Hover', 'blablablocks-tabs-block'),
 							},
 							{
 								name: 'active',
@@ -88,30 +93,32 @@ function ColorControlDropdown( {
 									'blablablocks-tabs-block'
 								),
 							},
-						] }
+						]}
 					>
-						{ ( tab ) => (
+						{(tab) => (
 							<ColorPalette
 								__experimentalIsRenderedInSidebar
-								value={ colorValue[ tab.name ] || '' }
-								onChange={ ( color ) => {
-									onChangeColor( {
+								value={colorValue[tab.name] || ''}
+								onChange={(color) => {
+									onChangeColor({
 										...colorValue,
-										[ tab.name ]: color,
-									} );
-								} }
+										[tab.name]: color,
+									});
+								}}
+								{...colorGradientSettings}
 								enableAlpha
 							/>
-						) }
+						)}
 					</TabPanel>
 				) : (
 					<ColorPalette
 						className="bbb-color-pallete-container"
 						__experimentalIsRenderedInSidebar
-						value={ colorValue.default || '' }
-						onChange={ ( color ) => {
-							onChangeColor( { ...colorValue, default: color } );
-						} }
+						value={colorValue.default || ''}
+						onChange={(color) => {
+							onChangeColor({ ...colorValue, default: color });
+						}}
+						{...colorGradientSettings}
 						enableAlpha
 					/>
 				)

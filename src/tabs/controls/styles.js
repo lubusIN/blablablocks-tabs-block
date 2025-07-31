@@ -7,11 +7,7 @@ import {
 	__experimentalSpacingSizesControl as SpacingSizesControl, // eslint-disable-line
 } from '@wordpress/block-editor';
 import {
-	__experimentalHeading as Heading,                         // eslint-disable-line
-	__experimentalVStack as VStack, 						  // eslint-disable-line
-	__experimentalToolsPanel as ToolsPanel, 				  // eslint-disable-line
 	__experimentalToolsPanelItem as ToolsPanelItem, 		  // eslint-disable-line
-	__experimentalBorderBoxControl as BorderBoxControl, 	  // eslint-disable-line
 } from '@wordpress/components';
 
 /**
@@ -28,162 +24,80 @@ import { ColorControlDropdown } from '../../components';
  *
  * @return {JSX.Element} Styles panel
  */
-function Styles( { attributes, setAttributes } ) {
+function Styles({ attributes, setAttributes, clientId }) {
+	const colorControls = [
+		{ key: 'textColor', label: __('Tab Text', 'blablablocks-tabs-block') },
+		{ key: 'backgroundColor', label: __('Tab Background', 'blablablocks-tabs-block') },
+		{ key: 'iconColor', label: __('Tab Icon', 'blablablocks-tabs-block') },
+	];
+
+	const { tabColor = {} } = attributes;
+
+	const clearColor = (colorKey) => {
+		setAttributes({
+			tabColor: {
+				...tabColor,
+				[colorKey]: { default: undefined, hover: undefined, active: undefined },
+			},
+		});
+	};
+
 	return (
-		<InspectorControls group="styles">
-			<ToolsPanel
-				label={ __( 'Tab', 'blablablocks-tabs-block' ) }
-				resetAll={ () =>
-					setAttributes( {
-						tabColor: {
-							textColor: {
-								default: undefined,
-								hover: undefined,
-								active: undefined,
-							},
-							backgroundColor: {
-								default: undefined,
-								hover: undefined,
-								active: undefined,
-							},
-							iconColor: {
-								default: undefined,
-								hover: undefined,
-								active: undefined,
-							},
-						},
-						tabPadding: undefined,
-					} )
-				}
-			>
-				<ToolsPanelItem
-					label={ __( 'Color', 'blablablocks-tabs-block' ) }
-					isShownByDefault
-					hasValue={ () =>
-						!! attributes?.tabColor?.textColor?.default ||
-						!! attributes?.tabColor?.textColor?.hover ||
-						!! attributes?.tabColor?.textColor?.active ||
-						!! attributes?.tabColor?.backgroundColor?.default ||
-						!! attributes?.tabColor?.backgroundColor?.hover ||
-						!! attributes?.tabColor?.backgroundColor?.active ||
-						!! attributes?.tabColor?.iconColor?.default ||
-						!! attributes?.tabColor?.iconColor?.hover ||
-						!! attributes?.tabColor?.iconColor?.active
-					}
-					onDeselect={ () =>
-						setAttributes( {
-							tabColor: {
-								textColor: {
-									default: undefined,
-									hover: undefined,
-									active: undefined,
-								},
-								backgroundColor: {
-									default: undefined,
-									hover: undefined,
-									active: undefined,
-								},
-								iconColor: {
-									default: undefined,
-									hover: undefined,
-									active: undefined,
-								},
-							},
-						} )
-					}
-				>
-					<VStack spacing={ 0 }>
-						<Heading
-							lineHeight={ 1 }
-							level={ 3 }
-							weight={ 500 }
-							upperCase
-						>
-							Color
-						</Heading>
-						<VStack
+		<>
+			<InspectorControls group="color">
+				{colorControls.map(({ key, label }) => {
+					const value = tabColor[key] || {};
+					const hasValue = [value.default, value.hover, value.active].some(Boolean);
+
+					return (
+						<ToolsPanelItem
+							key={key}
+							label={label}
 							className="bbb-tabs_color-support-panel"
-							spacing={ 0 }
+							panelId={clientId}
+							isShownByDefault
+							hasValue={() => hasValue}
+							onDeselect={() => clearColor(key)}
+							resetAllFilter={() => clearColor(key)}
 						>
 							<ColorControlDropdown
-								label={ __(
-									'Text',
-									'blablablocks-tabs-block'
-								) }
-								colorValue={
-									attributes?.tabColor?.textColor || {}
+								label={label}
+								colorValue={value}
+								onChangeColor={(newColor) =>
+									setAttributes({ tabColor: { ...tabColor, [key]: newColor } })
 								}
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
-										tabColor: {
-											...attributes.tabColor,
-											textColor: newColor,
-										},
-									} )
-								}
-								hasHover={ true }
-								hasActive={ true }
+								hasHover
+								hasActive
 							/>
-							<ColorControlDropdown
-								label={ __(
-									'Background',
-									'blablablocks-tabs-block'
-								) }
-								colorValue={
-									attributes?.tabColor?.backgroundColor || {}
-								}
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
-										tabColor: {
-											...attributes?.tabColor,
-											backgroundColor: newColor,
-										},
-									} )
-								}
-								hasHover={ true }
-								hasActive={ true }
-							/>
-							<ColorControlDropdown
-								label={ __(
-									'Icon',
-									'blablablocks-tabs-block'
-								) }
-								colorValue={
-									attributes?.tabColor?.iconColor || {}
-								}
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
-										tabColor: {
-											...attributes?.tabColor,
-											iconColor: newColor,
-										},
-									} )
-								}
-								hasHover={ true }
-								hasActive={ true }
-							/>
-						</VStack>
-					</VStack>
-				</ToolsPanelItem>
+						</ToolsPanelItem>
+					);
+				})}
+			</InspectorControls>
+			<InspectorControls group="dimensions">
 				<ToolsPanelItem
-					label={ __( 'Padding', 'blablablocks-tabs-block' ) }
-					hasValue={ () => !! attributes.tabPadding }
-					onDeselect={ () =>
-						setAttributes( { tabPadding: undefined } )
+					label={__('Tab Padding', 'blablablocks-tabs-block')}
+					panelId={clientId}
+					isShownByDefault
+					hasValue={() => !!attributes.tabPadding}
+					onDeselect={() =>
+						setAttributes({ tabPadding: undefined })
+					}
+					resetAllFilter={() =>
+						setAttributes({ tabPadding: undefined })
 					}
 				>
 					<SpacingSizesControl
-						values={ attributes.tabPadding }
-						onChange={ ( value ) =>
-							setAttributes( { tabPadding: value } )
+						values={attributes.tabPadding}
+						onChange={(value) =>
+							setAttributes({ tabPadding: value })
 						}
-						label={ __( 'Padding', 'blablablocks-tabs-block' ) }
-						allowReset={ false }
-						splitOnAxis={ true }
+						label={__('Tab Padding', 'blablablocks-tabs-block')}
+						allowReset={false}
+						splitOnAxis={true}
 					/>
 				</ToolsPanelItem>
-			</ToolsPanel>
-		</InspectorControls>
+			</InspectorControls>
+		</>
 	);
 }
 

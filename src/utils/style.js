@@ -3,7 +3,8 @@
  */
 import {
 	__experimentalGetGapCSSValue as getGapCSSValue, 					   // eslint-disable-line
-	__experimentalUseBorderProps as useBorderProps,                        // eslint-disable-line
+	__experimentalUseBorderProps as useBorderProps,
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,    // eslint-disable-line
 	__experimentalGetSpacingClassesAndStyles as getSpacingClassesAndStyles // eslint-disable-line
 } from '@wordpress/block-editor';
 
@@ -179,10 +180,13 @@ export const generateStyles = (attributes = {}) => {
  * @return {{ className: string, style: Object }}
  */
 export function getTabsContainerProps(attributes) {
-	// 1. spacing
+	// spacing
 	const spacingProps = getSpacingClassesAndStyles(attributes);
 
-	// 2. border (useBorderProps gives { className, style })
+	// color
+	const colorProps = getColorClassesAndStyles(attributes);
+
+	// border (useBorderProps gives { className, style })
 	const rawBorder = useBorderProps(attributes);
 	const borderRadius = attributes.style?.border?.radius;
 	const borderProps = {
@@ -196,7 +200,7 @@ export function getTabsContainerProps(attributes) {
 		},
 	};
 
-	// 3. margin
+	// margin
 	const marginStyle =
 		attributes.orientation === 'horizontal'
 			? (() => {
@@ -209,19 +213,20 @@ export function getTabsContainerProps(attributes) {
 			})()
 			: {};
 
-	// 4. width
+	// width
 	const width = attributes.orientation === 'vertical'
 		? { maxWidth: `${attributes.width || 50}%` }
 		: {};
 
-	// 5. combine
+	// combine
 	return {
-		className: [spacingProps.classes, borderProps.className]
+		className: [spacingProps.classes, borderProps.className, colorProps.className]
 			.filter(Boolean)
 			.join(' '),
 		style: {
 			...spacingProps.style,
 			...borderProps.style,
+			...colorProps.style,
 			...marginStyle,
 			...width
 		},

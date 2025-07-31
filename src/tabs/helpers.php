@@ -451,6 +451,18 @@ if (! function_exists('get_tabs_container_styles')) {
     {
         $border_css = get_tabs_border_styles($attributes);
 
+        // Background color and gradient
+        $background_styles = [];
+        $has_background_color = ! empty($attributes['style']['color']['background']);
+        if ($has_background_color) {
+            $background_styles[] = sprintf('background-color: %s;', $attributes['style']['color']['background']);
+        }
+
+        $has_custom_gradient = ! empty($attributes['style']['color']['gradient']);
+        if ($has_custom_gradient) {
+            $background_styles[] = sprintf('background: %s;', $attributes['style']['color']['gradient']);
+        }
+
         // Padding shorthand — resolves via resolveSpacingSizeValue():
         $padding = $attributes['style']['spacing']['padding'] ?? [];
         $top    = resolveSpacingSizeValue($padding['top']    ?? null, '0px');
@@ -488,6 +500,43 @@ if (! function_exists('get_tabs_container_styles')) {
             $border_css,
             $padding_css,
             $margin_css,
+            implode(' ', $background_styles)
         ])));
+    }
+}
+
+/**
+ * Returns color classnames depending on whether there are named or background colors.
+ *
+ * @param array $attributes The block attributes.
+ *
+ * @return string The color classnames to be applied to the block elements.
+ */
+if (! function_exists('blabtabl_get_color_classes')) {
+    function blabtabl_get_color_classes($attributes)
+    {
+        $classnames = [];
+
+        // Background color.
+        $has_named_background_color  = ! empty($attributes['backgroundColor']);
+        $has_custom_background_color = ! empty($attributes['style']['color']['background']);
+        $has_named_gradient          = ! empty($attributes['gradient']);
+        $has_custom_gradient         = ! empty($attributes['style']['color']['gradient']);
+        if (
+            $has_named_background_color ||
+            $has_custom_background_color ||
+            $has_named_gradient ||
+            $has_custom_gradient
+        ) {
+            $classnames[] = 'has-background';
+        }
+        if ($has_named_background_color) {
+            $classnames[] = sprintf('has-%s-background-color', $attributes['backgroundColor']);
+        }
+        if ($has_named_gradient) {
+            $classnames[] = sprintf('has-%s-gradient-background', $attributes['gradient']);
+        }
+
+        return implode(' ', $classnames);
     }
 }

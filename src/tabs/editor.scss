@@ -11,35 +11,34 @@
 	}
 }
 
+.components-tools-panel-item.block-editor-tools-panel-color-gradient-settings__item {
+	border-bottom-right-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+}
+
 .bbb-tabs_color-support-panel {
+	border-top: none;
+	border-left: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	padding: 0;
+	position: relative;
+	margin-top: 0px !important;
+
+	&:nth-last-child(1 of .bbb-tabs_color-support-panel) {
+		border-bottom-right-radius: 2px;
+		border-bottom-left-radius: 2px;
+	}
 
 	.components-dropdown {
 		width: 100%;
-
-		&:nth-child(1) {
-			border: 1px solid rgba(0, 0, 0, 0.1);
-			border-top-left-radius: 2px;
-			border-top-right-radius: 2px;
-		}
-
-		&:nth-child(2) {
-			border-left: 1px solid rgba(0, 0, 0, 0.1);
-			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-			border-right: 1px solid rgba(0, 0, 0, 0.1);
-		}
-
-		&:nth-child(3) {
-			border-left: 1px solid rgba(0, 0, 0, 0.1);
-			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-			border-right: 1px solid rgba(0, 0, 0, 0.1);
-			border-bottom-left-radius: 2px;
-			border-bottom-right-radius: 2px;
-		}
+		border-radius: inherit;
 	}
 
 	button {
 		width: 100%;
 		padding: 20px 10px;
+		border-radius: inherit;
 	}
 
 	.bbb-tabs_color_button.isOpen {
@@ -163,6 +162,6 @@
 	gap: 0.5rem;
 }
 
-.bbb-tab-placeholder{
+.bbb-tab-placeholder {
 	width: 100%;
 }
