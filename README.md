@@ -5,7 +5,8 @@
 [![Playground Demo Link](https://img.shields.io/badge/Playground_Demo-blue?logo=wordpress&logoColor=%23fff&labelColor=%233858e9&color=%233858e9)](https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/lubusIN/blablablocks-tabs-block/playground/_playground/blueprint-github.json)
 
 ## Overview
-BlaBlaBlocks Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly. 
+
+BlaBlaBlocks Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.
 
 ## Requirements
 
@@ -22,10 +23,11 @@ BlaBlaBlocks Tabs Block is a WordPress plugin built specifically for the Block E
 ## Development
 
 ### 1. Clone the Repository
+
 Clone the repository to your local system:
 
 ```bash
-git clone git@github.com:lubusIN/blablablocks-tabs-block.git 
+git clone git@github.com:lubusIN/blablablocks-tabs-block.git
 ```
 
 ### 2. Go to plugin folder
@@ -41,6 +43,7 @@ npm install
 ```
 
 ### 4. Build Plugin
+
 Build or start the development environment:
 
 ```bash
@@ -50,11 +53,13 @@ npm run start       # Watch for changes and auto-compile
 ```
 
 ### 5. Launch Playground
+
 Start a local WordPress playground using wp-now:
 
 ```bash
 npx @wp-now/wp-now start
 ```
+
 > [!NOTE]
 > Refer to `package.json` for additional available npm commands.
 
@@ -64,12 +69,6 @@ npx @wp-now/wp-now start
 
 <a href="https://cal.com/lubus">
 <img src="https://raw.githubusercontent.com/lubusIN/.github/refs/heads/main/profile/banner.png" />
-</a>
-
-## Credits
-
-<a href="https://github.com/lubusIN/blablablocks-tabs-block/graphs/contributors">
-  <img height="36px" src="https://contrib.rocks/image?repo=lubusIN/blablablocks-tabs-block" />
 </a>
 
 ## License
