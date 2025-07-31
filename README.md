@@ -54,10 +54,8 @@ npm run start       # Watch for changes and auto-compile
 
 ### 5. Launch Playground
 
-Start a local WordPress playground using wp-now:
-
 ```bash
-npx @wp-now/wp-now start
+npm run serve
 ```
 
 > [!NOTE]
