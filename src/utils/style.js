@@ -77,6 +77,25 @@ const getBorderPropsWithRadius = (borderAttributes, radiusPath) => {
 };
 
 /**
+ * Helper function to resolve color value based on slug
+ * 
+ * @param {Object} colorObj - Color object with color and slug properties
+ * @param {string} fallback - Fallback color value
+ * @return {string} - CSS color value or custom property
+ */
+const resolveColorValue = (colorObj, fallback) => {
+	if (!colorObj) return fallback;
+
+	// If we have a slug, use the WordPress preset color custom property
+	if (colorObj.slug) {
+		return `var(--wp--preset--color--${colorObj.slug})`;
+	}
+
+	// Otherwise use the direct color value
+	return colorObj.color || fallback;
+};
+
+/**
  * Generates a set of CSS variable mappings based on provided attributes.
  * The returned object excludes variables with invalid or undefined values.
  *
@@ -104,10 +123,26 @@ export const generateStyles = (attributes = {}) => {
 
 	Object.entries(colorDefaults).forEach(([state, defaults]) => {
 		const stateKey = state === 'default' ? 'default' : state;
-		styles[`--bbb-tab-text-${state}-color`] = attributes.textColor?.[stateKey] || defaults.text;
-		styles[`--bbb-tab-background-${state}-color`] = attributes.backgroundColor?.[stateKey] || defaults.bg;
-		styles[`--bbb-tab-icon-${state}-color`] = attributes.iconColor?.[stateKey] ||
-			(state === 'active' ? attributes.iconColor?.default : null) || defaults.icon;
+
+		// Text color
+		styles[`--bbb-tab-text-${state}-color`] = resolveColorValue(
+			attributes.tabTextColor?.[stateKey],
+			defaults.text
+		);
+
+		// Background color
+		styles[`--bbb-tab-background-${state}-color`] = resolveColorValue(
+			attributes.tabBackgroundColor?.[stateKey],
+			defaults.bg
+		);
+
+		// Icon color
+		const iconColorValue = attributes.tabIconColor?.[stateKey] ||
+			(state === 'active' ? attributes.tabIconColor?.default : null);
+		styles[`--bbb-tab-icon-${state}-color`] = resolveColorValue(
+			iconColorValue,
+			defaults.icon
+		);
 	});
 
 	// Other styles

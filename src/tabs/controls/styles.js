@@ -40,17 +40,17 @@ function Styles({ attributes, setAttributes, clientId }) {
 
 	const colorControls = [
 		{
-			attrKey: 'tabTextColor',
+			key: 'tabTextColor',
 			state: tabTextColor,
 			label: __('Tab Text', 'blablablocks-tabs-block'),
 		},
 		{
-			attrKey: 'tabBackgroundColor',
+			key: 'tabBackgroundColor',
 			state: tabBackgroundColor,
 			label: __('Tab Background', 'blablablocks-tabs-block'),
 		},
 		{
-			attrKey: 'tabIconColor',
+			key: 'tabIconColor',
 			state: tabIconColor,
 			label: __('Tab Icon', 'blablablocks-tabs-block'),
 		},
@@ -62,7 +62,7 @@ function Styles({ attributes, setAttributes, clientId }) {
 		});
 	};
 
-	const colorGradientSettings = useMultipleOriginColorsAndGradients()
+	const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
 	return (
 		<>
@@ -168,7 +168,7 @@ function Styles({ attributes, setAttributes, clientId }) {
 					</ToolsPanelItem>
 					<ToolsPanelItem
 						label={__('Radius', 'blablablocks-tabs-block')}
-						hasValue={() => !!tabBorder.border.radius}
+						hasValue={() => !!tabBorder?.border?.radius}
 						onDeselect={() =>
 							setAttributes({
 								tabBorder: {

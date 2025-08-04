@@ -8,13 +8,73 @@ import {
 } from '@wordpress/block-editor';
 import {
 	Button,
+	TabPanel,
 	Dropdown,
 	ColorIndicator,
 	__experimentalZStack as ZStack,  // eslint-disable-line
 	__experimentalHStack as HStack,  // eslint-disable-line
 	__experimentalText as Text,      // eslint-disable-line
-	TabPanel,
 } from '@wordpress/components';
+
+/**
+ * Resolve a raw selection from ColorPalette against the provided
+ * colorGradientSettings to see if it corresponds to a theme/preset color.
+ *
+ * @param {string|Object} rawColor
+ * @param {Array} colorGradientSettings  - the array you get from useMultipleOriginColorsAndGradients()
+ * @returns {{ color: string|undefined, slug: string|undefined }}
+ */
+function resolveColorSelection(rawColor, colorGradientSettings) {
+	let pickedColor = '';
+
+	if (typeof rawColor === 'object') {
+		pickedColor = rawColor.color || rawColor;
+	} else if (typeof rawColor === 'string') {
+		pickedColor = rawColor;
+	}
+
+	if (!pickedColor) {
+		return { color: undefined, slug: undefined };
+	}
+
+	const normalize = (c) => String(c).trim().toLowerCase();
+	const target = normalize(pickedColor);
+
+	const palettes = Array.isArray(colorGradientSettings?.colors)
+		? colorGradientSettings.colors
+		: [];
+
+	for (const palette of palettes) {
+		if (!Array.isArray(palette.colors)) continue;
+
+		for (const entry of palette.colors) {
+			if (!entry || !entry.color) continue;
+
+			if (normalize(entry.color) === target) {
+				return {
+					color: pickedColor,
+					slug: entry.slug,
+				};
+			}
+
+			// crude handling for function-style colors like color-mix
+			if (
+				entry.color.includes('color-mix') &&
+				target.includes(entry.color.replace(/\s+/g, '').toLowerCase())
+			) {
+				return {
+					color: pickedColor,
+					slug: entry.slug,
+				};
+			}
+		}
+	}
+
+	return {
+		color: pickedColor,
+		slug: undefined,
+	};
+}
 
 /**
  * Renders a color control dropdown for selecting colors.
@@ -36,7 +96,19 @@ function ColorControlDropdown({
 	hasActive = false,
 }) {
 
-	const colorGradientSettings = useMultipleOriginColorsAndGradients()
+	const colorGradientSettings = useMultipleOriginColorsAndGradients();
+
+	const handleChange = (tabName, rawColor) => {
+		const normalized = resolveColorSelection(rawColor, colorGradientSettings);
+		onChangeColor({
+			...colorValue,
+			[tabName]: normalized,
+		});
+	};
+
+	const defaultIndicator = colorValue.default?.color || '';
+	const hoverIndicator = hasHover ? colorValue.hover?.color : null;
+	const activeIndicator = hasActive ? colorValue.active?.color : null;
 
 	return (
 		<Dropdown
@@ -55,15 +127,15 @@ function ColorControlDropdown({
 				>
 					<HStack justify="left">
 						<ZStack offset={10}>
-							<ColorIndicator colorValue={colorValue.default} />
+							<ColorIndicator colorValue={defaultIndicator} />
 							{hasHover && (
 								<ColorIndicator
-									colorValue={colorValue.hover}
+									colorValue={hoverIndicator}
 								/>
 							)}
 							{hasActive && (
 								<ColorIndicator
-									colorValue={colorValue.active}
+									colorValue={activeIndicator}
 								/>
 							)}
 						</ZStack>
@@ -98,13 +170,8 @@ function ColorControlDropdown({
 						{(tab) => (
 							<ColorPalette
 								__experimentalIsRenderedInSidebar
-								value={colorValue[tab.name] || ''}
-								onChange={(color) => {
-									onChangeColor({
-										...colorValue,
-										[tab.name]: color,
-									});
-								}}
+								value={colorValue[tab.name]?.color || ''}
+								onChange={(color) => handleChange(tab.name, color)}
 								{...colorGradientSettings}
 								enableAlpha
 							/>
@@ -114,7 +181,7 @@ function ColorControlDropdown({
 					<ColorPalette
 						className="bbb-color-pallete-container"
 						__experimentalIsRenderedInSidebar
-						value={colorValue.default || ''}
+						value={colorValue.default?.color || ''}
 						onChange={(color) => {
 							onChangeColor({ ...colorValue, default: color });
 						}}

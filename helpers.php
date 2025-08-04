@@ -101,10 +101,46 @@ if (! function_exists('blabtabl_get_gap_css_value')) {
 }
 
 /**
+ * Helper function to resolve color value based on slug
+ * 
+ * @param mixed $colorValue - Color value (can be string, array with 'color' and 'slug', or null)
+ * @param string $fallback - Fallback color value
+ * @return string - CSS color value or custom property
+ */
+if (! function_exists('blabtabl_resolve_color_value')) {
+    function blabtabl_resolve_color_value($colorValue, $fallback = '')
+    {
+        // If it's null or empty, return fallback
+        if (empty($colorValue)) {
+            return $fallback;
+        }
+
+        // If it's a string, return as-is (direct color value)
+        if (is_string($colorValue)) {
+            return $colorValue;
+        }
+
+        // If it's an array (normalized color object from JS)
+        if (is_array($colorValue)) {
+            // If we have a slug, use the WordPress preset color custom property
+            if (!empty($colorValue['slug'])) {
+                return "var(--wp--preset--color--{$colorValue['slug']})";
+            }
+
+            // Otherwise use the direct color value
+            if (!empty($colorValue['color'])) {
+                return $colorValue['color'];
+            }
+        }
+
+        return $fallback;
+    }
+}
+
+/**
  * Returns typography classnames depending on whether there are named font sizes/families.
  *
  * @param array $attributes The block attributes.
- *
  * @return string The typography color classnames to be applied to the block elements.
  */
 if (! function_exists('blabtabl_get_typography_classes')) {
@@ -274,16 +310,34 @@ if (! function_exists('blabtabl_generate_styles')) {
         );
 
         // Colors for different states
-        $colorStates = [
-            'default' => ['#000', '#fff', '#000'], // text, bg, icon
-            'hover'   => ['#fff', '#000', '#fff'],
-            'active'  => ['#fff', '#000', '#fff']
+        $colorDefaults = [
+            'default' => ['text' => '#000', 'bg' => '#fff', 'icon' => '#000'],
+            'hover'   => ['text' => '#fff', 'bg' => '#000', 'icon' => '#fff'],
+            'active'  => ['text' => '#fff', 'bg' => '#000', 'icon' => '#fff']
         ];
 
-        foreach ($colorStates as $state => [$textDefault, $bgDefault, $iconDefault]) {
-            $styles["--bbb-tab-text-{$state}-color"] = $attributes['textColor'][$state] ?? $textDefault;
-            $styles["--bbb-tab-background-{$state}-color"] = $attributes['backgroundColor'][$state] ?? $bgDefault;
-            $styles["--bbb-tab-icon-{$state}-color"] = $attributes['iconColor'][$state] ?? $iconDefault;
+        foreach ($colorDefaults as $state => $defaults) {
+
+            // Text color
+            $textColor = $attributes['tabTextColor'][$state] ?? null;
+            $styles["--bbb-tab-text-{$state}-color"] = blabtabl_resolve_color_value(
+                $textColor,
+                $defaults['text']
+            );
+
+            // Background color
+            $backgroundColor = $attributes['tabBackgroundColor'][$state] ?? null;
+            $styles["--bbb-tab-background-{$state}-color"] = blabtabl_resolve_color_value(
+                $backgroundColor,
+                $defaults['bg']
+            );
+
+            // Icon color
+            $iconColor = $attributes['tabIconColor'][$state] ?? null;
+            $styles["--bbb-tab-icon-{$state}-color"] = blabtabl_resolve_color_value(
+                $iconColor,
+                $defaults['icon']
+            );
         }
 
         // Other styles
@@ -356,7 +410,6 @@ if (! function_exists('blabtabl_get_tabs_container_styles')) {
  * Returns color classnames depending on whether there are named or background colors.
  *
  * @param array $attributes The block attributes.
- *
  * @return string The color classnames to be applied to the block elements.
  */
 if (! function_exists('blabtabl_get_color_classes')) {
@@ -400,7 +453,7 @@ if (! function_exists('blabtabl_get_tab_button_styles')) {
         $styles = [];
 
         // Tab Border styles
-        $styles[] = blabtabl_get_tabs_border_styles(['style' => $attributes['tabBorder']]);
+        $styles[] = blabtabl_get_tabs_border_styles(['style' => $attributes['tabBorder'] ?? []]);
 
         return trim(implode(' ', array_filter($styles)));
     }
