@@ -4,10 +4,16 @@
 import { __ } from '@wordpress/i18n';
 import {
 	InspectorControls,
-	__experimentalSpacingSizesControl as SpacingSizesControl, // eslint-disable-line
+	__experimentalBorderRadiusControl as BorderRadiusControl,									// eslint-disable-line
+	__experimentalSpacingSizesControl as SpacingSizesControl,									// eslint-disable-line
+	__experimentalUseMultipleOriginColorsAndGradients as useMultipleOriginColorsAndGradients	// eslint-disable-line
 } from '@wordpress/block-editor';
 import {
-	__experimentalToolsPanelItem as ToolsPanelItem, 		  // eslint-disable-line
+	ToggleControl,
+	BorderBoxControl,
+	__experimentalVStack as VStack, 						// eslint-disable-line
+	__experimentalToolsPanel as ToolsPanel, 				// eslint-disable-line
+	__experimentalToolsPanelItem as ToolsPanelItem, 		// eslint-disable-line
 } from '@wordpress/components';
 
 /**
@@ -25,28 +31,44 @@ import { ColorControlDropdown } from '../../components';
  * @return {JSX.Element} Styles panel
  */
 function Styles({ attributes, setAttributes, clientId }) {
-	const colorControls = [
-		{ key: 'textColor', label: __('Tab Text', 'blablablocks-tabs-block') },
-		{ key: 'backgroundColor', label: __('Tab Background', 'blablablocks-tabs-block') },
-		{ key: 'iconColor', label: __('Tab Icon', 'blablablocks-tabs-block') },
-	];
+	const {
+		tabTextColor = {},
+		tabBackgroundColor = {},
+		tabIconColor = {},
+		tabBorder = {}
+	} = attributes;
 
-	const { tabColor = {} } = attributes;
+	const colorControls = [
+		{
+			attrKey: 'tabTextColor',
+			state: tabTextColor,
+			label: __('Tab Text', 'blablablocks-tabs-block'),
+		},
+		{
+			attrKey: 'tabBackgroundColor',
+			state: tabBackgroundColor,
+			label: __('Tab Background', 'blablablocks-tabs-block'),
+		},
+		{
+			attrKey: 'tabIconColor',
+			state: tabIconColor,
+			label: __('Tab Icon', 'blablablocks-tabs-block'),
+		},
+	];
 
 	const clearColor = (colorKey) => {
 		setAttributes({
-			tabColor: {
-				...tabColor,
-				[colorKey]: { default: undefined, hover: undefined, active: undefined },
-			},
+			[colorKey]: { default: undefined, hover: undefined, active: undefined },
 		});
 	};
+
+	const colorGradientSettings = useMultipleOriginColorsAndGradients()
 
 	return (
 		<>
 			<InspectorControls group="color">
-				{colorControls.map(({ key, label }) => {
-					const value = tabColor[key] || {};
+				{colorControls.map(({ key, state, label }) => {
+					const value = state || {};
 					const hasValue = [value.default, value.hover, value.active].some(Boolean);
 
 					return (
@@ -64,7 +86,7 @@ function Styles({ attributes, setAttributes, clientId }) {
 								label={label}
 								colorValue={value}
 								onChangeColor={(newColor) =>
-									setAttributes({ tabColor: { ...tabColor, [key]: newColor } })
+									setAttributes({ [key]: { ...value, ...newColor } })
 								}
 								hasHover
 								hasActive
@@ -97,8 +119,90 @@ function Styles({ attributes, setAttributes, clientId }) {
 					/>
 				</ToolsPanelItem>
 			</InspectorControls>
+			<InspectorControls group='styles'>
+				<ToolsPanel
+					label="Tab Border"
+					resetAll={() =>
+						setAttributes({
+							tabBorder: {
+								border: undefined,
+								onActive: undefined,
+							},
+						})
+					}
+				>
+					<ToolsPanelItem
+						label={__('Border', 'blablablocks-tabs-block')}
+						hasValue={() => !!tabBorder.border}
+						onDeselect={() =>
+							setAttributes({
+								tabBorder: {
+									border: undefined
+								},
+							})
+						}
+					>
+						<VStack spacing={4}>
+							<BorderBoxControl
+								__next40pxDefaultSize
+								label={__('Border', 'blablablocks-tabs-block')}
+								hideLabelFromVision
+								value={tabBorder.border}
+								onChange={(value) =>
+									setAttributes({
+										tabBorder: { ...tabBorder, border: value },
+									})
+								}
+								{...colorGradientSettings}
+							/>
+							<ToggleControl
+								label={__('Only show border on active tab', 'blablablocks-tabs-block')}
+								checked={tabBorder.onActive}
+								onChange={(value) =>
+									setAttributes({
+										tabBorder: { ...tabBorder, onActive: value },
+									})
+								}
+							/>
+						</VStack>
+					</ToolsPanelItem>
+					<ToolsPanelItem
+						label={__('Radius', 'blablablocks-tabs-block')}
+						hasValue={() => !!tabBorder.border.radius}
+						onDeselect={() =>
+							setAttributes({
+								tabBorder: {
+									...tabBorder,
+									border: {
+										...tabBorder.border,
+										radius: undefined
+									}
+								},
+							})
+						}
+					>
+						<BorderRadiusControl
+							__next40pxDefaultSize
+							label={__('Radius', 'blablablocks-tabs-block')}
+							values={tabBorder?.border?.radius}
+							onChange={(value) =>
+								setAttributes({
+									tabBorder: {
+										...tabBorder,
+										border: {
+											...tabBorder.border,
+											radius: value
+										}
+									}
+								})
+							}
+						/>
+					</ToolsPanelItem>
+				</ToolsPanel>
+			</InspectorControls>
 		</>
 	);
 }
 
 export default Styles;
+

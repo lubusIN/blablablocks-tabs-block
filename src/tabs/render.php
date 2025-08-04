@@ -14,10 +14,10 @@ if (! defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-require plugin_dir_path(dirname(__DIR__)) . '/src/tabs/helpers.php';
+require plugin_dir_path(dirname(__DIR__)) . '/helpers.php';
 
 // Extract tabs data.
-$all_tabs = blablablocks_extract_tab_data($block->parsed_block['innerBlocks'] ?? []);
+$all_tabs = blabtabl_extract_tab_data($block->parsed_block['innerBlocks'] ?? []);
 $tabs     = array_values(array_filter($all_tabs, fn($tab) => $tab['hasInnerblock']));
 
 if (empty($tabs)) {
@@ -26,44 +26,47 @@ if (empty($tabs)) {
 
 // Determine active tab safely.
 $active_tab_index = isset($attributes['activeTab'], $tabs[$attributes['activeTab']]) ? $attributes['activeTab'] : 0;
-$active_tab_id    = $tabs[$active_tab_index]['id'];
 
-// Prepare data context.
+// Generate tabs styles
+$tabs_styles            = blabtabl_generate_styles($attributes);
+$typography_classes     = blabtabl_get_typography_classes($attributes);
+$typography_styles      = blabtabl_get_typography_styles($attributes);
+$color_classes          = blabtabl_get_color_classes($attributes);
+$border_classes         = blabtabl_get_border_color_classes($attributes);
+$tabs_container_styles  = blabtabl_get_tabs_container_styles($attributes);
+$tab_button_styles      = blabtabl_get_tab_button_styles($attributes);
+
+// Build inline styles
+$style_string = implode('', array_map(
+    fn($prop, $val) => "$prop:$val;",
+    array_keys($tabs_styles),
+    $tabs_styles
+));
+
+// Build wrapper classes
+$orientation     = $attributes['orientation'] ?? 'horizontal';
+$justification   = $attributes['justification'] ?? 'left';
+$wrapper_classes = array_filter([
+    'blablablocks-tabs',
+    'blablablocks-tab-container',
+    "blablablocks-tabs__{$orientation}",
+    'blablablocks-tabs__' . ($attributes['verticalPosition'] ?? 'left'),
+    ($justification === 'stretch' && $orientation === 'horizontal')
+        ? 'blablablocks-tabs__autoWidth' : '',
+    'blablablocks-tabs-icon__' . ($attributes['iconPosition'] ?? 'left'),
+]);
+
+$wrapper_attributes = get_block_wrapper_attributes([
+    'class' => implode(' ', $wrapper_classes),
+    'style' => $style_string,
+]);
+
+// Data context for interactivity
 $data_context = [
     'tabs'      => $tabs,
     'activeTab' => $active_tab_index,
-    'activeId'  => $active_tab_id,
+    'activeId'  => $tabs[$active_tab_index]['id'],
 ];
-
-// Generate tabs styles
-$tabs_styles = generateStyles($attributes);
-$typography_classes = bbb_get_typography_classes($attributes);
-$typography_styles  = bbb_get_typography_styles($attributes);
-
-// Convert styles array to inline style string
-$style_string = '';
-foreach ($tabs_styles as $property => $value) {
-    $style_string .= "$property:$value;";
-}
-
-$wrapper_classes = [
-    'blablablocks-tabs',
-    'blablablocks-tab-container',
-    'blablablocks-tabs__' . ($attributes['orientation'] ?? 'horizontal'),
-    'blablablocks-tabs__' . ($attributes['verticalPosition'] ?? 'left'),
-    isset($attributes['justification']) && 'stretch' == $attributes['justification'] && ($attributes['orientation'] ?? 'horizontal') === 'horizontal' ? 'blablablocks-tabs__autoWidth' : '',
-    'blablablocks-tabs-icon__' . ($attributes['iconPosition'] ?? 'left'),
-];
-
-// Filter out empty classes
-$wrapper_classes = array_filter($wrapper_classes);
-
-$wrapper_attributes = get_block_wrapper_attributes(
-    [
-        'class' => implode(' ', $wrapper_classes),
-        'style' => $style_string,
-    ]
-);
 
 ?>
 <div <?php echo wp_kses_data($wrapper_attributes); ?>
@@ -71,7 +74,10 @@ $wrapper_attributes = get_block_wrapper_attributes(
     data-wp-context='<?php echo wp_json_encode($data_context); ?>'
     data-wp-init="callbacks.initTabs">
 
-    <ul class="blablablocks-tabs-buttons" role="tablist" style="<?php echo get_tabs_container_styles($attributes); ?>">
+    <ul class="blablablocks-tabs-buttons <?php echo esc_attr(trim($color_classes . ' ' . $border_classes)); ?>"
+        role="tablist"
+        style="<?php echo esc_attr($tabs_container_styles); ?>">
+
         <?php foreach ($tabs as $index => $tab) :
             $icon = $block->parsed_block['innerBlocks'][$index]['attrs']['tabIcon'] ?? '';
         ?>
@@ -83,21 +89,25 @@ $wrapper_attributes = get_block_wrapper_attributes(
                 data-wp-bind--aria-selected="state.isActive"
                 data-wp-on--click="actions.setActiveTab"
                 data-wp-on--keydown="actions.handleOnKeyDown"
-                data-wp-class--is-bbb-active-tab="state.isActive">
+                data-wp-class--is-bbb-active-tab="state.isActive"
+                data-border-on-active="<?php echo isset($attributes['tabBorder']['onActive']) ? "true" : "false" ?>"
+                style="<?php echo esc_attr($tab_button_styles); ?>">
 
-                <?php if (!empty($icon)) : ?>
+                <?php if ($icon) : ?>
                     <span class="bbb-tab-icon">
-                        <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  
+                        <?php echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                         ?>
                     </span>
                 <?php endif; ?>
 
                 <?php if (!empty($tab['label'])) : ?>
-                    <span class="tab-button-text <?php echo esc_attr($typography_classes); ?>" style="<?php echo esc_attr($typography_styles); ?>">
+                    <span class="tab-button-text <?php echo esc_attr($typography_classes); ?>"
+                        style="<?php echo esc_attr($typography_styles); ?>">
                         <?php echo esc_html($tab['label']); ?>
                     </span>
-                <?php elseif (empty($icon) && empty($tab['label'])) : ?>
-                    <span class="tab-button-text <?php echo esc_attr($typography_classes); ?>" style="<?php echo esc_attr($typography_styles); ?>">
+                <?php elseif (empty($icon)) : ?>
+                    <span class="tab-button-text <?php echo esc_attr($typography_classes); ?>"
+                        style="<?php echo esc_attr($typography_styles); ?>">
                         <?php echo esc_html('Tab ' . ($index + 1)); ?>
                     </span>
                 <?php endif; ?>

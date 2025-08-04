@@ -22,6 +22,7 @@ import { ToggleControl, PanelBody } from '@wordpress/components';
 import { TabFill, TabsListSlot } from '../utils/slotFill';
 import Placeholder from './placeholder';
 import IconPicker from '../components/icon-picker';
+import { getTabButtonStyles } from '../utils/style';
 
 /**
  * The Edit component for the Tab block.
@@ -210,6 +211,7 @@ export default function Edit({
 						aria-selected={isTabSelected}
 						aria-controls={attributes.tabId}
 						onClick={() => selectBlock(clientId)}
+						{...getTabButtonStyles(parentAttrs)}
 					>
 						{ /* Render the tab icon if it exists */}
 						{attributes.tabIcon && (

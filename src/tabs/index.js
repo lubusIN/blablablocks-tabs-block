@@ -15,8 +15,8 @@ import { TabsLogo } from '../components';
 /**
  * Register a tabs block
  */
-registerBlockType( metadata.name, {
+registerBlockType(metadata.name, {
 	icon: TabsLogo,
 	edit: Edit,
 	save,
-} );
+});

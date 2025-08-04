@@ -34,59 +34,61 @@
 			"type": "number",
 			"default": 24
 		},
-		"iconFill": {
-			"type": "boolean",
-			"default": true
-		},
-		"tabColor": {
+		"tabTextColor": {
 			"type": "object",
 			"properties": {
-				"textColor": {
-					"type": "object",
-					"properties": {
-						"default": {
-							"type": "string"
-						},
-						"hover": {
-							"type": "string"
-						},
-						"active": {
-							"type": "string"
-						}
-					}
+				"default": {
+					"type": "string"
 				},
-				"backgroundColor": {
-					"type": "object",
-					"properties": {
-						"default": {
-							"type": "string"
-						},
-						"hover": {
-							"type": "string"
-						},
-						"active": {
-							"type": "string"
-						}
-					}
+				"hover": {
+					"type": "string"
 				},
-				"iconColor": {
-					"type": "object",
-					"properties": {
-						"default": {
-							"type": "string"
-						},
-						"hover": {
-							"type": "string"
-						},
-						"active": {
-							"type": "string"
-						}
-					}
+				"active": {
+					"type": "string"
+				}
+			}
+		},
+		"tabBackgroundColor": {
+			"type": "object",
+			"properties": {
+				"default": {
+					"type": "string"
+				},
+				"hover": {
+					"type": "string"
+				},
+				"active": {
+					"type": "string"
+				}
+			}
+		},
+		"tabIconColor": {
+			"type": "object",
+			"properties": {
+				"default": {
+					"type": "string"
+				},
+				"hover": {
+					"type": "string"
+				},
+				"active": {
+					"type": "string"
 				}
 			}
 		},
 		"tabPadding": {
 			"type": "object"
+		},
+		"tabBorder": {
+			"type": "object",
+			"properties": {
+				"border": {
+					"type": "object"
+				},
+				"onActive": {
+					"type": "boolean"
+				}
+			}
 		}
 	},
 	"example": {

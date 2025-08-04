@@ -2,10 +2,10 @@
  * WordPress dependencies
  */
 import {
-	__experimentalGetGapCSSValue as getGapCSSValue, 					   // eslint-disable-line
-	__experimentalUseBorderProps as useBorderProps,
-	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,    // eslint-disable-line
-	__experimentalGetSpacingClassesAndStyles as getSpacingClassesAndStyles // eslint-disable-line
+	__experimentalGetGapCSSValue as getGapCSSValue,							// eslint-disable-line
+	__experimentalUseBorderProps as useBorderProps,							// eslint-disable-line
+	__experimentalGetColorClassesAndStyles as getColorClassesAndStyles,		// eslint-disable-line
+	__experimentalGetSpacingClassesAndStyles as getSpacingClassesAndStyles	// eslint-disable-line
 } from '@wordpress/block-editor';
 
 const DEFAULT_GAP = '0.5em';
@@ -48,20 +48,32 @@ const resolveSpacingSizeValue = (value, defaultValue = '0px') => {
 	if (typeof value === 'string') {
 		if (value.startsWith('var:')) {
 			// Convert "var:some|value" into "var(--wp--some--value)"
-			const cssVariable = value
-				.replace('var:', '--wp--')
-				.replace(/\|/g, '--');
-			return `var(${cssVariable})`;
+			return `var(${value.replace('var:', '--wp--').replace(/\|/g, '--')})`;
 		}
 		return value; // If it's a valid CSS string, return as-is
 	}
 
-	if (typeof value === 'number') {
-		return `${value}px`; // Convert numbers to pixel values
-	}
+	return typeof value === 'number' ? `${value}px` : defaultValue;
+};
 
-	// use defaultValue if value is invalid or undefined
-	return defaultValue;
+/**
+ * Helper to get border props with numeric radius handling.
+ * 
+ * @param {Object} borderAttributes - Attributes object to pass to useBorderProps
+ * @param {Function} radiusPath - Function that returns the border radius value
+ * @return {Object} Border props with className and style, including converted numeric radius
+ */
+const getBorderPropsWithRadius = (borderAttributes, radiusPath) => {
+	const rawBorder = useBorderProps(borderAttributes);
+	const borderRadius = radiusPath?.();
+
+	return {
+		...rawBorder,
+		style: {
+			...rawBorder.style,
+			...(typeof borderRadius === 'number' && { borderRadius: `${borderRadius}px` })
+		}
+	};
 };
 
 /**
@@ -69,106 +81,49 @@ const resolveSpacingSizeValue = (value, defaultValue = '0px') => {
  * The returned object excludes variables with invalid or undefined values.
  *
  * @param {Object} attributes - The attributes used to customize styles.
- *
  * @return {Object} - An object with CSS variable definitions.
  */
 export const generateStyles = (attributes = {}) => {
 	const styles = {};
 
-	// Helper function to add a style with a fallback to default values
-	const addStyle = (key, value, defaultValue = '0px') => {
-		if (value !== undefined && value !== null) {
-			styles[key] = value;
-		} else if (defaultValue) {
-			styles[key] = defaultValue;
-		}
+	// Padding
+	const padding = attributes.tabPadding || {};
+	styles['--bbb-tab-padding'] = [
+		resolveSpacingSizeValue(padding.top, '5px'),
+		resolveSpacingSizeValue(padding.right, '15px'),
+		resolveSpacingSizeValue(padding.bottom, '5px'),
+		resolveSpacingSizeValue(padding.left, '15px')
+	].join(' ');
+
+	// Colors for different states
+	const colorDefaults = {
+		default: { text: '#000', bg: '#fff', icon: '#000' },
+		hover: { text: '#fff', bg: '#000', icon: '#fff' },
+		active: { text: '#fff', bg: '#000', icon: '#fff' }
 	};
 
-	const padTop = resolveSpacingSizeValue(
-		attributes?.tabPadding?.top,
-		'5px'
-	);
-	const padRight = resolveSpacingSizeValue(
-		attributes?.tabPadding?.right,
-		'15px'
-	);
-	const padBottom = resolveSpacingSizeValue(
-		attributes?.tabPadding?.bottom,
-		'5px'
-	);
-	const padLeft = resolveSpacingSizeValue(
-		attributes?.tabPadding?.left,
-		'15px'
-	);
+	Object.entries(colorDefaults).forEach(([state, defaults]) => {
+		const stateKey = state === 'default' ? 'default' : state;
+		styles[`--bbb-tab-text-${state}-color`] = attributes.textColor?.[stateKey] || defaults.text;
+		styles[`--bbb-tab-background-${state}-color`] = attributes.backgroundColor?.[stateKey] || defaults.bg;
+		styles[`--bbb-tab-icon-${state}-color`] = attributes.iconColor?.[stateKey] ||
+			(state === 'active' ? attributes.iconColor?.default : null) || defaults.icon;
+	});
 
+	// Other styles
+	styles['--bbb-tab-buttons-justify-content'] = attributes.justification || 'left';
+	styles['--bbb-tab-icon-size'] = `${attributes.iconSize || 24}px`;
 
-	// Tab Color using Tailwind's gray shades
-	addStyle(
-		'--bbb-tab-text-color',
-		attributes?.tabColor?.textColor?.default || '#000'
-	);
-	addStyle(
-		'--bbb-tab-background-color',
-		attributes?.tabColor?.backgroundColor?.default || '#fff'
-	);
-	addStyle(
-		'--bbb-tab-icon-color',
-		attributes?.tabColor?.iconColor?.default || '#000'
-	);
-	addStyle(
-		'--bbb-tab-text-hover-color',
-		attributes?.tabColor?.textColor?.hover || '#fff'
-	);
-	addStyle(
-		'--bbb-tab-background-hover-color',
-		attributes?.tabColor?.backgroundColor?.hover || '#000'
-	);
-	addStyle(
-		'--bbb-tab-icon-hover-color',
-		attributes?.tabColor?.iconColor?.hover || '#fff'
-	);
-	addStyle(
-		'--bbb-tab-text-active-color',
-		attributes?.tabColor?.textColor?.active || '#fff'
-	);
-	addStyle(
-		'--bbb-tab-background-active-color',
-		attributes?.tabColor?.backgroundColor?.active || '#000'
-	);
-	addStyle(
-		'--bbb-tab-icon-active-color',
-		attributes?.tabColor?.iconColor?.active || attributes?.tabColor?.iconColor?.default || '#fff'
-	);
-
-	// Padding styles with defaults
-	addStyle(
-		'--bbb-tab-padding',
-		`${padTop} ${padRight} ${padBottom} ${padLeft}`
-	);
-
-	// Tab Buttons styles
-	addStyle(
-		'--bbb-tab-buttons-justify-content',
-		attributes?.justification || 'left'
-	);
-
-	// Icon Size
-	addStyle(
-		'--bbb-tab-icon-size',
-		attributes?.iconSize ? `${attributes?.iconSize}px` : '24px'
-	);
-
-	// Tab List Gap
+	// Gap styles
 	const [listGap, tabsGap] = generateGapStyles(
 		attributes.style?.spacing?.blockGap || null,
 		attributes.orientation
 	);
-	addStyle('--bbb-tabs-list-gap', listGap);
-	addStyle('--bbb-tabs-gap', tabsGap);
+	styles['--bbb-tabs-list-gap'] = listGap;
+	styles['--bbb-tabs-gap'] = tabsGap;
 
 	return styles;
 };
-
 
 /**
  * Return consolidated className + style for the Tabs container:
@@ -176,7 +131,7 @@ export const generateStyles = (attributes = {}) => {
  * – border props (with numeric radius)
  * – horizontal margin based on orientation/justification
  *
- * @param {Object} attributes
+ * @param {Object} attributes - The attributes used to customize styles.
  * @return {{ className: string, style: Object }}
  */
 export function getTabsContainerProps(attributes) {
@@ -187,18 +142,10 @@ export function getTabsContainerProps(attributes) {
 	const colorProps = getColorClassesAndStyles(attributes);
 
 	// border (useBorderProps gives { className, style })
-	const rawBorder = useBorderProps(attributes);
-	const borderRadius = attributes.style?.border?.radius;
-	const borderProps = {
-		...rawBorder,
-		style: {
-			...rawBorder.style,
-			// if radius is a number, append "px"
-			...(typeof borderRadius === 'number'
-				? { borderRadius: `${borderRadius}px` }
-				: {}),
-		},
-	};
+	const borderProps = getBorderPropsWithRadius(
+		attributes,
+		() => attributes.style?.border?.radius
+	);
 
 	// margin
 	const marginStyle =
@@ -231,4 +178,23 @@ export function getTabsContainerProps(attributes) {
 			...width
 		},
 	};
+}
+
+/**
+ * Return consolidated style for the Tab button:
+ *
+ * @param {Object} attributes - The attributes used to customize styles.
+ * @return {{ style: Object }}
+ */
+export function getTabButtonStyles(attributes) {
+
+	// Tab Border
+	const borderProps = getBorderPropsWithRadius(
+		{ style: attributes?.tabBorder },
+		() => attributes?.tabBorder?.border?.radius
+	);
+
+	return {
+		style: { ...borderProps.style }
+	}
 }

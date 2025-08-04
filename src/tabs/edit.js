@@ -45,7 +45,7 @@ const TABS_TEMPLATE = [
  * @param {Function} props.setAttributes Function to update block attributes.
  * @return {JSX.Element} The component rendering for the block editor.
  */
-export default function Edit({ clientId, attributes, setAttributes }) {
+function Edit({ clientId, attributes, setAttributes }) {
 	const { allowedBlocks } = attributes;
 
 	/**
@@ -103,3 +103,5 @@ export default function Edit({ clientId, attributes, setAttributes }) {
 		<Placeholder clientId={clientId} setAttributes={setAttributes} />
 	);
 }
+
+export default Edit;

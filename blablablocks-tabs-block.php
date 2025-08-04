@@ -43,12 +43,8 @@ function blabtabl_register_styles()
 
 	$styles = [
 		[
-			'name'   => 'style-1',
-			'label'  => __('Style 1', 'blablablocks-tabs-block'),
-		],
-		[
-			'name'   => 'style-2',
-			'label'  => __('Style 2', 'blablablocks-tabs-block'),
+			'name'   => 'pointing-tabs',
+			'label'  => __('Pointing Tabs', 'blablablocks-tabs-block'),
 		],
 	];
 
