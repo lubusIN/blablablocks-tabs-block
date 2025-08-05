@@ -221,15 +221,23 @@ export function getTabsContainerProps(attributes) {
  * @param {Object} attributes - The attributes used to customize styles.
  * @return {{ style: Object }}
  */
-export function getTabButtonStyles(attributes) {
+export function getTabButtonStyles(attributes, isActive) {
 
-	// Tab Border
+	// If tabBorder has an onActive flag and it's true, only apply border when this tab is active.
+	const shouldApplyBorder =
+		attributes?.tabBorder?.onActive ? isActive : true;
+
+	// Tab Border (only if allowed by shouldApplyBorder)
+	const borderInput = shouldApplyBorder
+		? { style: attributes?.tabBorder }
+		: { style: {} };
+
 	const borderProps = getBorderPropsWithRadius(
-		{ style: attributes?.tabBorder },
+		borderInput,
 		() => attributes?.tabBorder?.border?.radius
 	);
 
 	return {
-		style: { ...borderProps.style }
-	}
+		style: { ...borderProps.style },
+	};
 }

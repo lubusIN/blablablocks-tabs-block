@@ -28,13 +28,13 @@ if (empty($tabs)) {
 $active_tab_index = isset($attributes['activeTab'], $tabs[$attributes['activeTab']]) ? $attributes['activeTab'] : 0;
 
 // Generate tabs styles
-$tabs_styles            = blabtabl_generate_styles($attributes);
-$typography_classes     = blabtabl_get_typography_classes($attributes);
-$typography_styles      = blabtabl_get_typography_styles($attributes);
-$color_classes          = blabtabl_get_color_classes($attributes);
-$border_classes         = blabtabl_get_border_color_classes($attributes);
-$tabs_container_styles  = blabtabl_get_tabs_container_styles($attributes);
-$tab_button_styles      = blabtabl_get_tab_button_styles($attributes);
+$tabs_styles             = blabtabl_generate_styles($attributes);
+$typography_classes      = blabtabl_get_typography_classes($attributes);
+$typography_styles       = blabtabl_get_typography_styles($attributes);
+$color_classes           = blabtabl_get_color_classes($attributes);
+$border_classes          = blabtabl_get_border_color_classes($attributes);
+$tabs_container_styles   = blabtabl_get_tabs_container_styles($attributes);
+$tab_button_border_style = blabtabl_get_tab_button_border_styles($attributes);
 
 // Build inline styles
 $style_string = implode('', array_map(
@@ -63,16 +63,19 @@ $wrapper_attributes = get_block_wrapper_attributes([
 
 // Data context for interactivity
 $data_context = [
-    'tabs'      => $tabs,
-    'activeTab' => $active_tab_index,
-    'activeId'  => $tabs[$active_tab_index]['id'],
+    'tabs'                      => $tabs,
+    'activeTab'                 => $active_tab_index,
+    'activeId'                  => $tabs[$active_tab_index]['id'],
+    'tabButtonBorderStyles'     => $tab_button_border_style,
+    'borderOnActive'            => !empty($attributes['tabBorder']['onActive']),
 ];
 
 ?>
 <div <?php echo wp_kses_data($wrapper_attributes); ?>
     data-wp-interactive="blablablocks-tabs"
     data-wp-context='<?php echo wp_json_encode($data_context); ?>'
-    data-wp-init="callbacks.initTabs">
+    data-wp-init="callbacks.initTabs"
+    data-wp-watch="callbacks.updateTabBorders">
 
     <ul class="blablablocks-tabs-buttons <?php echo esc_attr(trim($color_classes . ' ' . $border_classes)); ?>"
         role="tablist"
@@ -90,8 +93,7 @@ $data_context = [
                 data-wp-on--click="actions.setActiveTab"
                 data-wp-on--keydown="actions.handleOnKeyDown"
                 data-wp-class--is-bbb-active-tab="state.isActive"
-                data-border-on-active="<?php echo isset($attributes['tabBorder']['onActive']) ? "true" : "false" ?>"
-                style="<?php echo esc_attr($tab_button_styles); ?>">
+                style="<?php echo esc_attr($tab_button_border_style); ?>">
 
                 <?php if ($icon) : ?>
                     <span class="bbb-tab-icon">

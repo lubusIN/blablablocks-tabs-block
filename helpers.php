@@ -442,13 +442,13 @@ if (! function_exists('blabtabl_get_color_classes')) {
 }
 
 /**
- * Build the style for Tab button.
+ * Build the border style for Tab button.
  *
  * @param array $attributes Block attributes.
  * @return string A string of CSS declarations.
  */
-if (! function_exists('blabtabl_get_tab_button_styles')) {
-    function blabtabl_get_tab_button_styles(array $attributes): string
+if (! function_exists('blabtabl_get_tab_button_border_styles')) {
+    function blabtabl_get_tab_button_border_styles(array $attributes): string
     {
         $styles = [];
 

@@ -211,7 +211,7 @@ export default function Edit({
 						aria-selected={isTabSelected}
 						aria-controls={attributes.tabId}
 						onClick={() => selectBlock(clientId)}
-						{...getTabButtonStyles(parentAttrs)}
+						{...getTabButtonStyles(parentAttrs, isTabSelected)}
 					>
 						{ /* Render the tab icon if it exists */}
 						{attributes.tabIcon && (
