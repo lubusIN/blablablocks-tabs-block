@@ -54,9 +54,10 @@
 	}
 
 	&:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
-		max-width: fit-content;
+		min-width: fit-content;
 		width: 100%;
 		box-sizing: border-box;
+		max-width: fit-content;
 	}
 
 	.blablablocks-tab-content {
@@ -165,6 +166,7 @@
 		.blablablocks-tabs-buttons {
 			flex-direction: column;
 			margin: 0;
+			max-width: fit-content;
 		}
 	}
 
@@ -186,5 +188,47 @@
 
 	.blablablocks-tab-content {
 		min-width: 0;
+	}
+}
+
+/* Horizontal Stacked below 768px */
+@media (max-width: 768px) {
+	.blablablocks-tabs-buttons {
+		flex-wrap: nowrap !important;
+		overflow-x: auto;
+		overflow-y: hidden;
+		// scrollbar-width: none;
+		// -ms-overflow-style: none;
+	}
+
+	.is-style-pointing-tabs .blablablocks-tabs-buttons {
+		padding-bottom: 16px !important;
+	}
+
+	/* Change the overall layout from row to column */
+	.blablablocks-tabs__vertical {
+		flex-direction: column !important;
+	}
+
+	/* Make the buttons strip go across, wrap if needed */
+	.blablablocks-tabs__vertical .blablablocks-tabs-buttons {
+		flex-direction: row !important;
+	}
+
+	/* Let each button flex-grow to fill available space evenly */
+	.blablablocks-tabs__vertical .blablablock-tab-btn {
+		max-width: 150px;
+	}
+
+	/* Reposition the “pointer” arrow under each button */
+	.blablablocks-tabs__vertical .blablablock-tab-btn.is-bbb-active-tab::after {
+		top: 100% !important;
+		left: 50% !important;
+		margin-left: -10px !important;
+		transform: none !important;
+	}
+
+	.blablablocks-tabs:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
+		min-width: auto !important;
 	}
 }

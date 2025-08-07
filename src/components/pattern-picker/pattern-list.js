@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { useEffect, useState, useMemo } from '@wordpress/element';
 import { BlockPreview } from '@wordpress/block-editor';
@@ -23,19 +23,13 @@ const LOADING_DELAY = 300; // ms
  * Component for displaying a list of block patterns with search and selection functionality.
  *
  * @param {Object}   props                  - The component props.
- * @param {string}   props.clientId         - The client ID of the block editor instance.
  * @param {string}   props.selectedCategory - The currently selected category for filtering patterns.
  * @param {string}   props.searchTerm       - The current search term for filtering patterns by title.
  * @param {Function} props.onSelect         - Callback function triggered when a pattern is selected.
  *
  * @return {JSX.Element} The rendered PatternList component.
  */
-const PatternList = ({
-	clientId,
-	selectedCategory,
-	searchTerm,
-	onSelect,
-}) => {
+const PatternList = ({ selectedCategory, searchTerm, onSelect }) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState(null);
@@ -165,14 +159,30 @@ const PatternList = ({
 				</div>
 			) : (
 				<>
-					{searchTerm && (
-						<Heading className="tabs-patterns-no-results" style={{ paddingBottom: '32px' }}>
-							{__(
-								`${filteredPatterns?.length} patterns found`,
-								'blablablocks-tabs-block'
-							)}
-						</Heading>
-					)}
+					{searchTerm &&
+						(() => {
+							const count = filteredPatterns.length;
+							/* translators: %d: Number of patterns found. */
+							const label = sprintf(
+								/* translators: %d: Number of patterns found. */
+								_n(
+									'%d pattern found',
+									'%d patterns found',
+									count,
+									'blablablocks-tabs-block'
+								),
+								count
+							);
+
+							return (
+								<Heading
+									className="tabs-patterns-no-results"
+									style={{ paddingBottom: '32px' }}
+								>
+									{label}
+								</Heading>
+							);
+						})()}
 					{filteredPatterns?.length > 0 && (
 						<Grid
 							gap={8}
@@ -229,18 +239,13 @@ const PatternList = ({
 					)}
 					{ /* Pagination Controls */}
 					{filteredPatterns.length > 0 && totalPages > 1 && (
-						<div
-							className='bbb-tabs-patterns-pagination'
-						>
+						<div className="bbb-tabs-patterns-pagination">
 							<Button
 								disabled={currentPage === 1}
 								onClick={() => goToPage(-1)}
 								className="tabs-patterns-pagination-prev"
 							>
-								{__(
-									'Previous',
-									'blablablocks-tabs-block'
-								)}
+								{__('Previous', 'blablablocks-tabs-block')}
 							</Button>
 							<span className="tabs-patterns-pagination-status">
 								{`${currentPage} / ${totalPages}`}
@@ -250,10 +255,7 @@ const PatternList = ({
 								onClick={() => goToPage(1)}
 								className="tabs-patterns-pagination-next"
 							>
-								{__(
-									'Next',
-									'blablablocks-tabs-block'
-								)}
+								{__('Next', 'blablablocks-tabs-block')}
 							</Button>
 						</div>
 					)}

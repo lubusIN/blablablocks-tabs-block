@@ -165,3 +165,13 @@
 .bbb-tab-placeholder {
 	width: 100%;
 }
+
+.block-editor-block-preview__container::after {
+	border-radius: 4px;
+	outline: 1px solid #0000001a;
+	outline-offset: -1px;
+}
+
+.tabs-pattern-item:hover .block-editor-block-preview__container::after {
+	outline-color: #0000004d;
+}

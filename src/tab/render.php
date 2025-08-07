@@ -10,6 +10,8 @@
  * @package         BlaBlaBlocks Tabs Block
  */
 
+ray($attributes);
+
 $wrapper_attributes = get_block_wrapper_attributes([
     'id' => esc_attr('tab-' . $attributes['tabId']),
     'class' => esc_attr('blablablocks-tab-content'),

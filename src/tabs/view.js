@@ -1,19 +1,26 @@
 /**
  * Wordpress dependencies
  */
-import { store, getContext, getElement, withSyncEvent } from '@wordpress/interactivity';
+import {
+	store,
+	getContext,
+	getElement,
+	withSyncEvent,
+} from '@wordpress/interactivity';
 
 // Constants for store name and default values
 const STORE_NAME = 'blablablocks-tabs';
 
 /**
  * Helper function to apply CSS string to an element
- * 
- * @param {HTMLElement} element - The element to apply styles to
- * @param {string} cssString - CSS string like "border: 1px solid red; border-radius: 4px;"
+ *
+ * @param {HTMLElement} element   - The element to apply styles to
+ * @param {string}      cssString - CSS string like "border: 1px solid red; border-radius: 4px;"
  */
-const applyCSSString = (element, cssString) => {
-	if (!element || !cssString) return;
+const applyCSSString = ( element, cssString ) => {
+	if ( ! element || ! cssString ) {
+		return;
+	}
 
 	// Store existing non-border styles
 	const existingStyles = element.style.cssText;
@@ -24,25 +31,30 @@ const applyCSSString = (element, cssString) => {
 
 /**
  * Helper function to remove specific styles using the same CSS string
- * 
- * @param {HTMLElement} element - The element to remove styles from
- * @param {string} cssString - CSS string to parse and remove properties from
+ *
+ * @param {HTMLElement} element   - The element to remove styles from
+ * @param {string}      cssString - CSS string to parse and remove properties from
  */
-const removeCSSString = (element, cssString) => {
-	if (!element || !cssString) return;
+const removeCSSString = ( element, cssString ) => {
+	if ( ! element || ! cssString ) {
+		return;
+	}
 
 	// Parse the CSS string to get property names and reset them
-	cssString.split(';').forEach(rule => {
-		const [property] = rule.split(':').map(s => s.trim());
-		if (property) {
+	cssString.split( ';' ).forEach( ( rule ) => {
+		const [ property ] = rule.split( ':' ).map( ( s ) => s.trim() );
+		if ( property ) {
 			// Convert kebab-case to camelCase for JS
-			const camelProperty = property.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
-			element.style[camelProperty] = '';
+			const camelProperty = property.replace(
+				/-([a-z])/g,
+				( match, letter ) => letter.toUpperCase()
+			);
+			element.style[ camelProperty ] = '';
 		}
-	});
+	} );
 };
 
-const { state } = store(STORE_NAME, {
+const { state } = store( STORE_NAME, {
 	state: {
 		/**
 		 * Returns the index of the active tab.
@@ -52,11 +64,11 @@ const { state } = store(STORE_NAME, {
 		get activeTabIndex() {
 			const { attributes } = getElement();
 			const tabId = attributes?.id || null;
-			if (!tabId) {
+			if ( ! tabId ) {
 				return null;
 			}
 			const { tabs } = getContext();
-			const tabIndex = tabs.findIndex((t) => t.id === tabId);
+			const tabIndex = tabs.findIndex( ( t ) => t.id === tabId );
 			return tabIndex;
 		},
 
@@ -86,29 +98,29 @@ const { state } = store(STORE_NAME, {
 		 *
 		 * @param {KeyboardEvent} event
 		 */
-		handleOnKeyDown: withSyncEvent((event) => {
-			const context = getContext();
+		handleOnKeyDown: withSyncEvent( ( event ) => {
 			const tabIndex = state.activeTabIndex;
-			if (tabIndex === null) {
+			if ( tabIndex === null ) {
 				return;
 			}
 
+			const context = getContext();
 			const { tabs } = context;
 			let newIndex = tabIndex;
 
-			switch (event.key) {
+			switch ( event.key ) {
 				case 'Enter':
 				case ' ':
 					context.activeTab = tabIndex;
 					break;
 
 				case 'ArrowRight':
-					newIndex = (tabIndex + 1) % tabs.length;
+					newIndex = ( tabIndex + 1 ) % tabs.length;
 					context.activeTab = newIndex;
 					break;
 
 				case 'ArrowLeft':
-					newIndex = (tabIndex - 1 + tabs.length) % tabs.length;
+					newIndex = ( tabIndex - 1 + tabs.length ) % tabs.length;
 					context.activeTab = newIndex;
 					break;
 
@@ -117,11 +129,12 @@ const { state } = store(STORE_NAME, {
 			}
 
 			// After updating activeTab, move keyboard focus to the new button.
-			requestAnimationFrame(() => {
-				const newBtn = document.getElementById(tabs[newIndex].id);
+			/* eslint-env browser */
+			requestAnimationFrame( () => {
+				const newBtn = document.getElementById( tabs[ newIndex ].id );
 				newBtn?.focus();
-			});
-		}),
+			} );
+		} ),
 
 		/**
 		 * Sets the active tab to the current tab's ID.
@@ -131,7 +144,7 @@ const { state } = store(STORE_NAME, {
 		setActiveTab: () => {
 			const context = getContext();
 			const tabIndex = state.activeTabIndex;
-			if (tabIndex !== null) {
+			if ( tabIndex !== null ) {
 				context.activeTab = state.activeTabIndex;
 			}
 		},
@@ -146,9 +159,9 @@ const { state } = store(STORE_NAME, {
 		initTabs() {
 			const context = getContext();
 			const tabIndex = context.tabs.findIndex(
-				(t) => t.id === context.activeId
+				( t ) => t.id === context.activeId
 			);
-			if (tabIndex >= 0) {
+			if ( tabIndex >= 0 ) {
 				context.activeTab = tabIndex;
 			}
 		},
@@ -161,32 +174,35 @@ const { state } = store(STORE_NAME, {
 		 */
 		updateTabBorders() {
 			const context = getContext();
-			const { tabs, activeTab, tabButtonBorderStyles, borderOnActive } = context;
+			const { tabs, activeTab, tabButtonBorderStyles, borderOnActive } =
+				context;
 
 			// If borderOnActive is disabled, borders are already applied via inline styles
 			// So we don't need to do anything - just return early
-			if (!borderOnActive) {
+			if ( ! borderOnActive ) {
 				return;
 			}
 
 			// Only apply dynamic borders if borderOnActive is enabled and we have styles
-			if (!tabButtonBorderStyles) {
+			if ( ! tabButtonBorderStyles ) {
 				return;
 			}
 
 			// Apply styles to all tabs
-			tabs.forEach((tab, index) => {
-				const tabElement = document.getElementById(tab.id);
-				if (!tabElement) return;
+			tabs.forEach( ( tab, index ) => {
+				const tabElement = document.getElementById( tab.id );
+				if ( ! tabElement ) {
+					return;
+				}
 
-				if (index === activeTab) {
+				if ( index === activeTab ) {
 					// Apply border styles to active tab
-					applyCSSString(tabElement, tabButtonBorderStyles);
+					applyCSSString( tabElement, tabButtonBorderStyles );
 				} else {
 					// Remove border styles from inactive tabs
-					removeCSSString(tabElement, tabButtonBorderStyles);
+					removeCSSString( tabElement, tabButtonBorderStyles );
 				}
-			});
+			} );
 		},
 	},
-});
+} );

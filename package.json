@@ -28,7 +28,7 @@
 		"@wordpress/element": "^6.17.0",
 		"@wordpress/i18n": "^5.17.0",
 		"@wordpress/icons": "^10.17.0",
-		"@wordpress/interactivity": "^6.17.0",
+		"@wordpress/interactivity": "^6.27.0",
 		"clsx": "^2.1.1"
 	}
 }

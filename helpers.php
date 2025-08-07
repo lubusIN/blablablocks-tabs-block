@@ -399,7 +399,7 @@ if (! function_exists('blabtabl_get_tabs_container_styles')) {
         // width
         if (($attributes['orientation'] ?? 'horizontal') === 'vertical') {
             $width = $attributes['width'] ?? '50';
-            $styles[] = "max-width: {$width}%;";
+            $styles[] = "min-width: {$width}%;";
         }
 
         return trim(implode(' ', array_filter($styles)));

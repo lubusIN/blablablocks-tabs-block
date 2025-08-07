@@ -1,18 +1,18 @@
 <?php
 
 /**
- * Plugin Name:       BlaBlaBlocks Tabs Block
- * Description:       Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.
- * Version:           1.0.0
- * Requires at least: 6.7
- * Requires PHP:      7.4
- * Author:            Lubus
- * Author URI:        https://lubus.in
- * License:           MIT
- * License URI:       https://www.gnu.org/licenses/MIT
- * Text Domain:       blablablocks-tabs-block
+ * Plugin Name:			BlaBlaBlocks Tabs Block
+ * Description:			Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.
+ * Version:				1.0.0
+ * Requires at least:	6.7
+ * Requires PHP:		7.4
+ * Author:				Lubus
+ * Author URI:			https://lubus.in
+ * License:				MIT
+ * License URI:			https://www.gnu.org/licenses/MIT
+ * Text Domain:			blablablocks-tabs-block
  *
- * @package 		  BlaBlaBlocks Tabs Block
+ * @package				BlaBlaBlocks Tabs Block
  */
 
 if (! defined('ABSPATH')) {
@@ -53,3 +53,18 @@ function blabtabl_register_styles()
 		register_block_style('blablablocks/tabs', $style);
 	}
 }
+
+/**
+ * Enqueue editor assets for the slider block.
+ */
+function blabtabl_enqueue_editor_assets()
+{
+	wp_localize_script(
+		'blablablocks-tabs-editor-script',
+		'BlablablocksTabsData',
+		[
+			'assetsUrl' => plugin_dir_url(__FILE__) . 'assets',
+		]
+	);
+}
+add_action('enqueue_block_editor_assets', 'blabtabl_enqueue_editor_assets');

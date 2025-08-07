@@ -11,8 +11,8 @@
 			"default": 0
 		},
 		"width": {
-			"type": "number",
-			"default": 50
+			"type": "string",
+			"default": "50"
 		},
 		"orientation": {
 			"type": "string",

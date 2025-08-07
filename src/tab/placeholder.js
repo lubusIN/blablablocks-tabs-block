@@ -32,7 +32,7 @@ import { TabLogo, PatternSidebar, PatternList } from '../components';
  */
 function Placeholder( { clientId, attributes } ) {
 	const { replaceInnerBlocks } = useDispatch( blockEditorStore );
-	const blockProps = useBlockProps({ className: 'bbb-tab-placeholder' });
+	const blockProps = useBlockProps( { className: 'bbb-tab-placeholder' } );
 	const [ step, setStep ] = useState( null );
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const [ selectedCategory, setSelectedCategory ] = useState( null );
@@ -44,11 +44,7 @@ function Placeholder( { clientId, attributes } ) {
 	 */
 	const handleSkip = useCallback( () => {
 		try {
-			const defaultTemplate = [
-				[
-					'core/paragraph',
-				],
-			];
+			const defaultTemplate = [ [ 'core/paragraph' ] ];
 			const blocks =
 				createBlocksFromInnerBlocksTemplate( defaultTemplate );
 			replaceInnerBlocks( clientId, blocks, true );
@@ -143,7 +139,9 @@ function Placeholder( { clientId, attributes } ) {
 						'Choose a pattern or skip.',
 						'blablablocks-tabs-block'
 					) }
+					/* translators: %s: the name the user has given this tab */
 					label={ sprintf(
+						/* translators: %s: the name the user has given this tab */
 						__( 'Tab: %s', 'blablablocks-tabs-block' ),
 						attributes.tabname ?? ''
 					) }
@@ -171,7 +169,6 @@ function Placeholder( { clientId, attributes } ) {
 							searchTerm={ searchTerm }
 						/>
 						<PatternList
-							clientId={ clientId }
 							selectedCategory={ selectedCategory }
 							searchTerm={ searchTerm }
 							onSelect={ applyPattern }

@@ -9,14 +9,14 @@ import {
 	Modal,
 	Placeholder as PlaceholderComponent,
 	Button,
-    __experimentalGrid as Grid,		 	// eslint-disable-line
-    __experimentalVStack as VStack, 	// eslint-disable-line
+	__experimentalGrid as Grid,		 	// eslint-disable-line
+	__experimentalVStack as VStack, 	// eslint-disable-line
 	__experimentalText as Text,			// eslint-disable-line
 } from '@wordpress/components';
 import {
 	useBlockProps,
 	BlockPreview,
-    __experimentalBlockVariationPicker as BlockVariationPicker, // eslint-disable-line
+	__experimentalBlockVariationPicker as BlockVariationPicker, // eslint-disable-line
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 
@@ -25,6 +25,12 @@ import {
  */
 import variations from './variations';
 import { TabsLogo } from '../components';
+import * as templates from '../templates';
+
+/**
+ * Default patterns for modal preview.
+ */
+const defaultPatterns = Object.values( templates );
 
 /**
  * This component serves as a placeholder for the Tabs block, displaying a block variation picker.
@@ -41,8 +47,6 @@ function Placeholder( { clientId, setAttributes } ) {
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 	const { replaceInnerBlocks } = useDispatch( blockEditorStore );
 	const blockProps = useBlockProps();
-
-	const defaultPatterns = [];
 
 	const onSelectVariation = ( variation ) => {
 		if ( variation?.attributes ) {
@@ -112,7 +116,7 @@ function Placeholder( { clientId, setAttributes } ) {
 				<Modal
 					title={ __(
 						'Choose a Template',
-						'blablablocks-slider-block'
+						'blablablocks-tabs-block'
 					) }
 					isFullScreen
 					onRequestClose={ () => setIsModalOpen( false ) }
@@ -121,7 +125,7 @@ function Placeholder( { clientId, setAttributes } ) {
 						{ defaultPatterns?.map( ( pattern ) => (
 							<Button
 								key={ pattern.name }
-								className={ 'slider-pattern-item' }
+								className={ 'tabs-pattern-item' }
 								onClick={ () => applyPattern( pattern ) }
 								style={ { width: '100%', height: '100%' } }
 							>

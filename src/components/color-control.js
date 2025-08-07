@@ -21,36 +21,40 @@ import {
  * colorGradientSettings to see if it corresponds to a theme/preset color.
  *
  * @param {string|Object} rawColor
- * @param {Array} colorGradientSettings  - the array you get from useMultipleOriginColorsAndGradients()
- * @returns {{ color: string|undefined, slug: string|undefined }}
+ * @param {Array}         colorGradientSettings - the array you get from useMultipleOriginColorsAndGradients()
+ * @return {{ color: string|undefined, slug: string|undefined }} Object containing the selected color value and its slug if it matches a preset otherwise, both properties are undefined.
  */
-function resolveColorSelection(rawColor, colorGradientSettings) {
+function resolveColorSelection( rawColor, colorGradientSettings ) {
 	let pickedColor = '';
 
-	if (typeof rawColor === 'object') {
+	if ( typeof rawColor === 'object' ) {
 		pickedColor = rawColor.color || rawColor;
-	} else if (typeof rawColor === 'string') {
+	} else if ( typeof rawColor === 'string' ) {
 		pickedColor = rawColor;
 	}
 
-	if (!pickedColor) {
+	if ( ! pickedColor ) {
 		return { color: undefined, slug: undefined };
 	}
 
-	const normalize = (c) => String(c).trim().toLowerCase();
-	const target = normalize(pickedColor);
+	const normalize = ( c ) => String( c ).trim().toLowerCase();
+	const target = normalize( pickedColor );
 
-	const palettes = Array.isArray(colorGradientSettings?.colors)
+	const palettes = Array.isArray( colorGradientSettings?.colors )
 		? colorGradientSettings.colors
 		: [];
 
-	for (const palette of palettes) {
-		if (!Array.isArray(palette.colors)) continue;
+	for ( const palette of palettes ) {
+		if ( ! Array.isArray( palette.colors ) ) {
+			continue;
+		}
 
-		for (const entry of palette.colors) {
-			if (!entry || !entry.color) continue;
+		for ( const entry of palette.colors ) {
+			if ( ! entry || ! entry.color ) {
+				continue;
+			}
 
-			if (normalize(entry.color) === target) {
+			if ( normalize( entry.color ) === target ) {
 				return {
 					color: pickedColor,
 					slug: entry.slug,
@@ -59,8 +63,10 @@ function resolveColorSelection(rawColor, colorGradientSettings) {
 
 			// crude handling for function-style colors like color-mix
 			if (
-				entry.color.includes('color-mix') &&
-				target.includes(entry.color.replace(/\s+/g, '').toLowerCase())
+				entry.color.includes( 'color-mix' ) &&
+				target.includes(
+					entry.color.replace( /\s+/g, '' ).toLowerCase()
+				)
 			) {
 				return {
 					color: pickedColor,
@@ -88,22 +94,24 @@ function resolveColorSelection(rawColor, colorGradientSettings) {
  *
  * @return {JSX.Element} The rendered ColorControlDropdown component.
  */
-function ColorControlDropdown({
+function ColorControlDropdown( {
 	label,
 	colorValue = {},
 	onChangeColor,
 	hasHover = false,
 	hasActive = false,
-}) {
-
+} ) {
 	const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
-	const handleChange = (tabName, rawColor) => {
-		const normalized = resolveColorSelection(rawColor, colorGradientSettings);
-		onChangeColor({
+	const handleChange = ( tabName, rawColor ) => {
+		const normalized = resolveColorSelection(
+			rawColor,
+			colorGradientSettings
+		);
+		onChangeColor( {
 			...colorValue,
-			[tabName]: normalized,
-		});
+			[ tabName ]: normalized,
+		} );
 	};
 
 	const defaultIndicator = colorValue.default?.color || '';
@@ -112,41 +120,40 @@ function ColorControlDropdown({
 
 	return (
 		<Dropdown
-			popoverProps={{
+			popoverProps={ {
 				placement: 'left-start',
 				offset: 36,
 				shift: true,
-			}}
+			} }
 			contentClassName="bbb-tabs_color_popover"
-			renderToggle={({ isOpen, onToggle }) => (
+			renderToggle={ ( { isOpen, onToggle } ) => (
 				<Button
-					className={`bbb-tabs_color_button ${isOpen ? 'isOpen' : ''
-						}`}
-					aria-expanded={isOpen}
-					onClick={onToggle}
+					className={ `bbb-tabs_color_button ${
+						isOpen ? 'isOpen' : ''
+					}` }
+					aria-expanded={ isOpen }
+					onClick={ onToggle }
 				>
 					<HStack justify="left">
-						<ZStack offset={10}>
-							<ColorIndicator colorValue={defaultIndicator} />
-							{hasHover && (
+						<ZStack offset={ 10 }>
+							<ColorIndicator colorValue={ defaultIndicator } />
+							{ hasHover && (
+								<ColorIndicator colorValue={ hoverIndicator } />
+							) }
+							{ hasActive && (
 								<ColorIndicator
-									colorValue={hoverIndicator}
+									colorValue={ activeIndicator }
 								/>
-							)}
-							{hasActive && (
-								<ColorIndicator
-									colorValue={activeIndicator}
-								/>
-							)}
+							) }
 						</ZStack>
-						<Text>{label}</Text>
+						<Text>{ label }</Text>
 					</HStack>
 				</Button>
-			)}
-			renderContent={() =>
+			) }
+			renderContent={ () =>
 				hasHover || hasActive ? (
 					<TabPanel
-						tabs={[
+						tabs={ [
 							{
 								name: 'default',
 								title: __(
@@ -156,7 +163,7 @@ function ColorControlDropdown({
 							},
 							{
 								name: 'hover',
-								title: __('Hover', 'blablablocks-tabs-block'),
+								title: __( 'Hover', 'blablablocks-tabs-block' ),
 							},
 							{
 								name: 'active',
@@ -165,27 +172,29 @@ function ColorControlDropdown({
 									'blablablocks-tabs-block'
 								),
 							},
-						]}
+						] }
 					>
-						{(tab) => (
+						{ ( tab ) => (
 							<ColorPalette
 								__experimentalIsRenderedInSidebar
-								value={colorValue[tab.name]?.color || ''}
-								onChange={(color) => handleChange(tab.name, color)}
-								{...colorGradientSettings}
+								value={ colorValue[ tab.name ]?.color || '' }
+								onChange={ ( color ) =>
+									handleChange( tab.name, color )
+								}
+								{ ...colorGradientSettings }
 								enableAlpha
 							/>
-						)}
+						) }
 					</TabPanel>
 				) : (
 					<ColorPalette
 						className="bbb-color-pallete-container"
 						__experimentalIsRenderedInSidebar
-						value={colorValue.default?.color || ''}
-						onChange={(color) => {
-							onChangeColor({ ...colorValue, default: color });
-						}}
-						{...colorGradientSettings}
+						value={ colorValue.default?.color || '' }
+						onChange={ ( color ) => {
+							onChangeColor( { ...colorValue, default: color } );
+						} }
+						{ ...colorGradientSettings }
 						enableAlpha
 					/>
 				)
