@@ -30,7 +30,7 @@ import { ColorControlDropdown } from '../../components';
  * @param {string}   props.clientId      The client ID for this block instance.
  * @return {JSX.Element} Styles panel
  */
-function Styles( { attributes, setAttributes, clientId } ) {
+function Styles({ attributes, setAttributes, clientId }) {
 	const {
 		tabTextColor = {},
 		tabBackgroundColor = {},
@@ -42,28 +42,36 @@ function Styles( { attributes, setAttributes, clientId } ) {
 		{
 			key: 'tabTextColor',
 			state: tabTextColor,
-			label: __( 'Tab Text', 'blablablocks-tabs-block' ),
+			label: __('Tab Text', 'blablablocks-tabs-block'),
 		},
 		{
 			key: 'tabBackgroundColor',
 			state: tabBackgroundColor,
-			label: __( 'Tab Background', 'blablablocks-tabs-block' ),
+			label: __('Tab Background', 'blablablocks-tabs-block'),
 		},
 		{
 			key: 'tabIconColor',
 			state: tabIconColor,
-			label: __( 'Tab Icon', 'blablablocks-tabs-block' ),
+			label: __('Tab Icon', 'blablablocks-tabs-block'),
 		},
 	];
 
-	const clearColor = ( colorKey ) => {
-		setAttributes( {
-			[ colorKey ]: {
+	const clearColor = (colorKey) => {
+		setAttributes({
+			[colorKey]: {
 				default: undefined,
 				hover: undefined,
 				active: undefined,
 			},
-		} );
+		});
+	};
+
+	const hasNonRadiusBorderValues = (border) => {
+		if (!border) return false;
+		const { radius, ...rest } = border;
+		return Object.values(rest).some((v) =>
+			typeof v === 'object' ? Object.values(v || {}).some(Boolean) : Boolean(v)
+		);
 	};
 
 	const colorGradientSettings = useMultipleOriginColorsAndGradients();
@@ -71,128 +79,148 @@ function Styles( { attributes, setAttributes, clientId } ) {
 	return (
 		<>
 			<InspectorControls group="color">
-				{ colorControls.map( ( { key, state, label } ) => {
+				{colorControls.map(({ key, state, label }) => {
 					const value = state || {};
 					const hasValue = [
 						value.default,
 						value.hover,
 						value.active,
-					].some( Boolean );
+					].some(Boolean);
 
 					return (
 						<ToolsPanelItem
-							key={ key }
-							label={ label }
+							key={key}
+							label={label}
 							className="bbb-tabs_color-support-panel"
-							panelId={ clientId }
+							panelId={clientId}
 							isShownByDefault
-							hasValue={ () => hasValue }
-							onDeselect={ () => clearColor( key ) }
-							resetAllFilter={ () => clearColor( key ) }
+							hasValue={() => hasValue}
+							onDeselect={() => clearColor(key)}
+							resetAllFilter={() => clearColor(key)}
 						>
 							<ColorControlDropdown
-								label={ label }
-								colorValue={ value }
-								onChangeColor={ ( newColor ) =>
-									setAttributes( {
-										[ key ]: { ...value, ...newColor },
-									} )
+								label={label}
+								colorValue={value}
+								onChangeColor={(newColor) =>
+									setAttributes({
+										[key]: { ...value, ...newColor },
+									})
 								}
 								hasHover
 								hasActive
 							/>
 						</ToolsPanelItem>
 					);
-				} ) }
+				})}
 			</InspectorControls>
 			<InspectorControls group="dimensions">
 				<ToolsPanelItem
-					label={ __( 'Tab Padding', 'blablablocks-tabs-block' ) }
-					panelId={ clientId }
+					label={__('Tab Padding', 'blablablocks-tabs-block')}
+					panelId={clientId}
 					isShownByDefault
-					hasValue={ () => !! attributes.tabPadding }
-					onDeselect={ () =>
-						setAttributes( { tabPadding: undefined } )
+					hasValue={() => !!attributes.tabPadding}
+					onDeselect={() =>
+						setAttributes({ tabPadding: undefined })
 					}
-					resetAllFilter={ () =>
-						setAttributes( { tabPadding: undefined } )
+					resetAllFilter={() =>
+						setAttributes({ tabPadding: undefined })
 					}
 				>
 					<SpacingSizesControl
-						values={ attributes.tabPadding }
-						onChange={ ( value ) =>
-							setAttributes( { tabPadding: value } )
+						values={attributes.tabPadding}
+						onChange={(value) =>
+							setAttributes({ tabPadding: value })
 						}
-						label={ __( 'Tab Padding', 'blablablocks-tabs-block' ) }
-						allowReset={ false }
-						splitOnAxis={ true }
+						label={__('Tab Padding', 'blablablocks-tabs-block')}
+						allowReset={false}
+						splitOnAxis={true}
 					/>
 				</ToolsPanelItem>
 			</InspectorControls>
 			<InspectorControls group="styles">
 				<ToolsPanel
 					label="Tab Border"
-					resetAll={ () =>
-						setAttributes( {
+					resetAll={() =>
+						setAttributes({
 							tabBorder: {
 								border: undefined,
 								onActive: undefined,
 							},
-						} )
+						})
 					}
 				>
 					<ToolsPanelItem
-						label={ __( 'Border', 'blablablocks-tabs-block' ) }
-						hasValue={ () => !! tabBorder.border }
-						onDeselect={ () =>
-							setAttributes( {
+						label={__('Border', 'blablablocks-tabs-block')}
+						hasValue={() => hasNonRadiusBorderValues(tabBorder?.border)}
+						onDeselect={() => {
+							const prev = tabBorder?.border || {};
+							const next = { ...prev };
+
+							// Clear only non-radius props
+							delete next.color;
+							delete next.style;
+							delete next.width; // covers per-side widths if stored under width
+
+							// If nothing remains (no radius either), drop the border object; otherwise keep it
+							const cleaned =
+								Object.prototype.hasOwnProperty.call(next, 'radius') && next.radius !== undefined
+									? next
+									: (Object.keys(next).length ? next : undefined);
+
+							setAttributes({
 								tabBorder: {
-									border: undefined,
+									...tabBorder,
+									border: cleaned,
 								},
-							} )
-						}
+							});
+						}}
 					>
-						<VStack spacing={ 4 }>
+						<VStack spacing={4}>
 							<BorderBoxControl
 								__next40pxDefaultSize
-								label={ __(
+								label={__(
 									'Border',
 									'blablablocks-tabs-block'
-								) }
+								)}
 								hideLabelFromVision
-								value={ tabBorder.border }
-								onChange={ ( value ) =>
-									setAttributes( {
+								value={tabBorder.border}
+								onChange={(next) => {
+									const prev = tabBorder?.border || {};
+									setAttributes({
 										tabBorder: {
 											...tabBorder,
-											border: value,
+											border: {
+												...prev,       // keep previously set keys (like radius)
+												...next,       // apply new border props (color, style, width, etc.)
+												radius: next?.radius !== undefined ? next.radius : prev?.radius,
+											},
 										},
-									} )
-								}
-								{ ...colorGradientSettings }
+									});
+								}}
+								{...colorGradientSettings}
 							/>
 							<ToggleControl
-								label={ __(
+								label={__(
 									'Only show border on active tab',
 									'blablablocks-tabs-block'
-								) }
-								checked={ tabBorder.onActive }
-								onChange={ ( value ) =>
-									setAttributes( {
+								)}
+								checked={tabBorder.onActive}
+								onChange={(value) =>
+									setAttributes({
 										tabBorder: {
 											...tabBorder,
 											onActive: value,
 										},
-									} )
+									})
 								}
 							/>
 						</VStack>
 					</ToolsPanelItem>
 					<ToolsPanelItem
-						label={ __( 'Radius', 'blablablocks-tabs-block' ) }
-						hasValue={ () => !! tabBorder?.border?.radius }
-						onDeselect={ () =>
-							setAttributes( {
+						label={__('Radius', 'blablablocks-tabs-block')}
+						hasValue={() => !!tabBorder?.border?.radius}
+						onDeselect={() =>
+							setAttributes({
 								tabBorder: {
 									...tabBorder,
 									border: {
@@ -200,15 +228,15 @@ function Styles( { attributes, setAttributes, clientId } ) {
 										radius: undefined,
 									},
 								},
-							} )
+							})
 						}
 					>
 						<BorderRadiusControl
 							__next40pxDefaultSize
-							label={ __( 'Radius', 'blablablocks-tabs-block' ) }
-							values={ tabBorder?.border?.radius }
-							onChange={ ( value ) =>
-								setAttributes( {
+							label={__('Radius', 'blablablocks-tabs-block')}
+							values={tabBorder?.border?.radius}
+							onChange={(value) =>
+								setAttributes({
 									tabBorder: {
 										...tabBorder,
 										border: {
@@ -216,7 +244,7 @@ function Styles( { attributes, setAttributes, clientId } ) {
 											radius: value,
 										},
 									},
-								} )
+								})
 							}
 						/>
 					</ToolsPanelItem>
