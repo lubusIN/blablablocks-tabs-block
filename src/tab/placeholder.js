@@ -30,26 +30,26 @@ import { TabLogo, PatternSidebar, PatternList } from '../components';
  * @param {Object} props.attributes The Attributes for this block.
  * @return {JSX.Element} The placeholder component for the Tabs block.
  */
-function Placeholder( { clientId, attributes } ) {
-	const { replaceInnerBlocks } = useDispatch( blockEditorStore );
-	const blockProps = useBlockProps( { className: 'bbb-tab-placeholder' } );
-	const [ step, setStep ] = useState( null );
-	const [ isModalOpen, setIsModalOpen ] = useState( false );
-	const [ selectedCategory, setSelectedCategory ] = useState( null );
-	const [ searchTerm, setSearchTerm ] = useState( '' );
-	const [ error, setError ] = useState( null );
+function Placeholder({ clientId, attributes }) {
+	const { replaceInnerBlocks } = useDispatch(blockEditorStore);
+	const blockProps = useBlockProps({ className: 'bbb-tab-placeholder' });
+	const [step, setStep] = useState(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [selectedCategory, setSelectedCategory] = useState(null);
+	const [searchTerm, setSearchTerm] = useState('');
+	const [error, setError] = useState(null);
 
 	/**
 	 * Creates a blank tab with default content
 	 */
-	const handleSkip = useCallback( () => {
+	const handleSkip = useCallback(() => {
 		try {
-			const defaultTemplate = [ [ 'core/paragraph' ] ];
+			const defaultTemplate = [['core/paragraph']];
 			const blocks =
-				createBlocksFromInnerBlocksTemplate( defaultTemplate );
-			replaceInnerBlocks( clientId, blocks, true );
-			setStep( 'blank' );
-		} catch ( err ) {
+				createBlocksFromInnerBlocksTemplate(defaultTemplate);
+			replaceInnerBlocks(clientId, blocks, true);
+			setStep('blank');
+		} catch (err) {
 			setError(
 				__(
 					'Failed to create blank tab. Please try again.',
@@ -57,7 +57,7 @@ function Placeholder( { clientId, attributes } ) {
 				)
 			);
 		}
-	}, [ clientId, replaceInnerBlocks ] );
+	}, [clientId, replaceInnerBlocks]);
 
 	/**
 	 * Applies a selected pattern to the tab content
@@ -65,8 +65,8 @@ function Placeholder( { clientId, attributes } ) {
 	 * @param {Object} pattern - The pattern object containing content to apply
 	 */
 	const applyPattern = useCallback(
-		( pattern ) => {
-			if ( ! pattern || ! pattern.content ) {
+		(pattern) => {
+			if (!pattern || !pattern.content) {
 				setError(
 					__(
 						'Invalid pattern selected. Please choose another pattern.',
@@ -77,16 +77,16 @@ function Placeholder( { clientId, attributes } ) {
 			}
 
 			try {
-				const parsedBlocks = parse( pattern.content );
+				const parsedBlocks = parse(pattern.content);
 
-				if ( ! parsedBlocks || parsedBlocks.length === 0 ) {
-					throw new Error( 'No valid blocks found in pattern' );
+				if (!parsedBlocks || parsedBlocks.length === 0) {
+					throw new Error('No valid blocks found in pattern');
 				}
 
-				replaceInnerBlocks( clientId, parsedBlocks, true );
-				setIsModalOpen( false );
-				setStep( 'pattern' );
-			} catch ( err ) {
+				replaceInnerBlocks(clientId, parsedBlocks, true);
+				setIsModalOpen(false);
+				setStep('pattern');
+			} catch (err) {
 				setError(
 					__(
 						'Failed to apply pattern. Please try another one.',
@@ -95,88 +95,88 @@ function Placeholder( { clientId, attributes } ) {
 				);
 			}
 		},
-		[ clientId, replaceInnerBlocks ]
+		[clientId, replaceInnerBlocks]
 	);
 
 	/**
 	 * Clears current error message
 	 */
 	const dismissError = () => {
-		setError( null );
+		setError(null);
 	};
 
 	/**
 	 * Opens pattern selection modal
 	 */
 	const openPatternModal = () => {
-		setIsModalOpen( true );
-		setError( null );
+		setIsModalOpen(true);
+		setError(null);
 	};
 
 	/**
 	 * Closes pattern selection modal
 	 */
 	const closePatternModal = () => {
-		setIsModalOpen( false );
+		setIsModalOpen(false);
 	};
 
 	return (
-		<div { ...blockProps }>
-			{ error && (
+		<div {...blockProps}>
+			{error && (
 				<Notice
 					status="error"
-					isDismissible={ true }
-					onRemove={ dismissError }
+					isDismissible={true}
+					onRemove={dismissError}
 				>
-					{ error }
+					{error}
 				</Notice>
-			) }
+			)}
 
-			{ ! step && (
+			{!step && (
 				<PlaceholderComponent
-					icon={ TabLogo }
-					instructions={ __(
-						'Choose a pattern or skip.',
+					icon={TabLogo}
+					instructions={__(
+						'Choose a pattern or start blank.',
 						'blablablocks-tabs-block'
-					) }
+					)}
 					/* translators: %s: the name the user has given this tab */
-					label={ sprintf(
+					label={sprintf(
 						/* translators: %s: the name the user has given this tab */
-						__( 'Tab: %s', 'blablablocks-tabs-block' ),
+						__('Tab: %s', 'blablablocks-tabs-block'),
 						attributes.tabname ?? ''
-					) }
+					)}
 				>
-					<Button variant="primary" onClick={ openPatternModal }>
-						{ __( 'Choose', 'blablablocks-tabs-block' ) }
+					<Button variant="primary" onClick={openPatternModal}>
+						{__('Choose', 'blablablocks-tabs-block')}
 					</Button>
-					<Button variant="link" onClick={ handleSkip }>
-						{ __( 'Skip', 'blablablocks-tabs-block' ) }
+					<Button variant="secondary" onClick={handleSkip}>
+						{__('Start blank', 'blablablocks-tabs-block')}
 					</Button>
 				</PlaceholderComponent>
-			) }
+			)}
 
-			{ isModalOpen && (
+			{isModalOpen && (
 				<Modal
-					title={ __( 'Patterns', 'blablablocks-tabs-block' ) }
+					title={__('Patterns', 'blablablocks-tabs-block')}
 					isFullScreen
-					onRequestClose={ closePatternModal }
+					onRequestClose={closePatternModal}
 				>
 					<div className="bbb-tabs-patterns-container">
 						<PatternSidebar
-							selectedCategory={ selectedCategory }
-							setSelectedCategory={ setSelectedCategory }
-							setSearchTerm={ setSearchTerm }
-							searchTerm={ searchTerm }
+							selectedCategory={selectedCategory}
+							setSelectedCategory={setSelectedCategory}
+							setSearchTerm={setSearchTerm}
+							searchTerm={searchTerm}
 						/>
 						<PatternList
-							selectedCategory={ selectedCategory }
-							searchTerm={ searchTerm }
-							onSelect={ applyPattern }
-							onError={ setError }
+							selectedCategory={selectedCategory}
+							searchTerm={searchTerm}
+							onSelect={applyPattern}
+							onError={setError}
 						/>
 					</div>
 				</Modal>
-			) }
+			)}
 		</div>
 	);
 }
