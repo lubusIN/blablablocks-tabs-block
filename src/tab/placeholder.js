@@ -139,12 +139,7 @@ function Placeholder({ clientId, attributes }) {
 						'Choose a pattern or start blank.',
 						'blablablocks-tabs-block'
 					)}
-					/* translators: %s: the name the user has given this tab */
-					label={sprintf(
-						/* translators: %s: the name the user has given this tab */
-						__('Tab: %s', 'blablablocks-tabs-block'),
-						attributes.tabname ?? ''
-					)}
+					label={__('Tab', 'blablablocks-tabs-block')}
 				>
 					<Button variant="primary" onClick={openPatternModal}>
 						{__('Choose', 'blablablocks-tabs-block')}
