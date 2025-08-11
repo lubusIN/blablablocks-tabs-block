@@ -4,10 +4,10 @@
 import { __ } from '@wordpress/i18n';
 
 const Pricing = {
-	name: 'pricing',
-	title: __( 'Pricing', 'blablablocks-tabs-block' ),
-	content: `
-                    <!-- wp:group {"metadata":{"name":"Pricing"},"align":"wide","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"20px","right":"20px"}}},"layout":{"type":"constrained"}} -->
+        name: 'pricing',
+        title: __('Horizontal Pricing', 'blablablocks-tabs-block'),
+        content: `
+                    <!-- wp:group {"metadata":{"name":"Horizontal Pricing"},"align":"wide","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"20px","right":"20px"}}},"layout":{"type":"constrained"}} -->
             <div class="wp-block-group alignwide" style="padding-top:var(--wp--preset--spacing--30);padding-right:20px;padding-bottom:var(--wp--preset--spacing--30);padding-left:20px"><!-- wp:blablablocks/tabs {"justification":"center","tabTextColor":{"hover":{"color":"#fefefe"}},"tabBackgroundColor":{"default":{"color":"#fefefe"},"active":{"color":"#3858e9"},"hover":{"color":"#3858e9"}},"tabBorder":{"border":{"radius":"50px"}},"metadata":{},"align":"wide","style":{"border":{"color":"#ebe6e7","width":"1px","radius":"50px"},"spacing":{"padding":{"left":"8px","right":"8px","top":"8px","bottom":"8px"}},"typography":{"fontSize":"16px","fontStyle":"normal","fontWeight":"500"}}} -->
             <!-- wp:blablablocks/tab {"tabname":"Monthly","tabId":"12986470-6c0e-43f6-9d13-fc986f486bb7"} -->
             <!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"15px"}}}} -->
