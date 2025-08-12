@@ -3,7 +3,7 @@ name: Sync to Playground
 on:
   push:
     branches:
-      - dev
+      - main
   workflow_call:
     inputs:
       target-branch:
