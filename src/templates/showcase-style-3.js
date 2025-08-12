@@ -5,22 +5,22 @@ import { __ } from '@wordpress/i18n';
 
 /* global BlablablocksTabsData */
 const baseImageUrl =
-  typeof BlablablocksTabsData !== 'undefined'
-    ? BlablablocksTabsData.assetsUrl
-    : '';
-const showcaseImagePath = `${baseImageUrl}/templates/showcase`;
+	typeof BlablablocksTabsData !== 'undefined'
+		? BlablablocksTabsData.assetsUrl
+		: '';
+const showcaseImagePath = `${ baseImageUrl }/templates/showcase`;
 
 const ShowcaseStyle3 = {
-  name: 'showcase-style-2',
-  title: __('Vertical Showcase Style 2', 'blablablocks-tabs-block'),
-  content: `
+	name: 'showcase-style-2',
+	title: __( 'Vertical Showcase Style 2', 'blablablocks-tabs-block' ),
+	content: `
           <!-- wp:group {"metadata":{"name":"Vertical Showcase Style 2"},"align":"wide","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"20px","right":"20px"}}},"layout":{"type":"constrained"}} -->
           <div class="wp-block-group alignwide" style="padding-top:var(--wp--preset--spacing--30);padding-right:20px;padding-bottom:var(--wp--preset--spacing--30);padding-left:20px"><!-- wp:blablablocks/tabs {"width":"25","orientation":"vertical","tabTextColor":{"active":[],"default":{"color":"#030712"},"hover":[]},"tabBackgroundColor":{"active":{"color":"#030712"},"hover":{"color":"#030712"}},"tabIconColor":{"default":[],"hover":[],"active":[]},"tabPadding":{"top":"15px","right":"15px","bottom":"15px","left":"15px"},"metadata":{},"align":"wide","className":"is-style-pointing-tabs","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|20","left":"var:preset|spacing|30"}},"typography":{"fontStyle":"normal","fontWeight":"500"}},"fontSize":"medium"} -->
           <!-- wp:blablablocks/tab {"tabname":"What Is the Block Editor?","tabId":"7a2a7931-41e2-46e8-95f6-58ea9b09e1bd","tabIcon":""} -->
           <!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|50","left":"var:preset|spacing|50"},"padding":{"top":"60px","bottom":"60px","left":"var:preset|spacing|40","right":"var:preset|spacing|40"}},"border":{"radius":"6px"},"color":{"background":"#f2f2f2"}}} -->
           <div class="wp-block-columns alignwide has-background" style="border-radius:6px;background-color:#f2f2f2;padding-top:60px;padding-right:var(--wp--preset--spacing--40);padding-bottom:60px;padding-left:var(--wp--preset--spacing--40)"><!-- wp:column {"verticalAlignment":"center","width":"56%"} -->
           <div class="wp-block-column is-vertically-aligned-center" style="flex-basis:56%"><!-- wp:image {"id":919,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"7px","color":"#f2f2f2","width":"6px"},"shadow":"var:preset|shadow|sharp"}} -->
-          <figure class="wp-block-image size-full has-custom-border"><img src="${showcaseImagePath}/editor.png" alt="" class="has-border-color wp-image-919" style="border-color:#f2f2f2;border-width:6px;border-radius:7px;box-shadow:var(--wp--preset--shadow--sharp)"/></figure>
+          <figure class="wp-block-image size-full has-custom-border"><img src="${ showcaseImagePath }/editor.png" alt="" class="has-border-color wp-image-919" style="border-color:#f2f2f2;border-width:6px;border-radius:7px;box-shadow:var(--wp--preset--shadow--sharp)"/></figure>
           <!-- /wp:image --></div>
           <!-- /wp:column -->
 
@@ -46,7 +46,7 @@ const ShowcaseStyle3 = {
             <!-- wp:columns {"align":"wide","className":"is-style-default","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|50","left":"var:preset|spacing|50"},"padding":{"top":"60px","bottom":"60px","left":"var:preset|spacing|40","right":"var:preset|spacing|40"}},"color":{"background":"#f2f2f2"},"border":{"radius":"6px"}}} -->
             <div class="wp-block-columns alignwide is-style-default has-background" style="border-radius:6px;background-color:#f2f2f2;padding-top:60px;padding-right:var(--wp--preset--spacing--40);padding-bottom:60px;padding-left:var(--wp--preset--spacing--40)"><!-- wp:column {"verticalAlignment":"center","width":"56%"} -->
             <div class="wp-block-column is-vertically-aligned-center" style="flex-basis:56%"><!-- wp:image {"id":920,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"7px"},"shadow":"var:preset|shadow|sharp"}} -->
-            <figure class="wp-block-image size-full has-custom-border"><img src="${showcaseImagePath}/patterns.png" alt="" class="wp-image-920" style="border-radius:7px;box-shadow:var(--wp--preset--shadow--sharp)"/></figure>
+            <figure class="wp-block-image size-full has-custom-border"><img src="${ showcaseImagePath }/patterns.png" alt="" class="wp-image-920" style="border-radius:7px;box-shadow:var(--wp--preset--shadow--sharp)"/></figure>
             <!-- /wp:image --></div>
             <!-- /wp:column -->
 
@@ -72,7 +72,7 @@ const ShowcaseStyle3 = {
             <!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|50","left":"var:preset|spacing|50"},"padding":{"top":"60px","bottom":"60px","left":"var:preset|spacing|40","right":"var:preset|spacing|40"}},"color":{"background":"#f2f2f2"},"border":{"radius":"6px"}}} -->
             <div class="wp-block-columns alignwide has-background" style="border-radius:6px;background-color:#f2f2f2;padding-top:60px;padding-right:var(--wp--preset--spacing--40);padding-bottom:60px;padding-left:var(--wp--preset--spacing--40)"><!-- wp:column {"verticalAlignment":"center","width":"56%"} -->
             <div class="wp-block-column is-vertically-aligned-center" style="flex-basis:56%"><!-- wp:image {"id":921,"sizeSlug":"full","linkDestination":"none","style":{"border":{"radius":"7px"},"shadow":"var:preset|shadow|sharp"}} -->
-            <figure class="wp-block-image size-full has-custom-border"><img src="${showcaseImagePath}/styles.png" alt="" class="wp-image-921" style="border-radius:7px;box-shadow:var(--wp--preset--shadow--sharp)"/></figure>
+            <figure class="wp-block-image size-full has-custom-border"><img src="${ showcaseImagePath }/styles.png" alt="" class="wp-image-921" style="border-radius:7px;box-shadow:var(--wp--preset--shadow--sharp)"/></figure>
             <!-- /wp:image --></div>
             <!-- /wp:column -->
 

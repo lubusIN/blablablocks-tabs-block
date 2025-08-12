@@ -151,14 +151,9 @@ function Settings( { attributes, setAttributes } ) {
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls>
-				<PanelBody
-					title={ __( 'Icon Settings', 'blablablocks-tabs-block' ) }
-				>
+				<PanelBody title={ __( 'Icon', 'blablablocks-tabs-block' ) }>
 					<ToggleGroupControl
-						label={ __(
-							'Icon Position',
-							'blablablocks-tabs-block'
-						) }
+						label={ __( 'Position', 'blablablocks-tabs-block' ) }
 						value={ attributes.iconPosition }
 						__nextHasNoMarginBottom
 						__next40pxDefaultSize
