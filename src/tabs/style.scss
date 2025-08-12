@@ -1,0 +1,234 @@
+.wp-block-blablablocks-tabs.is-style-pointing-tabs {
+
+	.blablablock-tab-btn.is-bbb-active-tab::after,
+	&.blablablock-tab-btn.is-bbb-active-tab::after {
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -10px;
+		width: 0;
+		height: 0;
+		border: solid transparent;
+		border-width: 10px;
+		border-top-color: var(--bbb-tab-background-active-color);
+		content: "";
+		pointer-events: none;
+		transition: border-top-color 0.25s ease-in-out;
+	}
+}
+
+.wp-block-blablablocks-tabs.is-style-pointing-tabs {
+
+	.blablablocks-tabs__vertical,
+	&.blablablocks-tabs__vertical {
+		.blablablock-tab-btn.is-bbb-active-tab::after {
+			top: 50%;
+			left: 100%;
+			margin-left: 0px;
+			transform: translateY(-50%) rotate(270deg);
+		}
+
+		&.blablablocks-tabs__right .blablablock-tab-btn.is-bbb-active-tab::after {
+			left: 0%;
+			margin-left: -20px;
+			transform: translateY(-50%) rotate(90deg);
+		}
+	}
+}
+
+.blablablocks-tabs {
+
+	&.blablablocks-tabs__autoWidth .blablablock-tab-btn {
+		flex: 1 1 auto !important;
+	}
+
+	&.blablablocks-tabs__autoWidth .blablablocks-tabs-buttons {
+		margin: 0 auto;
+	}
+
+	.blablablocks-tabs-buttons {
+		gap: var(--bbb-tabs-list-gap, 0);
+		display: flex;
+		padding: 0;
+		flex-wrap: wrap;
+	}
+
+	&:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
+		min-width: fit-content;
+		width: 100%;
+		box-sizing: border-box;
+		max-width: fit-content;
+	}
+
+	.blablablocks-tab-content {
+		width: 100%;
+	}
+}
+
+.blablablocks-tabs__vertical {
+	.blablablock-tab-btn {
+		width: 100% !important;
+		flex: 0 0 auto !important;
+		justify-content: var(--bbb-tab-buttons-justify-content, left) !important;
+	}
+}
+
+.blablablocks-tab-container {
+	display: flex;
+	gap: var(--bbb-tabs-gap, 0);
+
+	.blablablock-tab-btn {
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		height: auto;
+		flex: none;
+		cursor: pointer;
+		padding: var(--bbb-tab-padding);
+		background-color: var(--bbb-tab-background-default-color);
+		transition:
+			background-color 0.25s ease-in-out,
+			color 0.25s ease-in-out;
+		box-sizing: border-box;
+		width: fit-content;
+
+		.bbb-tab-icon {
+			width: var(--bbb-tab-icon-size, 24px);
+			height: var(--bbb-tab-icon-size, 24px);
+		}
+
+		.tab-button-text {
+			color: var(--bbb-tab-text-default-color);
+		}
+
+		.bbb-tab-icon svg {
+			color: var(--bbb-tab-icon-default-color);
+			height: 100%;
+		}
+
+		&:not(.is-bbb-active-tab) {
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-default-color);
+			}
+		}
+
+		&.is-bbb-active-tab {
+			background-color: var(--bbb-tab-background-active-color);
+
+			.tab-button-text {
+				color: var(--bbb-tab-text-active-color);
+			}
+
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-active-color);
+			}
+		}
+
+		&:focus {
+			outline: none;
+		}
+
+		&:hover {
+			background-color: var(--bbb-tab-background-hover-color);
+
+			.tab-button-text {
+				color: var(--bbb-tab-text-hover-color);
+			}
+
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-hover-color);
+			}
+
+			&:after {
+				border-top-color: var(--bbb-tab-background-hover-color) !important;
+			}
+		}
+	}
+
+	&.blablablocks-tabs__horizontal {
+		flex-direction: column;
+
+		.blablablocks-tabs-buttons {
+			flex-direction: row;
+			justify-content: var(--bbb-tab-buttons-justify-content, left);
+		}
+	}
+
+	&.blablablocks-tabs__vertical {
+		flex-direction: row;
+
+		&.blablablocks-tabs__right {
+			flex-direction: row-reverse;
+		}
+
+		.blablablocks-tabs-buttons {
+			flex-direction: column;
+			margin: 0;
+			max-width: fit-content;
+		}
+	}
+
+	&.blablablocks-tabs-icon__top .blablablock-tab-btn {
+		flex-direction: column;
+	}
+
+	&.blablablocks-tabs-icon__bottom .blablablock-tab-btn {
+		flex-direction: column-reverse;
+	}
+
+	&.blablablocks-tabs-icon__right .blablablock-tab-btn {
+		flex-direction: row-reverse;
+	}
+
+	&.blablablocks-tabs-icon__left .blablablock-tab-btn {
+		flex-direction: row;
+	}
+
+	.blablablocks-tab-content {
+		min-width: 0;
+	}
+}
+
+/* Horizontal Stacked below 768px */
+@media (max-width: 768px) {
+	.blablablocks-tabs-buttons {
+		flex-wrap: nowrap !important;
+		overflow-x: auto;
+		overflow-y: hidden;
+		// scrollbar-width: none;
+		// -ms-overflow-style: none;
+	}
+
+	.is-style-pointing-tabs .blablablocks-tabs-buttons {
+		padding-bottom: 16px !important;
+	}
+
+	/* Change the overall layout from row to column */
+	.blablablocks-tabs__vertical {
+		flex-direction: column !important;
+	}
+
+	/* Make the buttons strip go across, wrap if needed */
+	.blablablocks-tabs__vertical .blablablocks-tabs-buttons {
+		flex-direction: row !important;
+	}
+
+	/* Let each button flex-grow to fill available space evenly */
+	.blablablocks-tabs__vertical .blablablock-tab-btn {
+		max-width: 150px;
+	}
+
+	/* Reposition the “pointer” arrow under each button */
+	.blablablocks-tabs__vertical .blablablock-tab-btn.is-bbb-active-tab::after {
+		top: 100% !important;
+		left: 50% !important;
+		margin-left: -10px !important;
+		transform: none !important;
+	}
+
+	.blablablocks-tabs:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
+		min-width: auto !important;
+	}
+}

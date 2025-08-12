@@ -1,0 +1,63 @@
+name: Sync to Playground
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_call:
+    inputs:
+      target-branch:
+        required: true
+        type: string
+      force-folder:
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+
+      - name: Set target branch and force folder
+        id: set-vars
+        run: |
+          TARGET_BRANCH=${{ github.event_name == 'workflow_call' && inputs.target-branch || 'playground' }}
+          FORCE_FOLDER=${{ github.event_name == 'workflow_call' && inputs.force-folder || 'build/' }}
+          echo "target-branch=$TARGET_BRANCH" >> $GITHUB_OUTPUT
+          echo "force-folder=$FORCE_FOLDER" >> $GITHUB_OUTPUT
+
+      - name: Delete existing target branch (if any)
+        run: |
+          git fetch origin
+          git push origin --delete ${{ steps.set-vars.outputs.target-branch }} || echo "Branch does not exist"
+
+      - name: Create new target branch
+        run: |
+          git checkout -b ${{ steps.set-vars.outputs.target-branch }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Add build files (force)
+        run: |
+          git add -f ${{ steps.set-vars.outputs.force-folder }}
+
+      - name: Commit and push
+        run: |
+          git commit -m "Build and deploy to ${{ steps.set-vars.outputs.target-branch }}" || echo "Nothing to commit"
+          git push origin ${{ steps.set-vars.outputs.target-branch }} --force

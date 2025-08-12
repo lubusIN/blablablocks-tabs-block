@@ -1,0 +1,183 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "blablablocks/tabs",
+	"title": "Tabs",
+	"category": "widgets",
+	"description": "A dynamic tab block that lets you organize content into interactive, customizable tabs. Easily manage and display information in a clean, user-friendly layout.",
+	"attributes": {
+		"activeTab": {
+			"type": "number",
+			"default": 0
+		},
+		"width": {
+			"type": "string",
+			"default": "50"
+		},
+		"orientation": {
+			"type": "string",
+			"default": "horizontal"
+		},
+		"verticalPosition": {
+			"type": "string",
+			"default": "left"
+		},
+		"justification": {
+			"type": "string",
+			"default": "left"
+		},
+		"iconPosition": {
+			"type": "string",
+			"default": "left"
+		},
+		"iconSize": {
+			"type": "number",
+			"default": 24
+		},
+		"tabTextColor": {
+			"type": "object",
+			"properties": {
+				"default": {
+					"type": "object"
+				},
+				"hover": {
+					"type": "object"
+				},
+				"active": {
+					"type": "object"
+				}
+			}
+		},
+		"tabBackgroundColor": {
+			"type": "object",
+			"properties": {
+				"default": {
+					"type": "object"
+				},
+				"hover": {
+					"type": "object"
+				},
+				"active": {
+					"type": "object"
+				}
+			}
+		},
+		"tabIconColor": {
+			"type": "object",
+			"properties": {
+				"default": {
+					"type": "object"
+				},
+				"hover": {
+					"type": "object"
+				},
+				"active": {
+					"type": "object"
+				}
+			}
+		},
+		"tabPadding": {
+			"type": "object"
+		},
+		"tabBorder": {
+			"type": "object",
+			"properties": {
+				"border": {
+					"type": "object"
+				},
+				"onActive": {
+					"type": "boolean"
+				}
+			}
+		}
+	},
+	"example": {
+		"attributes": {
+			"className": "is-example"
+		},
+		"innerBlocks": [
+			{
+				"name": "blablablocks/tab",
+				"attributes": {
+					"tabname": "Tab 1"
+				},
+				"innerBlocks": [
+					{
+						"name": "core/paragraph",
+						"attributes": {
+							"content": "Tab 1 content"
+						}
+					}
+				]
+			},
+			{
+				"name": "blablablocks/tab",
+				"attributes": {
+					"tabname": "Tab 2"
+				}
+			},
+			{
+				"name": "blablablocks/tab",
+				"attributes": {
+					"tabname": "Tab 3"
+				}
+			}
+		]
+	},
+	"supports": {
+		"anchor": true,
+		"html": false,
+		"align": [
+			"wide",
+			"full"
+		],
+		"spacing": {
+			"margin": false,
+			"padding": true,
+			"blockGap": [
+				"horizontal",
+				"vertical"
+			],
+			"__experimentalSkipSerialization": true
+		},
+		"color": {
+			"__experimentalSkipSerialization": true,
+			"gradients": true,
+			"text": false,
+			"__experimentalDefaultControls": {
+				"background": true
+			}
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			},
+			"__experimentalSkipSerialization": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalSkipSerialization": true
+		},
+		"interactivity": true
+	},
+	"allowedBlocks": [
+		"blablablocks/tab"
+	],
+	"textdomain": "blablablocks-tabs-block",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php",
+	"viewScriptModule": "file:./view.js"
+}

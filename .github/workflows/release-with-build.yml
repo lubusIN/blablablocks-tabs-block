@@ -1,0 +1,75 @@
+name: Build & Package Everything on Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  build_and_package:
+    name: Build, Archive All Folders & Upload
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1) Check out the repository at the exact tag/commit for this Release
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      # 2) Remove the folders you do NOT want anywhere in the final artifact
+      - name: Remove ignored folders
+        run: |
+          rm -rf .github
+          rm -rf _playground
+
+      # 3) (Node.js example) Set up Node, install deps, and build
+      #    → If you use a different toolchain, replace these three steps
+      - name: Set up Node.js v16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      # 4) Delete node_modules so it never ends up in the ZIP
+      - name: Cleanup node_modules
+        run: rm -rf node_modules
+
+        # 5) Set up PHP & Composer (conditional PHP support)
+      - name: Setup PHP (for Composer)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          tools: composer
+
+      # 6) If there is a composer.json, install & optimize vendor/
+      - name: Install PHP dependencies
+        if: ${{ hashFiles('composer.json') != '' }}
+        run: |
+          composer install --no-dev --optimize-autoloader
+
+      # 5) Archive EVERYTHING that remains (all folders/files + the build/ folder)
+      #    Exclude the ZIP itself, so zip doesn’t recurse into itself.
+      - name: Archive entire workspace
+        id: archive
+        run: |
+          ARTIFACT_NAME="${{ github.event.repository.name }}.zip"
+          zip -r "$ARTIFACT_NAME" . -x "$ARTIFACT_NAME"
+
+          # Expose the filename as an output, so later steps can reference it
+          echo "artifact_name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+
+      # 6) Upload the ZIP (named <repo-name>-<tag>.zip) to the Release
+      - name: Upload ZIP to Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.archive.outputs.artifact_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
