@@ -15,7 +15,7 @@ BlaBlaBlocks Tabs Block is a WordPress plugin built specifically for the Block E
 
 ## Installation
 
-1. [Download](https://github.com/lubusIN/blablablocks-tabs-block/archive/refs/heads/dev.zip) latest copy from GitHub
+1. [Download](https://github.com/lubusIN/blablablocks-tabs-block/archive/refs/tags/v1.0.0.zip) latest release from GitHub
 2. Visit `Plugins > Add New`
 3. Upload `blablablocks-tabs-block.zip` file
 4. Activate `BlaBlaBlocks Tabs Block` from plugins page
