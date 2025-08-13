@@ -211,6 +211,11 @@ export default function Edit( {
 						onClick={ () => selectBlock( clientId ) }
 						onKeyDown={ ( e ) => {
 							if ( e.key === 'Enter' || e.key === ' ' ) {
+								// Don't handle if clicking on or inside the RichText component
+								if ( e.target.closest( '.tab-button-text' ) ) {
+									return;
+								}
+
 								e.preventDefault();
 								selectBlock( clientId );
 							}
