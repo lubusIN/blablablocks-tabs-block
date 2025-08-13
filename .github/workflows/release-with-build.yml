@@ -2,7 +2,7 @@ name: Build & Package Everything on Release
 
 on:
   release:
-    types: [created]
+    types: [created, edited]
 
 permissions:
   contents: write
