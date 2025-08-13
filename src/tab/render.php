@@ -10,6 +10,10 @@
  * @package         BlaBlaBlocks Tabs Block
  */
 
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
 $wrapper_attributes = get_block_wrapper_attributes([
     'id' => esc_attr('tab-' . $attributes['tabId']),
     'class' => esc_attr('blablablocks-tab-content'),

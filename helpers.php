@@ -4,6 +4,10 @@
  * Helpers Tabs Block.
  */
 
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
 /**
  * Extract tab data from inner blocks.
  *
