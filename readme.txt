@@ -16,8 +16,7 @@ Tabs Block is a WordPress plugin built specifically for the Block Editor, allowi
 
 === What makes BlaBlaBlocks Tabs Block special? ===
 * **Accessible** –  WCAG-compliant with ARIA roles, keyboard nav & screen-reader support. 
-* **Zero Dependencies** – no jQuery or bulky frameworks, just modern JS and CSS.  
-* **Interactivity API** – smooth, reactive UI built with WordPress native Interactivity API.
+* **Zero Dependency** – powered WordPress Interactivity API.
 * **Responsive** – auto-adjusts tabs and layout for any screen size.
 * **Horizontal & Vertical Support** – switch between horizontal or vertical tab layouts easily.
 * **Ready-to-use Templates** – ship with multiple prebuilt layouts you can insert and customize.  
