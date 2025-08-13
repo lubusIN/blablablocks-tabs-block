@@ -15,7 +15,9 @@ Create responsive, accessible tabs with ready-to-use templates in the Block Edit
 Tabs Block is a WordPress plugin built specifically for the Block Editor, allowing you to create responsive tabs effortlessly.
 
 === What makes BlaBlaBlocks Tabs Block special? ===
-* **Accessible** –  WCAG-compliant with ARIA roles, keyboard nav & screen-reader support.  
+* **Accessible** –  WCAG-compliant with ARIA roles, keyboard nav & screen-reader support. 
+* **Zero Dependencies** – no jQuery or bulky frameworks, just modern JS and CSS.  
+* **Interactivity API** – smooth, reactive UI built with WordPress native Interactivity API.
 * **Responsive** – auto-adjusts tabs and layout for any screen size.
 * **Horizontal & Vertical Support** – switch between horizontal or vertical tab layouts easily.
 * **Ready-to-use Templates** – ship with multiple prebuilt layouts you can insert and customize.  
@@ -29,6 +31,9 @@ The BlaBlaBlocks Tabs Block is open source. Not only is it free to use, but you 
 
 - **Report Issues:**  
   [https://github.com/lubusIN/blablablocks-tabs-block/issues](https://github.com/lubusIN/blablablocks-tabs-block/issues)
+
+- **Documentation:
+  [https://github.com/lubusIN/blablablocks-tabs-block/wiki](https://github.com/lubusIN/blablablocks-tabs-block/wiki)
 
 == Screenshots ==
 1. **Editor & Settings** – tweak your tabs’s layout and behavior right in the sidebar.
