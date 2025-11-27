@@ -192,8 +192,8 @@ export default function Edit( {
 	 * attribute to the clientId.
 	 */
 	useEffect( () => {
-		setAttributes( { tabId: clientId } );
-	}, [ clientId, attributes.tabId, setAttributes ] );
+		! attributes.tabId && setAttributes( { tabId: clientId } );
+	}, [ clientId ] );
 
 	return (
 		<>
