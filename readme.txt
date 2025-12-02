@@ -2,9 +2,9 @@
 Contributors:      lubus, ajitbohra, punitv342
 Tags:              tabs, tabs block, block editor, responsive tabs
 Requires at least: 6.6
-Tested up to:      6.8
+Tested up to:      6.9
 Requires PHP:      7.4
-Stable tag:        1.0.0
+Stable tag:        1.1.0
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 
@@ -201,6 +201,11 @@ Yes. Tabs Block doesn’t rely on AJAX or dynamic requests, so caching won’t a
 3. Activate it through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.1.0 =
+* Fix: Site Editor constantly showing "Review changes" after inserting Tabs block [#27](https://github.com/lubusIN/blablablocks-tabs-block/issues/27)
+* Bump plugin version to 1.1.0.
+* Update "Tested up to" to 6.9.
 
 = 1.0.0 =
 * Initial release of Tabs Block for Gutenberg.
