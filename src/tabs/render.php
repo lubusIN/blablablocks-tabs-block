@@ -73,7 +73,7 @@ $data_context = [
 ?>
 <div <?php echo wp_kses_data($wrapper_attributes); ?>
     data-wp-interactive="blablablocks-tabs"
-    data-wp-context='<?php echo wp_json_encode($data_context); ?>'
+	data-wp-context='<?php echo esc_attr(wp_json_encode($data_context)); ?>'
     data-wp-init="callbacks.initTabs"
     data-wp-watch="callbacks.updateTabBorders">
 
