@@ -189,11 +189,14 @@ export default function Edit( {
 	 * Set the `tabId` attribute.
 	 *
 	 * This effect ensures each tab has a unique identifier by setting the tabId
-	 * attribute to the clientId.
+	 * attribute to the clientId. This also handles duplication cases where the
+	 * tabId might have been copied from another block.
 	 */
 	useEffect( () => {
-		! attributes.tabId && setAttributes( { tabId: clientId } );
-	}, [ clientId ] );
+		if ( attributes.tabId !== clientId ) {
+			setAttributes( { tabId: clientId } );
+		}
+	}, [ clientId, attributes.tabId ] );
 
 	return (
 		<>
