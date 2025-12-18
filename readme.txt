@@ -1,5 +1,5 @@
 === Tabs Block – Responsive Gutenberg Tabs for Block Editor ===
-Contributors:      lubus, ajitbohra, punitv342
+Contributors:      lubus, ajitbohra, punitv342, thomasnavarro
 Tags:              tabs, tabs block, block editor, responsive tabs
 Requires at least: 6.6
 Tested up to:      6.9
