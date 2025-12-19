@@ -1,0 +1,179 @@
+# @format
+
+name: Playground Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+env:
+  PR_BUILD_BRANCH: playground-${{ github.event.number }}
+  GIT_USER_NAME: "GitHub Action"
+  GIT_USER_EMAIL: "action@github.com"
+
+jobs:
+  create-build-branch:
+    if: github.event.action != 'closed'
+    name: Create PR Build Branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Delete existing playground branch
+        run: |
+          if git ls-remote --exit-code --heads origin "$PR_BUILD_BRANCH"; then
+            git push origin --delete "$PR_BUILD_BRANCH"
+          fi
+
+      - name: Create Playground branch
+        run: |
+          git checkout -b "$PR_BUILD_BRANCH"
+          git push origin "$PR_BUILD_BRANCH"
+
+  commit-build-files:
+    if: github.event.action != 'closed'
+    needs: create-build-branch
+    name: Generate and commit build files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{env.PR_BUILD_BRANCH}}
+          fetch-depth: 0
+
+      - name: Install dependencies (Composer & NPM)
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist
+          npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Config Git
+        run: |
+          git config --global user.name "$GIT_USER_NAME"
+          git config --global user.email "$GIT_USER_EMAIL"
+
+      - name: Commit and Push build files
+        run: |
+          git add -f build/ vendor/
+          git commit -m "Add files"
+          git push origin "$PR_BUILD_BRANCH" --force
+
+  post-preview-comment:
+    if: github.event.action != 'closed'
+    needs: commit-build-files
+    name: Post Playgound Preview Comment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Post preview comment (create or update)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+            const branch = `playground-${prNumber}`;
+            const commentMarker = "<!-- WordPress Playground PR Preview -->";
+
+            const blueprint = {
+              "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+              "landingPage": "/wp-admin/post.php?post=9&action=edit",
+              "login": true,
+              "features": { "networking": true },
+              "steps": [
+                {
+                  "step": "updateUserMeta",
+                  "meta": {
+                    "admin_color": "modern",
+                    "show_welcome_panel": 0
+                  },
+                  "userId": 1
+                },
+                {
+                  "step": "setSiteOptions",
+                  "options": { "blogname": `${owner}/${repo} - PR ${prNumber}` }
+                },
+                {
+                  "step": "importWxr",
+                  "file": {
+                      "resource": "url",
+                      "url": `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/_playground/demo-content.xml``
+                    }
+                },
+                {
+                  "step": "installPlugin",
+                  "pluginData": {
+                    "resource": "git:directory",
+                    "url": `https://github.com/${owner}/${repo}/`,
+                    "ref": branch
+                  },
+                  "options": {
+                    "activate": true
+                  }
+                }
+              ]
+            };
+
+            const encoded = Buffer.from(JSON.stringify(blueprint)).toString('base64');
+            const previewUrl = `https://playground.wordpress.net/#${encoded}`;
+            const zipUrl = `https://github-proxy.com/proxy/?repo=${owner}/${repo}&branch=${branch}`;
+            const commentBody = `
+              ${commentMarker}
+              ### Playground Preview
+
+              ⚡️WordPress Playground [Preview](${previewUrl})
+              🚀 Build zip file [Download](${zipUrl})
+
+              I will update this comment with the latest preview links as you push more changes to this PR.
+
+              > [!NOTE]
+              > The preview sites are created using [WordPress Playground](https://wordpress.org/playground/). You can add content, edit settings, and test the pull request as you would on a real site, but please note that changes are not saved between sessions.
+            `;
+
+            const comments = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: prNumber,
+            });
+
+            const existing = comments.data.find(c => c.body.includes(commentMarker));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body: commentBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: commentBody,
+              });
+            }
+
+  remove-preview-branch:
+    if: github.event.action == 'closed'
+    name: Delete preview branch
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Delete Playground branch on PR close/merge
+        run: git push origin --delete "$PR_BUILD_BRANCH"
