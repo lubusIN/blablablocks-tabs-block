@@ -108,7 +108,7 @@ jobs:
                   "step": "importWxr",
                   "file": {
                       "resource": "url",
-                      "url": `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/_playground/demo-content.xml``
+                      "url": `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/_playground/demo-content.xml`
                     }
                 },
                 {
