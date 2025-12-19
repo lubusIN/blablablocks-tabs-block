@@ -3,7 +3,7 @@
     "apiVersion": 3,
     "name": "blablablocks/tab",
     "title": "Tab",
-    "description": "A single tab within a tabs block.",
+    "description": "A single tab within a tabs block Test.",
     "parent": [
         "blablablocks/tabs"
     ],
