@@ -191,44 +191,260 @@
 	}
 }
 
-/* Horizontal Stacked below 768px */
+/* ============================================
+   Desktop: Hide mobile-only elements
+   ============================================ */
+.blablablocks-tabs-dropdown,
+.blablablocks-tabs-accordion {
+	display: none;
+}
+
+/* ============================================
+   Dropdown Component Styles
+   ============================================ */
+.blablablocks-tabs-dropdown {
+	position: relative;
+	width: 100%;
+
+	&__toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 12px 16px;
+		background-color: var(--bbb-tab-background-default-color, #fff);
+		border: 1px solid #ddd;
+		border-radius: 6px;
+		cursor: pointer;
+		font: inherit;
+		color: var(--bbb-tab-text-default-color, #000);
+		transition: all 0.2s ease;
+
+		&:hover {
+			border-color: #999;
+		}
+
+		&.is-open {
+			border-color: #999;
+			border-radius: 6px 6px 0 0;
+
+			.blablablocks-tabs-dropdown__icon {
+				transform: rotate(180deg);
+			}
+		}
+	}
+
+	&__label {
+		flex: 1;
+		text-align: left;
+	}
+
+	&__icon {
+		flex-shrink: 0;
+		margin-left: 8px;
+		transition: transform 0.2s ease;
+	}
+
+	&__menu {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		z-index: 10;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		background: #fff;
+		border: 1px solid #999;
+		border-top: none;
+		border-radius: 0 0 6px 6px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		max-height: 240px;
+		overflow-y: auto;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	&__item {
+		padding: 10px 16px;
+		cursor: pointer;
+		transition: background-color 0.15s ease;
+
+		&:hover {
+			background-color: #f5f5f5;
+		}
+
+		&.is-selected {
+			background-color: var(--bbb-tab-background-active-color, #000);
+			color: var(--bbb-tab-text-active-color, #fff);
+		}
+	}
+}
+
+/* ============================================
+   Accordion Component Styles
+   ============================================ */
+.blablablocks-tabs-accordion {
+	width: 100%;
+
+	&__item {
+		border: 1px solid #ddd;
+		border-radius: 6px;
+		overflow: hidden;
+		transition: all 0.2s ease;
+
+		& + & {
+			margin-top: 8px;
+		}
+
+		&.is-accordion-open {
+			border-color: #999;
+		}
+
+		&.is-accordion-open .blablablocks-tabs-accordion__header {
+			background-color: var(--bbb-tab-background-active-color, #000);
+
+			.tab-button-text {
+				color: var(--bbb-tab-text-active-color, #fff);
+			}
+
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-active-color, #fff);
+			}
+
+			.blablablocks-tabs-accordion__chevron {
+				transform: rotate(180deg);
+				color: var(--bbb-tab-text-active-color, #fff);
+			}
+		}
+	}
+
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: 12px 16px;
+		background-color: var(--bbb-tab-background-default-color, #fff);
+		border: none;
+		cursor: pointer;
+		font: inherit;
+		color: var(--bbb-tab-text-default-color, #000);
+		transition: all 0.2s ease;
+
+		&:hover {
+			background-color: var(--bbb-tab-background-hover-color, #f5f5f5);
+
+			.tab-button-text {
+				color: var(--bbb-tab-text-hover-color, #000);
+			}
+
+			.bbb-tab-icon svg {
+				color: var(--bbb-tab-icon-hover-color, #000);
+			}
+		}
+	}
+
+	&__title {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		flex: 1;
+		text-align: left;
+	}
+
+	&__chevron {
+		flex-shrink: 0;
+		margin-left: 8px;
+		transition: transform 0.2s ease;
+	}
+
+	&__content {
+		padding: 16px;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+}
+
+/* ============================================
+   Mobile Responsive Styles
+   ============================================ */
 @media (max-width: 768px) {
-	.blablablocks-tabs-buttons {
-		flex-wrap: nowrap !important;
-		overflow-x: auto;
-		overflow-y: hidden;
-		// scrollbar-width: none;
-		// -ms-overflow-style: none;
+
+	/* ----- Scroll Mode (Default) ----- */
+	.blablablocks-tabs--mobile-scroll {
+		.blablablocks-tabs-buttons {
+			flex-wrap: nowrap !important;
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
+
+		&.is-style-pointing-tabs .blablablocks-tabs-buttons {
+			padding-bottom: 16px !important;
+		}
+
+		/* Change the overall layout from row to column */
+		&.blablablocks-tabs__vertical {
+			flex-direction: column !important;
+		}
+
+		/* Make the buttons strip go across */
+		&.blablablocks-tabs__vertical .blablablocks-tabs-buttons {
+			flex-direction: row !important;
+		}
+
+		/* Let each button flex-grow to fill available space evenly */
+		&.blablablocks-tabs__vertical .blablablock-tab-btn {
+			max-width: 150px;
+		}
+
+		/* Reposition the "pointer" arrow under each button */
+		&.blablablocks-tabs__vertical .blablablock-tab-btn.is-bbb-active-tab::after {
+			top: 100% !important;
+			left: 50% !important;
+			margin-left: -10px !important;
+			transform: none !important;
+		}
+
+		&:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
+			min-width: auto !important;
+		}
 	}
 
-	.is-style-pointing-tabs .blablablocks-tabs-buttons {
-		padding-bottom: 16px !important;
-	}
+	/* ----- Accordion Mode ----- */
+	.blablablocks-tabs--mobile-accordion {
+		/* Hide tab buttons and normal tab content on mobile */
+		.blablablocks-tabs-buttons,
+		.blablablocks-tabs-content {
+			display: none !important;
+		}
 
-	/* Change the overall layout from row to column */
-	.blablablocks-tabs__vertical {
+		/* Show accordion */
+		.blablablocks-tabs-accordion {
+			display: block;
+		}
+
+		/* Force column layout */
 		flex-direction: column !important;
 	}
 
-	/* Make the buttons strip go across, wrap if needed */
-	.blablablocks-tabs__vertical .blablablocks-tabs-buttons {
-		flex-direction: row !important;
-	}
+	/* ----- Dropdown Mode ----- */
+	.blablablocks-tabs--mobile-dropdown {
+		/* Hide tab buttons on mobile */
+		.blablablocks-tabs-buttons {
+			display: none !important;
+		}
 
-	/* Let each button flex-grow to fill available space evenly */
-	.blablablocks-tabs__vertical .blablablock-tab-btn {
-		max-width: 150px;
-	}
+		/* Show dropdown */
+		.blablablocks-tabs-dropdown {
+			display: block;
+		}
 
-	/* Reposition the “pointer” arrow under each button */
-	.blablablocks-tabs__vertical .blablablock-tab-btn.is-bbb-active-tab::after {
-		top: 100% !important;
-		left: 50% !important;
-		margin-left: -10px !important;
-		transform: none !important;
-	}
-
-	.blablablocks-tabs:not(.blablablocks-tabs__autoWidth) .blablablocks-tabs-buttons {
-		min-width: auto !important;
+		/* Force column layout */
+		flex-direction: column !important;
 	}
 }

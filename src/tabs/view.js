@@ -10,6 +10,7 @@ import {
 
 // Constants for store name and default values
 const STORE_NAME = 'blablablocks-tabs';
+const MOBILE_BREAKPOINT = 768;
 
 /**
  * Helper function to apply CSS string to an element
@@ -91,6 +92,61 @@ const { state } = store( STORE_NAME, {
 		get tabIndex() {
 			return state.isActive ? -1 : 0;
 		},
+
+		/**
+		 * Returns the label of the currently active tab (used for dropdown).
+		 *
+		 * @type {string}
+		 */
+		get activeTabLabel() {
+			const { tabs, activeTab } = getContext();
+			if ( tabs[ activeTab ] ) {
+				return (
+					tabs[ activeTab ].label || `Tab ${ activeTab + 1 }`
+				);
+			}
+			return '';
+		},
+
+		/**
+		 * Checks if the dropdown is currently open.
+		 *
+		 * @type {boolean}
+		 */
+		get isDropdownOpen() {
+			const { dropdownOpen } = getContext();
+			return dropdownOpen;
+		},
+
+		/**
+		 * Checks if the current accordion item is open.
+		 * Uses the element's data-tab-index attribute to determine
+		 * which accordion item we're checking.
+		 *
+		 * @type {boolean}
+		 */
+		get isAccordionItemOpen() {
+			const { accordionOpenIndex } = getContext();
+			const { ref } = getElement();
+
+			// For accordion items, get the tab index from the header button or the item
+			let itemIndex = -1;
+
+			// Check if the element itself has data-tab-index
+			if ( ref?.dataset?.tabIndex !== undefined ) {
+				itemIndex = parseInt( ref.dataset.tabIndex, 10 );
+			} else {
+				// For the accordion item wrapper, find the header button inside it
+				const header = ref?.querySelector(
+					'.blablablocks-tabs-accordion__header'
+				);
+				if ( header?.dataset?.tabIndex !== undefined ) {
+					itemIndex = parseInt( header.dataset.tabIndex, 10 );
+				}
+			}
+
+			return accordionOpenIndex === itemIndex;
+		},
 	},
 	actions: {
 		/**
@@ -148,6 +204,52 @@ const { state } = store( STORE_NAME, {
 				context.activeTab = state.activeTabIndex;
 			}
 		},
+
+		/**
+		 * Toggles the dropdown open/close state.
+		 *
+		 * @return {void}
+		 */
+		toggleDropdown: () => {
+			const context = getContext();
+			context.dropdownOpen = ! context.dropdownOpen;
+		},
+
+		/**
+		 * Handles selecting a tab from the dropdown menu.
+		 *
+		 * @return {void}
+		 */
+		selectDropdownTab: () => {
+			const context = getContext();
+			const { ref } = getElement();
+			const tabIndex = parseInt( ref?.dataset?.tabIndex, 10 );
+			if ( ! isNaN( tabIndex ) ) {
+				context.activeTab = tabIndex;
+				context.dropdownOpen = false;
+			}
+		},
+
+		/**
+		 * Toggles an accordion item open/closed.
+		 *
+		 * @return {void}
+		 */
+		toggleAccordion: () => {
+			const context = getContext();
+			const { ref } = getElement();
+			const tabIndex = parseInt( ref?.dataset?.tabIndex, 10 );
+			if ( ! isNaN( tabIndex ) ) {
+				if ( context.accordionOpenIndex === tabIndex ) {
+					// Close the currently open accordion
+					context.accordionOpenIndex = -1;
+				} else {
+					// Open this accordion and set it as active tab
+					context.accordionOpenIndex = tabIndex;
+					context.activeTab = tabIndex;
+				}
+			}
+		},
 	},
 	callbacks: {
 		/**
@@ -163,6 +265,24 @@ const { state } = store( STORE_NAME, {
 			);
 			if ( tabIndex >= 0 ) {
 				context.activeTab = tabIndex;
+
+				// Sync accordion open state with active tab on init
+				if ( context.mobileDisplay === 'accordion' ) {
+					context.accordionOpenIndex = tabIndex;
+				}
+			}
+
+			// Close dropdown when clicking outside
+			if ( context.mobileDisplay === 'dropdown' ) {
+				const { ref } = getElement();
+				document.addEventListener( 'click', ( event ) => {
+					const dropdown = ref?.querySelector(
+						'.blablablocks-tabs-dropdown'
+					);
+					if ( dropdown && ! dropdown.contains( event.target ) ) {
+						context.dropdownOpen = false;
+					}
+				} );
 			}
 		},
 
