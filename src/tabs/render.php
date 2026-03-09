@@ -73,7 +73,7 @@ $data_context = [
     'tabButtonBorderStyles'     => $tab_button_border_style,
     'borderOnActive'            => !empty($attributes['tabBorder']['onActive']),
     'mobileDisplay'             => $mobile_display,
-    'accordionOpenIndex'        => $mobile_display === 'accordion' ? $active_tab_index : -1,
+    'accordionOpenIndex'        => -1,
     'dropdownOpen'              => false,
 ];
 
@@ -170,6 +170,7 @@ $data_context = [
             ?>
                 <div class="blablablocks-tabs-accordion__item"
                      id="<?php echo esc_attr($tab['id']); ?>-accordion"
+                     data-tab-index="<?php echo esc_attr($index); ?>"
                      data-wp-class--is-accordion-open="state.isAccordionItemOpen">
                     <button class="blablablocks-tabs-accordion__header <?php echo esc_attr(trim($color_classes . ' ' . $border_classes)); ?>"
                             data-tab-index="<?php echo esc_attr($index); ?>"
@@ -197,6 +198,7 @@ $data_context = [
                     </button>
                     <div class="blablablocks-tabs-accordion__content"
                          role="region"
+                         data-tab-index="<?php echo esc_attr($index); ?>"
                          data-wp-bind--hidden="!state.isAccordionItemOpen">
                         <?php echo $inner_content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
                     </div>
