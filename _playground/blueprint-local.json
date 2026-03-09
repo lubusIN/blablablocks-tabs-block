@@ -1,0 +1,31 @@
+{
+    "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+    "landingPage": "/wp-admin/post.php?post=4&action=edit",
+    "login": true,
+    "features": {
+        "networking": true
+    },
+    "steps": [
+        {
+            "step": "updateUserMeta",
+            "meta": {
+                "admin_color": "modern",
+                "show_welcome_panel": 0
+            },
+            "userId": 1
+        },
+        {
+            "step": "setSiteOptions",
+            "options": {
+                "blogname": "BlaBlaBlocks Tabs | Local Dev 🧑‍💻"
+            }
+        },
+        {
+            "step": "importWxr",
+            "file": {
+                "resource": "url",
+                "url": "https://raw.githubusercontent.com/lubusIN/blablablocks-tabs-block/playground/_playground/demo-content.xml"
+            }
+        }
+    ]
+}
