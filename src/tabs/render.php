@@ -105,7 +105,7 @@ $data_context = [
                 <?php if (!empty($tab['label'])) : ?>
                     <span class="tab-button-text <?php echo esc_attr($typography_classes); ?>"
                         style="<?php echo esc_attr($typography_styles); ?>">
-                        <?php echo esc_html($tab['label']); ?>
+						<?php echo wp_kses_post($tab['label']); ?>
                     </span>
                 <?php elseif (empty($icon)) : ?>
                     <span class="tab-button-text <?php echo esc_attr($typography_classes); ?>"
@@ -118,7 +118,7 @@ $data_context = [
     </ul>
 
     <div class="blablablocks-tabs-content">
-        <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+        <?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         ?>
     </div>
 </div>
