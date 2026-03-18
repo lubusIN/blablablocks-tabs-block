@@ -97,8 +97,11 @@ if (! function_exists('blabtabl_get_gap_styles')) {
 if (! function_exists('blabtabl_get_gap_css_value')) {
     function blabtabl_get_gap_css_value($value)
     {
-        if (preg_match('/^var:preset\|spacing\|\d+$/', $value)) {
-            return 'var(--wp--preset--spacing--' . substr($value, strrpos($value, '|') + 1) . ')';
+        if (! is_string($value)) {
+            return $value;
+        }
+        if (preg_match('/^var:preset\|spacing\|([a-z0-9-]+)$/i', $value, $matches)) {
+            return sprintf('var(--wp--preset--spacing--%s)', sanitize_title($matches[1]));
         }
         return $value;
     }
@@ -106,7 +109,7 @@ if (! function_exists('blabtabl_get_gap_css_value')) {
 
 /**
  * Helper function to resolve color value based on slug
- * 
+ *
  * @param mixed $colorValue - Color value (can be string, array with 'color' and 'slug', or null)
  * @param string $fallback - Fallback color value
  * @return string - CSS color value or custom property
