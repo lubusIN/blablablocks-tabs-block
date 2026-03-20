@@ -6,6 +6,7 @@ import { InspectorControls } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	RangeControl,
+	SelectControl,
 	__experimentalHStack as HStack, // eslint-disable-line
 	__experimentalNumberControl as NumberControl, // eslint-disable-line
 	__experimentalToggleGroupControl as ToggleGroupControl, // eslint-disable-line
@@ -193,6 +194,51 @@ function Settings( { attributes, setAttributes } ) {
 						}
 						min={ 10 }
 						max={ 100 }
+					/>
+				</PanelBody>
+			</InspectorControls>
+			<InspectorControls>
+				<PanelBody
+					title={ __( 'Mobile', 'blablablocks-tabs-block' ) }
+				>
+					<SelectControl
+						label={ __(
+							'Display mode',
+							'blablablocks-tabs-block'
+						) }
+						value={ attributes.mobileDisplay || 'scroll' }
+						options={ [
+							{
+								label: __(
+									'Scrollable Tabs',
+									'blablablocks-tabs-block'
+								),
+								value: 'scroll',
+							},
+							{
+								label: __(
+									'Accordion',
+									'blablablocks-tabs-block'
+								),
+								value: 'accordion',
+							},
+							{
+								label: __(
+									'Dropdown',
+									'blablablocks-tabs-block'
+								),
+								value: 'dropdown',
+							},
+						] }
+						onChange={ ( value ) =>
+							setAttributes( { mobileDisplay: value } )
+						}
+						help={ __(
+							'Choose how tabs are displayed on mobile devices.',
+							'blablablocks-tabs-block'
+						) }
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
 					/>
 				</PanelBody>
 			</InspectorControls>

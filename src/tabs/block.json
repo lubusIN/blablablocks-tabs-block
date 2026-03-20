@@ -79,6 +79,10 @@
 		"tabPadding": {
 			"type": "object"
 		},
+		"mobileDisplay": {
+			"type": "string",
+			"default": "scroll"
+		},
 		"tabBorder": {
 			"type": "object",
 			"properties": {
