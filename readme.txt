@@ -4,7 +4,7 @@ Tags:              tabs, tabs block, block editor, responsive tabs
 Requires at least: 6.6
 Tested up to:      6.9
 Requires PHP:      7.4
-Stable tag:        1.1.2
+Stable tag:        1.1.3
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 
@@ -201,6 +201,10 @@ Yes. Tabs Block doesn’t rely on AJAX or dynamic requests, so caching won’t a
 3. Activate it through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.1.3 =
+* Fix: Resolved issue where Tabs gap was not applied when using spacing presets (e.g. small, medium, large). Preset values are now correctly converted to valid CSS variables like var(--wp--preset--spacing--*).
+* Fix: Corrected rendering of rich text formats inside Tabs content. Rich formatting is now properly applied on the frontend instead of being output as raw HTML strings.
 
 = 1.1.2 =
 * Fix: Ensure tabId is always synced with clientId to prevent duplication issues by @thomasnavarro in [#32](https://github.com/lubusIN/blablablocks-tabs-block/pull/32)
