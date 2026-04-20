@@ -20,11 +20,11 @@
                 "blogname": "BlaBlaBlocks Tabs | Local Dev 🧑‍💻"
             }
         },
-        {
+       {
             "step": "importWxr",
             "file": {
-                "resource": "url",
-                "url": "https://raw.githubusercontent.com/lubusIN/blablablocks-tabs-block/playground/_playground/demo-content.xml"
+                "resource": "bundled",
+                "path": "/demo-content.xml"
             }
         }
     ]
