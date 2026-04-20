@@ -1,0 +1,42 @@
+{
+    "name": "lubusin/blablablocks-tabs-block",
+    "description": "Build Accessible, Responsive Tabs in the Gutenberg Block Editor.",
+    "keywords": [
+        "wordpress",
+        "plugin",
+        "block",
+        "tabs",
+ß        "blablablocks"
+    ],
+    "homepage": "https://lubus.in",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Punit Verma",
+            "email": "punit@lubus.in",
+            "homepage": "https://lubus.in"
+        },
+        {
+            "name": "Ajit Bohra",
+            "email": "ajit@lubus.in",
+            "homepage": "https://lubus.in"
+        }
+    ],
+    "type": "wordpress-plugin",
+    "support": {
+        "issues": "https://github.com/lubusIN/blablablocks-tabs-block/issues",
+        "source": "https://github.com/lubusIN/blablablocks-tabs-block"
+    },
+    "extra": {
+        "installer-name": "blablablocks-tabs-block"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "composer/installers": "^2.3"
+    }
+}
