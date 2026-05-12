@@ -89,7 +89,7 @@ const { state } = store( STORE_NAME, {
 		 * @type {false|string}
 		 */
 		get tabIndex() {
-			return state.isActive ? -1 : 0;
+			return state.isActive ? 0 : -1;
 		},
 	},
 	actions: {
