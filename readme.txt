@@ -202,6 +202,10 @@ Yes. Tabs Block doesn’t rely on AJAX or dynamic requests, so caching won’t a
 
 == Changelog ==
 
+= 1.1.4 =
+* Fix: Corrected keyboard roving tabindex behavior so only the selected tab is focusable via `Tab`, and unselected tabs use `tabindex="-1"` [#40](https://github.com/lubusIN/blablablocks-tabs-block/issues/40)
+* Fix: Restored visible keyboard focus indicator for tab buttons by removing focus outline suppression [#41](https://github.com/lubusIN/blablablocks-tabs-block/issues/41)
+
 = 1.1.3 =
 * Fix: Resolved issue where Tabs gap was not applied when using spacing presets (e.g. small, medium, large). Preset values are now correctly converted to valid CSS variables like var(--wp--preset--spacing--*).
 * Fix: Corrected rendering of rich text formats inside Tabs content. Rich formatting is now properly applied on the frontend instead of being output as raw HTML strings.
