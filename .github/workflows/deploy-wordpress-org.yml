@@ -1,0 +1,100 @@
+name: Deploy to WordPress.org
+
+on:
+    push:
+        tags:
+            - '*'
+
+    workflow_dispatch:
+        inputs:
+            task:
+                description: 'What do you want to run?'
+                required: true
+                default: 'assets'
+                type: choice
+                options:
+                    - assets
+
+jobs:
+    deploy-to-wordpress:
+        name: Deploy plugin release to WordPress.org
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout tagged code
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+
+            - name: Install node dependencies
+              run: npm ci
+
+            - name: Build plugin assets
+              run: npm run build
+
+            - name: Get tag version
+              id: get-version
+              run: |
+                  TAG_NAME="${GITHUB_REF#refs/tags/}"
+                  VERSION="${TAG_NAME#v}"
+                  echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+                  echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
+
+            - name: Validate version format
+              run: |
+                  VERSION="${{ steps.get-version.outputs.VERSION }}"
+
+                  if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                    echo "Invalid tag version: $VERSION"
+                    echo "Use tags like 1.2.0 or v1.2.0"
+                    exit 1
+                  fi
+
+            - name: Validate package.json version
+              run: |
+                  VERSION="${{ steps.get-version.outputs.VERSION }}"
+                  PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
+                  if [ "$PACKAGE_VERSION" != "$VERSION" ]; then
+                    echo "package.json version $PACKAGE_VERSION does not match tag version $VERSION"
+                    exit 1
+                  fi
+
+            - name: Validate readme stable tag
+              run: |
+                  VERSION="${{ steps.get-version.outputs.VERSION }}"
+
+                  if ! grep -q "Stable tag: $VERSION" readme.txt; then
+                    echo "readme.txt Stable tag does not match tag version: $VERSION"
+                    exit 1
+                  fi
+
+            - name: Deploy plugin to WordPress.org
+              uses: 10up/action-wordpress-plugin-deploy@stable
+              env:
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SLUG: blablablocks-tabs-block
+                  VERSION: ${{ steps.get-version.outputs.VERSION }}
+
+    update-assets:
+        name: Update WordPress.org readme/assets
+        if: github.event_name == 'workflow_dispatch' && inputs.task == 'assets'
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Update WordPress.org readme/assets
+              uses: 10up/action-wordpress-plugin-asset-update@stable
+              env:
+                  SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+                  SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+                  SLUG: blablablocks-tabs-block
+                  IGNORE_OTHER_FILES: true
