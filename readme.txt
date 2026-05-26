@@ -2,9 +2,9 @@
 Contributors:      lubus, ajitbohra, punitv342, thomasnavarro
 Tags:              tabs, tabs block, block editor, responsive tabs
 Requires at least: 6.6
-Tested up to:      6.9
+Tested up to:      7.0
 Requires PHP:      7.4
-Stable tag:        1.1.4
+Stable tag:        1.1.5
 License:           MIT
 License URI:       https://opensource.org/licenses/MIT
 
@@ -201,6 +201,9 @@ Yes. Tabs Block doesn’t rely on AJAX or dynamic requests, so caching won’t a
 3. Activate it through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.1.5 =
+* Chore: Update Tested up to 7.0.
 
 = 1.1.4 =
 * Fix: Corrected keyboard roving tabindex behavior so only the selected tab is focusable via `Tab`, and unselected tabs use `tabindex="-1"` [#40](https://github.com/lubusIN/blablablocks-tabs-block/issues/40)
