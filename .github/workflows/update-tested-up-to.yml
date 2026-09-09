@@ -1,0 +1,19 @@
+name: Update Tested Up To
+
+on:
+  schedule:
+    - cron: "51 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-tested-up-to:
+    uses: lubusIN/.github/.github/workflows/update-tested-up-to.yml@main
+    with:
+      plugin-slug: blablablocks-tabs-block
+      release-branch: main
+    secrets:
+      SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+      SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
