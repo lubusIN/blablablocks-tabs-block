@@ -112,7 +112,7 @@ Explore more open-source solutions we're building for the WordPress Block Editor
 
 [LUBUS](https://lubus.in/?utm_source=github&utm_medium=open-source&utm_campaign=blablablocks-tabs-block) is a web design agency based in Mumbai.
 
-<a href="https://cal.com/lubus">
+<a href="https://book.lubus.in/">
 <img src="https://raw.githubusercontent.com/lubusIN/.github/refs/heads/main/profile/banner.png" />
 </a>
 
